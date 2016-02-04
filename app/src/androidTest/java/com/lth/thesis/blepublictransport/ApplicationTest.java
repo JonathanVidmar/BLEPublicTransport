@@ -1,4 +1,4 @@
-package lth.master.thesis.blepublictransport.app;
+package com.lth.thesis.blepublictransport;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

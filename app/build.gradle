@@ -1,32 +1,15 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
-    }
-}
 apply plugin: 'com.android.application'
-
-repositories {
-    jcenter()
-}
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "lth.master.thesis.blepublictransport.app"
-        minSdkVersion 21
+        applicationId "com.lth.thesis.blepublictransport"
+        minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
     }
     buildTypes {
         release {
@@ -38,5 +21,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:23.1.1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
 }
