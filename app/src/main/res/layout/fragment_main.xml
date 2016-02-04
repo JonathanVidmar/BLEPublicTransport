@@ -3,16 +3,16 @@
     android:layout_height="match_parent"
     tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
 
-    <Button
+    <TextView
+        android:id="@+id/stationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home"
-        android:padding="8dp"
-        android:textColor="#fff"
-        android:background="@color/colorPrimary"
-        android:textSize="28sp"
-        android:id="@+id/textView"
+        android:text="No station near you"
+        android:textSize="20sp"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
+        />
 
 </RelativeLayout>
