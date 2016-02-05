@@ -3,16 +3,12 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="mainfragmenttext">This is main!</string>
     <string name="paymentfragmenttext">This is the payment page!</string>
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_blepublic_transport">BLEPublicTransport</string>
     <string name="main_fragment_text">Home</string>
     <string name="payment_fragment_text">Payment</string>
-
 </resources>
