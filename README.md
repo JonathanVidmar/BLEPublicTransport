@@ -10,7 +10,9 @@ Last week our project plan was finished and this week started by conducting inte
 
 In the middle of the week we started setting up the environments we will be using to develop the prototypes. We installed Android Studios/IntelliJ and set up our project with github. In the end of the week we started developing for our use cases, finishing both the first and the second.
 We also set up the initial structure of the report and inserted relevant parts of the project plan into it.
+
 **Jonathan**
 Implemented use case 1 consisting both Android implementation as well as a web page used for redirection.
+
 **Jacob**
 Implemented use case 2 with focus on both foreground and background beacon detection and notification integration.
