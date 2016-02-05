@@ -1,7 +1,5 @@
 package com.lth.thesis.blepublictransport;
 
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -23,12 +21,9 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.util.Collection;
-
-
 /**
- * A simple {@link Fragment} subclass.
- *
+ * The main fragment class, subclass of Fragment,
+ * which implements the BeaconConsumer which let's it detect iBeacons.
  */
 public class MainFragment extends Fragment implements BeaconConsumer {
     protected static final String TAG = "MonitoringActivity";
