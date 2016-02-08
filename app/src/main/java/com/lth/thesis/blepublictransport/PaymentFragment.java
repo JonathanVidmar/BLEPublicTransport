@@ -2,14 +2,17 @@ package com.lth.thesis.blepublictransport;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Strategy;
@@ -28,7 +31,10 @@ public class PaymentFragment extends Fragment implements GoogleApiClient.Connect
     private static final String TAG = "Nearby";
 
     // Provides an entry point for Google Play services
-    GoogleApiClient mGoogleApiClient = null;
+    private GoogleApiClient mGoogleApiClient;
+    private MessageListener mMessageListener;
+    private boolean mResolvingError = false;
+
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -38,7 +44,25 @@ public class PaymentFragment extends Fragment implements GoogleApiClient.Connect
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_payment, container, false);
+        View view = inflater.inflate(R.layout.fragment_payment, container, false);
+
+        mMessageListener = new MessageListener() {
+            @Override
+            public void onFound(final Message message) {
+                final String nearbyMessageString = new String(message.getContent());
+
+                // Do something with the message string.
+                Log.i(TAG, "Beacon found with message: " + nearbyMessageString);
+            }
+
+            // Called when a message is no longer detectable nearby. Doesn't need to be implemented.
+            public void onLost(final Message message) {
+                final String nearbyMessageString = new String(message.getContent());
+                // Take appropriate action here (update UI, etc.)
+            }
+        };
+
+        return view;
     }
 
     @Override
@@ -63,7 +87,7 @@ public class PaymentFragment extends Fragment implements GoogleApiClient.Connect
             Log.i(TAG, "Subscribing for background updates.");
             SubscribeOptions options = new SubscribeOptions.Builder()
                     .setStrategy(Strategy.BLE_ONLY)
-                    .build();
+                    .build(); // Can ha med en callback som option, i fall att BLE expires.
             Nearby.Messages.subscribe(mGoogleApiClient, getPendingIntent(), options)
                     .setResultCallback(new ResultCallback<Status>() {
                         @Override
@@ -72,12 +96,41 @@ public class PaymentFragment extends Fragment implements GoogleApiClient.Connect
                                 Log.i(TAG, "Subscribed successfully.");
                             } else {
                                 Log.i(TAG, "Could not subscribe.");
-                                //handleUnsuccessfulNearbyResult(status); <-- Den här gjorde massor saker
+                                // Det här händer alltid första gången appen körs, pga användaren inte har givit permission
+                                handleUnsuccessfulNearbyResult(status);
                             }
                         }
                     });
         }
     }
+
+    private void handleUnsuccessfulNearbyResult(Status status) {
+        Log.i(TAG, "Processing error, status = " + status);
+        if (mResolvingError) {
+            // Already attempting to resolve an error.
+            return;
+        } else if (status.hasResolution()) {
+            try {
+                mResolvingError = true;
+                // Visar dialogruta med permissions
+                status.startResolutionForResult(getActivity(), 1001);
+            } catch (IntentSender.SendIntentException e) {
+                mResolvingError = false;
+                Log.i(TAG, "Failed to resolve error status.", e);
+            }
+        } else {
+            if (status.getStatusCode() == CommonStatusCodes.NETWORK_ERROR) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        "No connectivity, cannot proceed. Fix in 'Settings' and try again.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                // To keep things simple, pop a toast for all other error messages.
+                Toast.makeText(getActivity().getApplicationContext(), "Unsuccessful: " +
+                        status.getStatusMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     private PendingIntent getPendingIntent() {
         return PendingIntent.getService(getActivity().getApplicationContext(), 0,
                 getBackgroundSubscribeServiceIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -135,6 +188,10 @@ public class PaymentFragment extends Fragment implements GoogleApiClient.Connect
         // the following Google Play services doc for more details:
         // http://developer.android.com/google/auth/api-client.html
         Log.i(TAG, "connection to GoogleApiClient failed");
+    }
+
+    public void executePendingTasks(){
+        backgroundSubscribe();
     }
 
 }
