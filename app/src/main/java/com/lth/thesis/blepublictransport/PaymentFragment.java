@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -53,6 +54,15 @@ public class PaymentFragment extends Fragment implements GoogleApiClient.Connect
 
                 // Do something with the message string.
                 Log.i(TAG, "Beacon found with message: " + nearbyMessageString);
+                // Only the main thread can update the ui
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // This code will always run on the UI thread, therefore is safe to modify UI elements.
+                        TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
+                        stationText.setText("Welcome to Kings Cross, message: " + nearbyMessageString);
+                    }
+                });
             }
 
             // Called when a message is no longer detectable nearby. Doesn't need to be implemented.
@@ -162,7 +172,7 @@ public class PaymentFragment extends Fragment implements GoogleApiClient.Connect
         // If the user has requested a subscription or publication task that requires
         // GoogleApiClient to be connected, we keep track of that task and execute it here, since
         // we now have a connected GoogleApiClient.
-        //executePendingTasks();
+        executePendingTasks();
     }
 
     @Override
