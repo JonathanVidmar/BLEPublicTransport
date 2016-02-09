@@ -3,16 +3,17 @@
     android:layout_height="match_parent"
     tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
 
-    <Button
+    <TextView
+        android:id="@+id/found_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/payment_fragment_text"
-        android:padding="8dp"
-        android:textColor="#fff"
+        android:text="Nearby didn't find anything"
+        android:textSize="20sp"
+        android:paddingTop="30px"
+        android:layout_centerHorizontal="true"
         android:background="@color/colorPrimary"
-        android:textSize="28sp"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:textColor="#fff"
+        />
+
 
 </RelativeLayout>
