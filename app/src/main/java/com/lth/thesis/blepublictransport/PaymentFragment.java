@@ -146,24 +146,8 @@ public class PaymentFragment extends Fragment implements GoogleApiClient.Connect
                 getBackgroundSubscribeServiceIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    // Skickar en tillbaka hit
     private Intent getBackgroundSubscribeServiceIntent() {
-        return new Intent(getActivity().getApplicationContext(), PaymentFragment.class);
-    }
-
-    // Hanterar när man har blivit hitskickad, se ovan
-    protected void onHandleIntent(Intent intent) {
-        Nearby.Messages.handleIntent(intent, new MessageListener() {
-            @Override
-            public void onFound(Message message) {
-                Log.i(TAG, "Found message via PendingIntent: " + message);
-            }
-
-            @Override
-            public void onLost(Message message) {
-                Log.i(TAG, "Lost message via PendingIntent: " + message);
-            }
-        });
+        return new Intent(getActivity().getApplicationContext(), BackgroundSubscribeIntentService.class);
     }
 
     @Override
