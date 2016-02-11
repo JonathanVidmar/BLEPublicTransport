@@ -35,7 +35,7 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
     private BeaconManager beaconManager;
     private View view;
     private ListView listView;
-    private HashMap<String, Double> foundBeacons;
+    private HashMap<String, Double> foundBeacons = new HashMap<String, Double>();
     private NearObjectListViewAdapter mAdapter;
 
     public StationHomeFragment() {
@@ -46,10 +46,11 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main, container, false);
-        foundBeacons = new HashMap<String, Double>();
 
+        // Adds a placeholder text for when no region has been detected.
         ArrayList<String> items = new ArrayList<String>();
         items.add("Looking for nearby facilities");
+
         mAdapter = new NearObjectListViewAdapter(getActivity(), items);
         return view;
     }
@@ -79,19 +80,7 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
             @Override
             public void didEnterRegion(Region region) {
                 Log.d(TAG, "didEnterRegion");
-
-                // Only the main thread can update the ui
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                        TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
-                        stationText.setText("Welcome to Kings Cross");
-                        listView = (ListView)view.findViewById(R.id.locationItems);
-                        listView.setAdapter(mAdapter);
-                    }
-                });
-
+                enteredStation();
 
                 try {
                     beaconManager.startRangingBeaconsInRegion(region);
@@ -103,17 +92,6 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
             @Override
             public void didExitRegion(Region region) {
                 Log.d(TAG, "didExitRegion");
-
-                // Only the main thread can update the ui
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                        TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
-                        stationText.setText("No station near you");
-                        listView.setVisibility(View.GONE);
-                    }
-                });
 
                 try {
                     beaconManager.stopRangingBeaconsInRegion(region);
@@ -131,12 +109,7 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                for (Beacon oneBeacon : beacons) {
-                    Log.d(TAG, "distance: " + oneBeacon.getDistance() + " id:" + oneBeacon.getId1() + "/" + oneBeacon.getId2() + "/" + oneBeacon.getId3());
-                    String key = oneBeacon.getId1().toString() + oneBeacon.getId2().toString() + oneBeacon.getId3().toString();
-                    foundBeacons.put(key, oneBeacon.getDistance());
-                }
-                updateList();
+                foundObjectsNear(beacons);
             }
         });
 
@@ -146,24 +119,7 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
             e.printStackTrace();
         }
     }
-
-    public void updateList(){
-        ArrayList<String> list = new ArrayList<String>();
-
-        for (String s : foundBeacons.keySet()) {
-            String text = "Distane: " +  foundBeacons.get(s) + " Beacon:" + s;
-            list.add(text);
-            Log.d(TAG, text);
-        }
-        mAdapter.updateList(list);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
+    
     @Override
     public Context getApplicationContext() {
         return getActivity().getApplicationContext();
@@ -177,6 +133,78 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
     @Override
     public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
         return getActivity().bindService(intent, serviceConnection, i);
+    }
+
+    /**
+     * This is run when the beacon has been detected. It changes the display
+     * text and shows the list view that shows nearest objects.
+     */
+    public void enteredStation(){
+        // Only the main thread can update the ui
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Sets the information text
+                TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
+                stationText.setText("Welcome to Kings Cross");
+
+                // Updates the list view
+                listView = (ListView) view.findViewById(R.id.locationItems);
+                listView.setAdapter(mAdapter);
+            }
+        });
+    }
+
+    /**
+     * This is run when the beacons no longer is in range. It changes the display text
+     * and removes the list that shows all nearby objects.
+     */
+    public void leftStation(){
+        // Only the main thread can update the ui
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Sets the information text
+                TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
+                stationText.setText("No station near you");
+
+                // Deletes the list view
+                listView.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    /**
+     * This method is called when ranging has found nearby beacons. It updates
+     * each beacon value in the HashMap foundBeacons and then calls the update list
+     * function.
+     */
+    public void foundObjectsNear(Collection<Beacon> beacons){
+        for (Beacon oneBeacon : beacons) {
+            String key = oneBeacon.getId1().toString() + oneBeacon.getId2().toString() + oneBeacon.getId3().toString();
+            foundBeacons.put(key, oneBeacon.getDistance());
+        }
+        updateList();
+    }
+
+    /**
+     * This methods parses all the found beacons into strings and
+     * updates the list view.
+     */
+    public void updateList(){
+        ArrayList<String> list = new ArrayList<String>();
+
+        for (String s : foundBeacons.keySet()) {
+            String text = "Distane: " +  foundBeacons.get(s) + " Beacon:" + s;
+            list.add(text);
+        }
+        mAdapter.updateList(list);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 }
