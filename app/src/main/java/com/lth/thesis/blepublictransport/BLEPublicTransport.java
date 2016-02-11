@@ -31,16 +31,16 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "App started up");
-        BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);
+        //BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);
         // To detect proprietary beacons, you must add a line like below corresponding to your beacon
         // type.  Do a web search for "setBeaconLayout" to get the proper expression.
         // beaconManager.getBeaconParsers().add(new BeaconParser().
         //        setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+        //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         // wake up the app when any beacon is seen (you can specify specific id filers in the parameters below)
-        Region region = new Region("com.jacobarvidsson.test", Identifier.parse("FF72C36E-157A-4E58-9837-CCE51B75C7F4"), null, null);
+        //Region region = new Region("com.jacobarvidsson.test", Identifier.parse("FF72C36E-157A-4E58-9837-CCE51B75C7F4"), null, null);
 
-        regionBootstrap = new RegionBootstrap(this, region);
+        //regionBootstrap = new RegionBootstrap(this, region);
     }
 
     @Override
