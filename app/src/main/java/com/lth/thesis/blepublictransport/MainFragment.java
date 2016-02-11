@@ -10,16 +10,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.MonitorNotifier;
-import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+
+import java.util.ArrayList;
 
 /**
  * The main fragment class, subclass of Fragment,
@@ -36,7 +37,15 @@ public class MainFragment extends Fragment implements BeaconConsumer {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ArrayList<String> items = new ArrayList<String>();
+        items.add("Spår 9");
+        items.add("Spår 10");
+        items.add("Spår 11");
+        ListView lv = (ListView)view.findViewById(R.id.locationItems);
+        lv.setAdapter(new NearObjectListViewAdapter(getActivity(), items));
+
+        return view;
     }
 
     @Override
@@ -69,7 +78,7 @@ public class MainFragment extends Fragment implements BeaconConsumer {
                     @Override
                     public void run() {
                         // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                        TextView stationText = (TextView) getActivity().findViewById(R.id.stationText);
+                        TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
                         stationText.setText("Welcome to Kings Cross");
                     }
                 });
@@ -91,7 +100,7 @@ public class MainFragment extends Fragment implements BeaconConsumer {
                     @Override
                     public void run() {
                         // This code will always run on the UI thread, therefore is safe to modify UI elements.
-                        TextView stationText = (TextView) getActivity().findViewById(R.id.stationText);
+                        TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
                         stationText.setText("No station near you");
                     }
                 });

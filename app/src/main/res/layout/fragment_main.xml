@@ -1,18 +1,20 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
 
     <TextView
-        android:id="@+id/stationText"
-        android:layout_width="wrap_content"
+        android:id="@+id/found_label"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No station near you"
-        android:textSize="20sp"
-        android:layout_centerVertical="true"
+        android:text="No stations near you"
+        android:textSize="30sp"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
-        android:textColor="#fff"
+        android:background="#fff"
+        android:textColor="#111"
         />
-
+    <ListView
+        android:id="@+id/locationItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
 </RelativeLayout>

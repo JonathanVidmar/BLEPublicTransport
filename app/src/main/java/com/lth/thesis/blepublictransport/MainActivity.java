@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity
 
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private PaymentFragment mFragment;
-    private boolean mResolvingError = false;
+    private MainFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // Set fragment initially
-        mFragment = new PaymentFragment();
+        mFragment = new MainFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, mFragment);
         fragmentTransaction.commit();
@@ -55,25 +54,6 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1001) {
-            // User was presented with the Nearby opt-in dialog and pressed "Allow".
-            mResolvingError = false;
-            if (resultCode == Activity.RESULT_OK) {
-                // Execute the pending subscription and publication tasks here.
-                mFragment.executePendingTasks();
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // User declined to opt-in. Reset application state here.
-            } else {
-                Toast.makeText(this, "Failed to resolve error with code " + resultCode,
-                        Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     @Override

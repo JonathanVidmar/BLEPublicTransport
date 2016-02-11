@@ -12,9 +12,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyBBHL8-BeQx0YDkd0Np4k_jLm2Cody23o4" />
 
         <activity
             android:name=".MainActivity"
@@ -38,9 +35,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".BackgroundSubscribeIntentService"
-            android:exported="false"></service>
     </application>
 
 </manifest>

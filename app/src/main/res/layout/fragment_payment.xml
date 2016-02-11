@@ -8,12 +8,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nearby didn't find anything"
-        android:textSize="20sp"
-        android:paddingTop="30px"
+        android:textSize="30sp"
+        android:paddingLeft="70px"
+        android:paddingRight="70px"
+        android:paddingTop="200px"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
-        android:textColor="#fff"
+        android:background="#fff"
+        android:textColor="#111"
         />
-
-
 </RelativeLayout>
