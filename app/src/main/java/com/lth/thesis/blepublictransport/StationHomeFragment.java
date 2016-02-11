@@ -30,7 +30,7 @@ import java.util.HashMap;
  * The main fragment class, subclass of Fragment,
  * which implements the BeaconConsumer which let's it detect iBeacons.
  */
-public class MainFragment extends Fragment implements BeaconConsumer {
+public class StationHomeFragment extends Fragment implements BeaconConsumer {
     protected static final String TAG = "MonitoringActivity";
     private BeaconManager beaconManager;
     private View view;
@@ -38,7 +38,7 @@ public class MainFragment extends Fragment implements BeaconConsumer {
     private HashMap<String, Double> foundBeacons;
     private NearObjectListViewAdapter mAdapter;
 
-    public MainFragment() {
+    public StationHomeFragment() {
         // Required empty public constructor
     }
 
@@ -150,10 +150,17 @@ public class MainFragment extends Fragment implements BeaconConsumer {
         ArrayList<String> list = new ArrayList<String>();
 
         for (String s : foundBeacons.keySet()) {
-            list.add("Distane: " +  foundBeacons.get(s) + " Beacon:" + s);
+            String text = "Distane: " +  foundBeacons.get(s) + " Beacon:" + s;
+            list.add(text);
+            Log.d(TAG, text);
         }
-        //mAdapter.updateList(list);
-        //mAdapter.notifyDataSetChanged();
+        mAdapter.updateList(list);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
