@@ -1,7 +1,10 @@
 <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/toolbar"
+    tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment"
+    >
 
     <TextView
         android:id="@+id/found_label"
@@ -10,11 +13,14 @@
         android:text="No stations near you"
         android:textSize="30sp"
         android:layout_centerHorizontal="true"
-        android:background="#fff"
         android:textColor="#111"
+        android:layout_marginTop="140px"
+        android:gravity="center"
         />
     <ListView
         android:id="@+id/locationItems"
+        android:layout_below="@+id/found_label"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"
+        ></ListView>
 </RelativeLayout>

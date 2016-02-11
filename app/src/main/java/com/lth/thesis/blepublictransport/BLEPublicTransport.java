@@ -53,7 +53,9 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         Log.d(TAG, "Got a didEnterRegion call");
         // This call to disable will make it so the activity below only gets launched the first time a beacon is seen (until the next time the app is launched)
         // if you want the Activity to launch every single time beacons come into view, remove this call.
-        regionBootstrap.disable();
+
+        //regionBootstrap.disable();
+
         //Intent intent = new Intent(this, MainActivity.class);
         // IMPORTANT: in the AndroidManifest.xml definition of this activity, you must set android:launchMode="singleInstance" or you will get two instances
         // created when a user launches the activity manually and it gets launched from here.

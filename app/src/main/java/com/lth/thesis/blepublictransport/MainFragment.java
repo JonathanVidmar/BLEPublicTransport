@@ -13,14 +13,18 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * The main fragment class, subclass of Fragment,
@@ -29,6 +33,10 @@ import java.util.ArrayList;
 public class MainFragment extends Fragment implements BeaconConsumer {
     protected static final String TAG = "MonitoringActivity";
     private BeaconManager beaconManager;
+    private View view;
+    private ListView listView;
+    private HashMap<String, Double> foundBeacons;
+    private NearObjectListViewAdapter mAdapter;
 
     public MainFragment() {
         // Required empty public constructor
@@ -37,14 +45,12 @@ public class MainFragment extends Fragment implements BeaconConsumer {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ArrayList<String> items = new ArrayList<String>();
-        items.add("Spår 9");
-        items.add("Spår 10");
-        items.add("Spår 11");
-        ListView lv = (ListView)view.findViewById(R.id.locationItems);
-        lv.setAdapter(new NearObjectListViewAdapter(getActivity(), items));
+        view = inflater.inflate(R.layout.fragment_main, container, false);
+        foundBeacons = new HashMap<String, Double>();
 
+        ArrayList<String> items = new ArrayList<String>();
+        items.add("Looking for nearby facilities");
+        mAdapter = new NearObjectListViewAdapter(getActivity(), items);
         return view;
     }
 
@@ -80,15 +86,17 @@ public class MainFragment extends Fragment implements BeaconConsumer {
                         // This code will always run on the UI thread, therefore is safe to modify UI elements.
                         TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
                         stationText.setText("Welcome to Kings Cross");
+                        listView = (ListView)view.findViewById(R.id.locationItems);
+                        listView.setAdapter(mAdapter);
                     }
                 });
 
 
-                /*try {
+                try {
                     beaconManager.startRangingBeaconsInRegion(region);
                 } catch (RemoteException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
 
             @Override
@@ -102,14 +110,15 @@ public class MainFragment extends Fragment implements BeaconConsumer {
                         // This code will always run on the UI thread, therefore is safe to modify UI elements.
                         TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
                         stationText.setText("No station near you");
+                        listView.setVisibility(View.GONE);
                     }
                 });
 
-                /*try {
+                try {
                     beaconManager.stopRangingBeaconsInRegion(region);
                 } catch (RemoteException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
 
             @Override
@@ -118,20 +127,33 @@ public class MainFragment extends Fragment implements BeaconConsumer {
             }
         });
 
-        /*beaconManager.setRangeNotifier(new RangeNotifier() {
+        beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 for (Beacon oneBeacon : beacons) {
                     Log.d(TAG, "distance: " + oneBeacon.getDistance() + " id:" + oneBeacon.getId1() + "/" + oneBeacon.getId2() + "/" + oneBeacon.getId3());
+                    String key = oneBeacon.getId1().toString() + oneBeacon.getId2().toString() + oneBeacon.getId3().toString();
+                    foundBeacons.put(key, oneBeacon.getDistance());
                 }
+                updateList();
             }
-        });*/
+        });
 
         try {
             beaconManager.startMonitoringBeaconsInRegion(region);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateList(){
+        ArrayList<String> list = new ArrayList<String>();
+
+        for (String s : foundBeacons.keySet()) {
+            list.add("Distane: " +  foundBeacons.get(s) + " Beacon:" + s);
+        }
+        //mAdapter.updateList(list);
+        //mAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -17,9 +17,13 @@ public class NearObjectListViewAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
 
-    public NearObjectListViewAdapter(Context photosFragment, ArrayList<String> results){
+    public NearObjectListViewAdapter(Context fragment, ArrayList<String> results){
         objecList = results;
-        mInflater = LayoutInflater.from(photosFragment);
+        mInflater = LayoutInflater.from(fragment);
+    }
+
+    public void updateList(ArrayList<String> list) {
+        objecList = list;
     }
 
     @Override
