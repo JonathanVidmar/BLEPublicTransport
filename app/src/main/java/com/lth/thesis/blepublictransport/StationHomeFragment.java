@@ -119,7 +119,7 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
             e.printStackTrace();
         }
     }
-    
+
     @Override
     public Context getApplicationContext() {
         return getActivity().getApplicationContext();
