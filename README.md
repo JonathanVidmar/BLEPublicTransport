@@ -16,3 +16,14 @@ Implemented use case 1 consisting both Android implementation as well as a web p
 
 **Jacob**
 Implemented use case 2 with focus on both foreground and background beacon detection and notification integration.
+
+### Week six
+This week we continued on our first iteration. We decided in the beginning to try Google's new Nearby and Proximity API. It was not very easy to implement this since it's new and doesn't have a lot of documentation. In the end the API didn't really do what we wanted and we decided to use the Android Beacon Library instead. This was probably a good choice but it was a shame that we used so much time on Google Nearby. 
+
+The last two days of the week went into trying to get the last user case implemented and also to do some restructuring to make the application easier to work with in the future.
+
+**Jonathan**
+Implemented a lot of the server side authentication towards Google Nearby, and later tried to fix Nearby to work with our application. When implementing Android Beacon Library Jonathan did a lot of the restructuring of the application.
+
+**Jacob**
+Installed the beacons and set up the managing panel of them. Looked into Nearby and how to implement it. Implemented the list view with the nearby objects for Use Case 3.

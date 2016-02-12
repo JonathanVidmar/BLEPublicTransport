@@ -31,5 +31,18 @@ public class BeaconHelper {
         return beaconList.get(instanceId.toString());
     }
 
+    /**
+     * This method converts the distance to a string to be displayed.
+     * @param distance, the actual distance to the beacon
+     * @return the text to be displayed.
+     */
+    public String getDistanceText(Double distance){
+        if(distance < 1){
+            return "Less then 1 meter";
+        } else {
+            return String.valueOf(Math.round(distance));
+        }
+    }
+
 
 }
