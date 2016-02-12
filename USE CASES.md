@@ -25,8 +25,8 @@ _Prerequisites: None_
 _Prerequisites: None_
 
 1. The user has launched the application while at the station.
-2. The user navigates to the ‘map view’.
-3. While moving around, the user can see their own position as well as points of interest and the rough distance to these points.
+2. The user is taken to the main screen.
+3. While moving around, the user can see the distances to any point of interest in a list.
 
 
 ### Iteration Two
