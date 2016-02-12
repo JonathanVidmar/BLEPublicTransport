@@ -22,7 +22,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     private RegionBootstrap regionBootstrap;
     private BackgroundPowerSaver backgroundPowerSaver;
     private boolean haveDetectedBeaconsSinceBoot = false;
-    private MainActivity mainActivity = null;
+    public boolean active = true;
     private NotificationManager notificationManager;
     private BeaconManager beaconManager;
     private BeaconCommunicator beaconCommunicator;
@@ -35,8 +35,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19"));
 
         // Wakes up application
-        Region region = new Region("backgroundRegion", null, null, null);
-        regionBootstrap = new RegionBootstrap(this, region);
+        //Region region = new Region("backgroundRegion", null, null, null);
+        regionBootstrap = new RegionBootstrap(this, BeaconHelper.region);
         backgroundPowerSaver = new BackgroundPowerSaver(this);
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         beaconCommunicator = new BeaconCommunicator();
@@ -47,18 +47,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         // In this example, this class sends a notification to the user whenever a Beacon
         // matching a Region (defined above) are first seen.
         Log.d(TAG, "did enter region: " + arg0);
-        if (!haveDetectedBeaconsSinceBoot) {
-            Log.d(TAG, "auto launching MainActivity");
-
-            // The very first time since boot that we detect an beacon, we launch the
-            // MainActivity which in turn launches an fragment
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            this.startActivity(intent);
-            haveDetectedBeaconsSinceBoot = true;
-        } else if (mainActivity != null) {
+        if (active) {
             // Currently on a fragment
             // Send data about beacons{
+            beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.ENTERED_REGION, null));
 
         } else {
             // If we have already seen beacons before, but a fragment is not in
@@ -74,6 +66,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         // removes notification of entering a region if it exists
         notificationManager.cancel(1);
         // update mainActivity that region is no more
+        beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.EXITED_REGION, null));
+
     }
 
     @Override
@@ -120,6 +114,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
                 if (beacons.size() > 0) {
                     Beacon b = beacons.iterator().next();
                     Log.i("beacon", "Ranged for beacon: " + b.toString());
+                    beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
                 }
             }
         });

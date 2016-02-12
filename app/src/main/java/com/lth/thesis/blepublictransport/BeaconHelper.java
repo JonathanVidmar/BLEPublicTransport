@@ -12,7 +12,7 @@ public class BeaconHelper {
     private final static String eddystoneLayout = "s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19";
     private Identifier namespace = Identifier.parse("0xf7826da6bc5b71e0893e");
 
-    Region region = new Region("BLEPublicTransport", namespace, null, null);
+    public static final Region region = new Region("BLEPublicTransport", Identifier.parse("0xf7826da6bc5b71e0893e"), null, null);
 
     private HashMap<String, String> beaconList = new HashMap<String, String>();
 

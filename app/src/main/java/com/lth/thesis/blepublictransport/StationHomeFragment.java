@@ -138,6 +138,13 @@ public class StationHomeFragment extends Fragment implements Observer{
 
     @Override
     public void update(Observable observable, Object data) {
-
+        BeaconPacket p = (BeaconPacket) data;
+        if(p.type == BeaconPacket.ENTERED_REGION){
+            enteredStation();
+        }else if(p.type == BeaconPacket.EXITED_REGION){
+            leftStation();
+        }else if(p.type == BeaconPacket.RANGED_BEACONS){
+            foundObjectsNear(p.beacons);
+        }
     }
 }

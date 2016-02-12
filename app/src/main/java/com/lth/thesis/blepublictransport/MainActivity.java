@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        BLEPublicTransport application = (BLEPublicTransport) getApplication();
+        application.active = true;
+
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -54,6 +57,20 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        BLEPublicTransport application = (BLEPublicTransport) getApplication();
+        application.active = false;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        BLEPublicTransport application = (BLEPublicTransport) getApplication();
+        application.active = true;
     }
 
     @Override
@@ -116,4 +133,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
