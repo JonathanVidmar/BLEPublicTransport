@@ -6,17 +6,16 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
 import org.altbeacon.beacon.*;
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 
 import java.util.Collection;
+import java.util.Observer;
 
 public class BLEPublicTransport extends Application implements BootstrapNotifier, BeaconConsumer {
     private static final String TAG = "BLEPublicTransport";
@@ -26,6 +25,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     private MainActivity mainActivity = null;
     private NotificationManager notificationManager;
     private BeaconManager beaconManager;
+    private BeaconCommunicator beaconCommunicator;
 
 
     public void onCreate() {
@@ -39,6 +39,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         regionBootstrap = new RegionBootstrap(this, region);
         backgroundPowerSaver = new BackgroundPowerSaver(this);
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        beaconCommunicator = new BeaconCommunicator();
     }
 
     @Override
@@ -126,6 +127,9 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
         } catch (RemoteException e) {
         }
+    }
+    public BeaconCommunicator getBeaconCommunicator() {
+        return beaconCommunicator;
     }
 }
 

@@ -22,22 +22,18 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * The main fragment class, subclass of Fragment,
  * which implements the BeaconConsumer which let's it detect iBeacons.
  */
-public class StationHomeFragment extends Fragment implements BeaconConsumer {
-    protected static final String TAG = "MonitoringActivity";
-    private BeaconManager beaconManager;
+public class StationHomeFragment extends Fragment implements Observer{
+    protected static final String TAG = "StationHome";
     private View view;
     private ListView listView;
     private HashMap<String, Double> foundBeacons = new HashMap<String, Double>();
     private NearObjectListViewAdapter mAdapter;
-    private final Region region = new Region("com.jacobarvidsson.test", Identifier.parse("FF72C36E-157A-4E58-9837-CCE51B75C7F4"), null, null);
 
     public StationHomeFragment() {
         // Required empty public constructor
@@ -60,92 +56,8 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        beaconManager = BeaconManager.getInstanceForApplication(getActivity());
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        beaconManager.setForegroundScanPeriod(1000l);
-        beaconManager.bind(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // unbind if needed
-        if (beaconManager.isBound(this)) beaconManager.unbind(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        try {
-            beaconManager.stopRangingBeaconsInRegion(region);
-            beaconManager.stopMonitoringBeaconsInRegion(region);
-        } catch (RemoteException e) {
-            // oops?
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onBeaconServiceConnect() {
-        // ID for the beacon: region, uuid, major, minor
-        beaconManager.setMonitorNotifier(new MonitorNotifier() {
-            @Override
-            public void didEnterRegion(Region region) {
-                Log.d(TAG, "didEnterRegion");
-                enteredStation();
-
-                try {
-                    beaconManager.startRangingBeaconsInRegion(region);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void didExitRegion(Region region) {
-                Log.d(TAG, "didExitRegion");
-
-                try {
-                    beaconManager.stopRangingBeaconsInRegion(region);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void didDetermineStateForRegion(int i, Region region) {
-
-            }
-        });
-
-        beaconManager.setRangeNotifier(new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                Log.d("SCANNING!!", "AAAAAAAAaaaAAAaaAAaaaA");
-                foundObjectsNear(beacons);
-            }
-        });
-
-        try {
-            beaconManager.startMonitoringBeaconsInRegion(region);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public Context getApplicationContext() {
-        return getActivity().getApplicationContext();
-    }
-
-    @Override
-    public void unbindService(ServiceConnection serviceConnection) {
-        getActivity().unbindService(serviceConnection);
-    }
-
-    @Override
-    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
-        return getActivity().bindService(intent, serviceConnection, i);
+        BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
+        app.getBeaconCommunicator().addObserver(this);
     }
 
     /**
@@ -224,4 +136,8 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
 
     }
 
+    @Override
+    public void update(Observable observable, Object data) {
+
+    }
 }
