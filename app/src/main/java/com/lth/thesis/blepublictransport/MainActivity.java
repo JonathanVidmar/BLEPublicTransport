@@ -97,9 +97,9 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.fragment_container, mainFragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_gallery) {
-            PaymentFragment mainFragment = new PaymentFragment();
+            PaymentFragment paymentFragment = new PaymentFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, mainFragment);
+            fragmentTransaction.replace(R.id.fragment_container, paymentFragment);
             fragmentTransaction.commit();
         }
 

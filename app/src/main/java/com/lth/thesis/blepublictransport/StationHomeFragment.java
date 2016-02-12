@@ -67,7 +67,7 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
     public void onDestroy() {
         super.onDestroy();
         // unbind if needed
-        if( beaconManager.isBound(this) ) beaconManager.unbind(this);
+        if (beaconManager.isBound(this)) beaconManager.unbind(this);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
                         // This code will always run on the UI thread, therefore is safe to modify UI elements.
                         TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
                         stationText.setText("Welcome to Kings Cross");
-                        listView = (ListView)view.findViewById(R.id.locationItems);
+                        listView = (ListView) view.findViewById(R.id.locationItems);
                         listView.setAdapter(mAdapter);
                     }
                 });
@@ -132,8 +132,8 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 for (Beacon oneBeacon : beacons) {
-                    Log.d(TAG, "distance: " + oneBeacon.getDistance() + " id:" + oneBeacon.getId1() + "/" + oneBeacon.getId2() + "/" + oneBeacon.getId3());
-                    String key = oneBeacon.getId1().toString() + oneBeacon.getId2().toString() + oneBeacon.getId3().toString();
+                    Log.d(TAG, "distance: " + oneBeacon.getDistance() + " id:" + oneBeacon.getId1() + "/" + oneBeacon.getId2()); // + "/" + oneBeacon.getId3());
+                    String key = oneBeacon.getId1().toString() + oneBeacon.getId2().toString(); // + oneBeacon.getId3().toString();
                     foundBeacons.put(key, oneBeacon.getDistance());
                 }
                 updateList();
@@ -147,21 +147,23 @@ public class StationHomeFragment extends Fragment implements BeaconConsumer {
         }
     }
 
-    public void updateList(){
-        ArrayList<String> list = new ArrayList<String>();
+    public void updateList() {
+        if (getActivity() != null) {
+            ArrayList<String> list = new ArrayList<String>();
 
-        for (String s : foundBeacons.keySet()) {
-            String text = "Distane: " +  foundBeacons.get(s) + " Beacon:" + s;
-            list.add(text);
-            Log.d(TAG, text);
-        }
-        mAdapter.updateList(list);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.notifyDataSetChanged();
+            for (String s : foundBeacons.keySet()) {
+                String text = "Distane: " + foundBeacons.get(s) + " Beacon:" + s;
+                list.add(text);
+                Log.d(TAG, text);
             }
-        });
+            mAdapter.updateList(list);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     @Override
