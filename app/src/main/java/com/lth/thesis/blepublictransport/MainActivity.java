@@ -3,6 +3,7 @@ package com.lth.thesis.blepublictransport;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +19,8 @@ public class MainActivity extends AppCompatActivity
 
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private StationHomeFragment mFragment;
+    private static StationHomeFragment stationFragment;
+    private static PaymentFragment paymentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +30,11 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         // Set fragment initially
-        mFragment = new StationHomeFragment();
+        stationFragment = new StationHomeFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, mFragment);
+        fragmentTransaction.replace(R.id.fragment_container, stationFragment, "stationFragment");
         fragmentTransaction.commit();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -90,18 +93,24 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        String tag = "";
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_camera) {
-            StationHomeFragment mainFragment = new StationHomeFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, mainFragment);
-            fragmentTransaction.commit();
+            tag = "stationFragment";
+            stationFragment = (StationHomeFragment) getSupportFragmentManager().findFragmentByTag(tag);
+            if (stationFragment == null) {
+                stationFragment = new StationHomeFragment();
+                fragmentTransaction.replace(R.id.fragment_container, stationFragment, tag);
+            }
         } else if (id == R.id.nav_gallery) {
-            PaymentFragment paymentFragment = new PaymentFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, paymentFragment);
-            fragmentTransaction.commit();
+            tag = "paymentFragment";
+            paymentFragment = (PaymentFragment) getSupportFragmentManager().findFragmentByTag(tag);
+            if (paymentFragment == null) {
+                paymentFragment = new PaymentFragment();
+                fragmentTransaction.replace(R.id.fragment_container, paymentFragment, tag);
+            }
         }
+        fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

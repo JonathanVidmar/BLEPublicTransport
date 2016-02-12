@@ -46,6 +46,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         // class will automatically cause the BeaconLibrary to save battery whenever the application
         // is not visible.  This reduces bluetooth power usage by about 60%
         backgroundPowerSaver = new BackgroundPowerSaver(this);
+        notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // If you wish to test beacon detection in the Android Emulator, you can use code like this:
         // BeaconManager.setBeaconSimulator(new TimedBeaconSimulator() );
@@ -84,7 +85,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     @Override
     public void didExitRegion(Region region) {
         // removes notification of entering a region if it exists
-        notificationManager.cancel(1);
+        //notificationManager.cancel(1);
         // update mainActivity that region is no more
     }
 
@@ -108,8 +109,6 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         builder.setContentIntent(resultPendingIntent);
-        notificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
     }
 
