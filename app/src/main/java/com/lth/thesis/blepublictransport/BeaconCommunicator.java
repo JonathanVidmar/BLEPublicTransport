@@ -1,6 +1,4 @@
 package com.lth.thesis.blepublictransport;
-
-import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,6 +14,7 @@ public class BeaconCommunicator extends Observable {
 
     @Override
     public void notifyObservers(Object data) {
+        setChanged();
         super.notifyObservers(data);
     }
 }

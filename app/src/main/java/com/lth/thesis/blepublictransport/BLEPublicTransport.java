@@ -15,6 +15,7 @@ import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Observer;
 
 public class BLEPublicTransport extends Application implements BootstrapNotifier, BeaconConsumer {
@@ -26,6 +27,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     private NotificationManager notificationManager;
     private BeaconManager beaconManager;
     private BeaconCommunicator beaconCommunicator;
+    private boolean notCurrentlyRanging = true;
+    private BeaconHelper beaconHelper;
 
 
     public void onCreate() {
@@ -36,21 +39,25 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
         // Wakes up application
         //Region region = new Region("backgroundRegion", null, null, null);
-        regionBootstrap = new RegionBootstrap(this, BeaconHelper.region);
+        regionBootstrap = new RegionBootstrap(this, BeaconHelper.regions);
         backgroundPowerSaver = new BackgroundPowerSaver(this);
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         beaconCommunicator = new BeaconCommunicator();
+        beaconHelper = new BeaconHelper();
     }
 
     @Override
     public void didEnterRegion(Region arg0) {
-        // In this example, this class sends a notification to the user whenever a Beacon
-        // matching a Region (defined above) are first seen.
-        Log.d(TAG, "did enter region: " + arg0);
+        beaconHelper.foundRegionInstance(arg0.getId2());
+
+        Log.i("region", "did enter region: " + arg0.getId1() + ", " + arg0.getId2() + ", " + arg0.getId3());
         if (active) {
             // Currently on a fragment
             // Send data about beacons{
             beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.ENTERED_REGION, null));
+            if (notCurrentlyRanging) {
+                startRangingBeaconsInRegion();
+            }
 
         } else {
             // If we have already seen beacons before, but a fragment is not in
@@ -62,12 +69,29 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
 
     @Override
-    public void didExitRegion(Region region) {
-        // removes notification of entering a region if it exists
-        notificationManager.cancel(1);
-        // update mainActivity that region is no more
-        beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.EXITED_REGION, null));
+    public void didExitRegion(Region arg0) {
+        beaconHelper.lostRegionInstance(arg0.getId2());
 
+        if (!beaconHelper.currentlyInMainRegion()) {
+            // removes notification of entering a region if it exists
+            notificationManager.cancel(1);
+            // update mainActivity that region is no more
+            beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.EXITED_REGION, null));
+            // cancel ranging if active
+            stopRangingBeacons();
+            Log.i("region", "did exit region: " + arg0.getId1() + ", " + arg0.getId2() + ", " + arg0.getId3());
+        }
+    }
+
+    private void stopRangingBeacons() {
+        try {
+            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region1);
+            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region2);
+            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region3);
+            notCurrentlyRanging = true;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -80,15 +104,13 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
                 new NotificationCompat.Builder(this)
                         .setContentTitle("BLE Public Transport")
                         .setContentText("An beacon is nearby.")
-                        .setSmallIcon(R.drawable.ic_notification_bus);
+                        .setSmallIcon(R.drawable.ic_notification_bus)
+                        .setOngoing(true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntent(new Intent(this, MainActivity.class));
         PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(resultPendingIntent);
         notificationManager.notify(1, builder.build());
     }
@@ -96,33 +118,35 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     @Override
     public void onBeaconServiceConnect() {
         startMonitoringBeaconsInRegion();
-        startRangingBeaconsInRegion();
     }
 
     public void startMonitoringBeaconsInRegion() {
         try {
-            beaconManager.startMonitoringBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+            beaconManager.startMonitoringBeaconsInRegion(BeaconHelper.region1);
+            beaconManager.startMonitoringBeaconsInRegion(BeaconHelper.region2);
+            beaconManager.startMonitoringBeaconsInRegion(BeaconHelper.region3);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
     public void startRangingBeaconsInRegion() {
+        notCurrentlyRanging = false;
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                if (beacons.size() > 0) {
-                    Beacon b = beacons.iterator().next();
-                    Log.i("beacon", "Ranged for beacon: " + b.toString());
-                    beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
-                }
+                beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
+                // Log.i("region", "did range region: " + region.getId1() + ", " + region.getId2() + ", " + region.getId3());
             }
         });
         try {
-            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+            beaconManager.startRangingBeaconsInRegion(BeaconHelper.region1);
+            beaconManager.startRangingBeaconsInRegion(BeaconHelper.region2);
+            beaconManager.startRangingBeaconsInRegion(BeaconHelper.region3);
         } catch (RemoteException e) {
         }
     }
+
     public BeaconCommunicator getBeaconCommunicator() {
         return beaconCommunicator;
     }

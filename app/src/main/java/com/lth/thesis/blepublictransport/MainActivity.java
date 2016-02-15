@@ -14,13 +14,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Observable;
+import java.util.Observer;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Observer {
 
     private NavigationView navigationView;
     private Toolbar toolbar;
     private static StationHomeFragment stationFragment;
     private static PaymentFragment paymentFragment;
+    private static String STATION_FRAGMENT = "stationFragment";
+    private static String PAYMENT_FRAGMENT = "paymentFragment";
+    private String currentFragmentTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,7 @@ public class MainActivity extends AppCompatActivity
 
         BLEPublicTransport application = (BLEPublicTransport) getApplication();
         application.active = true;
+        application.getBeaconCommunicator().addObserver(this);
 
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -37,7 +44,8 @@ public class MainActivity extends AppCompatActivity
         // Set fragment initially
         stationFragment = new StationHomeFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, stationFragment, "stationFragment");
+        currentFragmentTag = STATION_FRAGMENT;
+        fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
         fragmentTransaction.commit();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -113,18 +121,16 @@ public class MainActivity extends AppCompatActivity
         String tag = "";
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_camera) {
-            tag = "stationFragment";
-            stationFragment = (StationHomeFragment) getSupportFragmentManager().findFragmentByTag(tag);
+            stationFragment = (StationHomeFragment) getSupportFragmentManager().findFragmentByTag(STATION_FRAGMENT);
             if (stationFragment == null) {
                 stationFragment = new StationHomeFragment();
-                fragmentTransaction.replace(R.id.fragment_container, stationFragment, tag);
+                fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
             }
         } else if (id == R.id.nav_gallery) {
-            tag = "paymentFragment";
-            paymentFragment = (PaymentFragment) getSupportFragmentManager().findFragmentByTag(tag);
+            paymentFragment = (PaymentFragment) getSupportFragmentManager().findFragmentByTag(PAYMENT_FRAGMENT);
             if (paymentFragment == null) {
                 paymentFragment = new PaymentFragment();
-                fragmentTransaction.replace(R.id.fragment_container, paymentFragment, tag);
+                fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
             }
         }
         fragmentTransaction.commit();
@@ -134,4 +140,14 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void update(Observable observable, Object data) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentTag);
+        // Should be redundant
+        if (currentFragment != null && currentFragment.isVisible()) {
+            if (currentFragment instanceof StationHomeFragment) {
+                ((StationHomeFragment) currentFragment).update(data);
+            }
+        }
+    }
 }
