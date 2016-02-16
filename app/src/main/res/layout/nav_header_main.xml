@@ -15,8 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Public Transport Show Case App"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        android:text="Public Transport\nPrototype Application"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
     <TextView
         android:id="@+id/textView"

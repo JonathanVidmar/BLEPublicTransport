@@ -8,9 +8,21 @@
         android:id="@+id/priceOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dependent/Independent prices"
+        android:text="Independent/Dependent prices"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
     />
+
+    <TextView
+        android:id="@+id/switchStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/priceOption"
+        android:text="Prices depends on destination"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
 </RelativeLayout>

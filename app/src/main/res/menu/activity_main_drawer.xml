@@ -7,7 +7,7 @@
         <item
                 android:id="@+id/nav_station_home"
                 android:icon="@drawable/ic_location_on_black_24dp"
-                android:title="Home"/>
+                android:title="Nearby"/>
         <item
                 android:id="@+id/nav_payment"
                 android:icon="@drawable/ic_attach_money_black_24dp"
