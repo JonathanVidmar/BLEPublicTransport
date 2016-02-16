@@ -35,10 +35,10 @@ _Prerequisites: The user has NOT launched the application. 3a: The ticket price 
 
 1. The user arrives to the station and the application detects a beacon.
 2. A notification is displayed telling the user to buy a ticket.
-3.
+3a. The ticket price is independant of the destination:
   1. A user clicks the notification and a screen shows up displaying information about the ticket together with a buy option.
   2. The users clicks buy and is taken to the ticket screen.
-4.
+3b. The ticket price is dependant of the destination.
   1. A user clicks the notification and a screen shows up displaying information about the ticket together with a input field.
   2. The users chooses the destination from a list and the price for the trip is displayed together with a buy option.
   3. The users clicks buy and is taken to the ticket screen.
