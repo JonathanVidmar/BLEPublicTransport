@@ -24,8 +24,11 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private static StationHomeFragment stationFragment;
     private static PaymentFragment paymentFragment;
+    private static SettingsFragment settingsFragment;
     private static String STATION_FRAGMENT = "stationFragment";
     private static String PAYMENT_FRAGMENT = "paymentFragment";
+    private static String SETTINGS_FRAGMENT = "paymentFragment";
+
     private String currentFragmentTag;
 
     @Override
@@ -120,17 +123,26 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         String tag = "";
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_station_home) {
+            toolbar.setTitle("Home");
             stationFragment = (StationHomeFragment) getSupportFragmentManager().findFragmentByTag(STATION_FRAGMENT);
             if (stationFragment == null) {
                 stationFragment = new StationHomeFragment();
                 fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
             }
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_payment) {
+            toolbar.setTitle("Payment");
             paymentFragment = (PaymentFragment) getSupportFragmentManager().findFragmentByTag(PAYMENT_FRAGMENT);
             if (paymentFragment == null) {
                 paymentFragment = new PaymentFragment();
                 fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
+            }
+        } else if (id == R.id.nav_settings) {
+            settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT);
+            toolbar.setTitle("Settings");
+            if (settingsFragment == null) {
+                settingsFragment = new SettingsFragment();
+                fragmentTransaction.replace(R.id.fragment_container, settingsFragment, SETTINGS_FRAGMENT);
             }
         }
         fragmentTransaction.commit();
