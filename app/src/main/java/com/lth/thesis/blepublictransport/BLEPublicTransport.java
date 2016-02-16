@@ -49,6 +49,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     @Override
     public void didEnterRegion(Region arg0) {
         beaconHelper.foundRegionInstance(arg0.getId2());
+        Log.d(TAG, "Sending notification.");
+        sendNotification();
 
         Log.i("region", "did enter region: " + arg0.getId1() + ", " + arg0.getId2() + ", " + arg0.getId3());
         if (active) {
@@ -59,12 +61,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
                 startRangingBeaconsInRegion();
             }
 
-        } else {
+        } //else {
             // If we have already seen beacons before, but a fragment is not in
             // the foreground, we send a notification to the user on subsequent detections.
-            Log.d(TAG, "Sending notification.");
-            sendNotification();
-        }
+        //}
     }
 
 

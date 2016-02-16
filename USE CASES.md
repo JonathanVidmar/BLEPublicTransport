@@ -31,30 +31,26 @@ _Prerequisites: The user has launched the application._
 
 ### Use case 4
 
-_Prerequisites: The user has launched the application. The ticket price is independant of the destination._
-
-1. The user arrives to the station and the application detects a beacon.
-2. An in-app notification shows up displaying information about the ticket together with a buy option.
-3. The users clicks buy and is taken to the ticket screen.
-
-### Use case 5
-
-_Prerequisites: The user has launched the application. The ticket price depends on the destination._
-
-1. The user arrives to the station and the application detects a beacon.
-2. An in-app notification shows up displaying information about the ticket together with a input field.
-3. The users chooses the destination from a list and the price for the trip is displayed together with a buy option.
-4. The users clicks buy and is taken to the ticket screen.
-
-### Use case 6
-
 _Prerequisites: The user has NOT launched the application._
 
 1. The user arrives to the station and the application detects a beacon.
 2. A notification is displayed telling the user to buy a ticket.
-3. The user clicks the notification and then follows user case 3 or 4.
 
-### Use case 7
+_Prerequisites: The ticket price is independant of the destination._
+
+3a.
+  1. A user clicks the notification and a screen shows up displaying information about the ticket together with a buy option.
+  2. The users clicks buy and is taken to the ticket screen.
+
+_Prerequisites: The ticket price is dependant of the destination._
+
+3b.
+  1. A user clicks the notification and a screen shows up displaying information about the ticket together with a input field.
+  2. The users chooses the destination from a list and the price for the trip is displayed together with a buy option.
+  3. The users clicks buy and is taken to the ticket screen.
+
+
+### Use case 5
 
 _Prerequisites: The user has bought a ticket and app is running in the background._
 
