@@ -3,6 +3,7 @@ package com.lth.thesis.blepublictransport;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.google.android.gms.common.api.ResultCallback;
 public class PaymentFragment extends Fragment {
     // Tag for debugging
     private static final String TAG = "Payment";
+    public static final String PREFS_NAME = "MyPrefsFile";
 
 
     public PaymentFragment() {
@@ -41,6 +43,10 @@ public class PaymentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
+
+        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+        boolean silent = settings.getBoolean("dependantPayment", false); // true == dependent travel
+
         setRetainInstance(true);
 
         return view;
