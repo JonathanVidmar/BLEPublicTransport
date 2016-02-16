@@ -13,12 +13,12 @@
     </group>
 
     <item android:title="Developer options">
-        <menu>
+        <group>
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Settings" />
-        </menu>
+        </group>
     </item>
 
 </menu>
