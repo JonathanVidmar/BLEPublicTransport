@@ -6,11 +6,11 @@
             android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_station_home"
-                android:icon="@drawable/ic_menu_camera"
+                android:icon="@drawable/ic_location_on_black_24dp"
                 android:title="Home"/>
         <item
                 android:id="@+id/nav_payment"
-                android:icon="@drawable/ic_menu_gallery"
+                android:icon="@drawable/ic_attach_money_black_24dp"
                 android:title="Payment"/>
     </group>
     <group
@@ -18,7 +18,7 @@
             android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_settings_black_24dp"
                 android:title="Settings"/>
     </group>
 </menu>
