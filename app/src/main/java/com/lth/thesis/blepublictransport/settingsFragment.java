@@ -18,7 +18,9 @@ import com.lth.thesis.blepublictransport.R;
  */
 public class SettingsFragment extends Fragment {
     public static final String PREFS_NAME = "MyPrefsFile";
-    Switch mSwitch;
+    private Switch mSwitch;
+    private TextView switchStatus;
+
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -31,10 +33,11 @@ public class SettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         mSwitch = (Switch) view.findViewById(R.id.priceOption);
+        switchStatus = (TextView) view.findViewById(R.id.switchStatus);
 
         // Restore preferences
         SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
-        boolean silent = settings.getBoolean("dependantPayment", false); // false is default value
+        boolean silent = settings.getBoolean("dependantPayment", true); // false is default value
 
         mSwitch.setChecked(silent);
 
@@ -46,8 +49,22 @@ public class SettingsFragment extends Fragment {
                 SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("dependantPayment", isChecked);
+                editor.commit();
+                if(isChecked){
+                    switchStatus.setText("Prices depends on destination");
+                }else{
+                    switchStatus.setText("Prices are independent of destination");
+                }
             }
         });
+
+        //check the current state before we display the screen
+        if(mSwitch.isChecked()){
+            switchStatus.setText("Prices depends on destination");
+        }
+        else {
+            switchStatus.setText("Prices are independent of destination");
+        }
 
         return view;
     }

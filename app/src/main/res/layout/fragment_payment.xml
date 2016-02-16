@@ -5,13 +5,13 @@
                 tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
 
     <TextView
-            android:id="@+id/found_label"
+            android:id="@+id/chooseDestinationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nearby didn't find anything"
-            android:textSize="30sp"
-            android:layout_centerHorizontal="true"
-            android:background="#fff"
+            android:text="Choose your destination"
+            android:textSize="22sp"
             android:textColor="#111"
-            />
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
 </RelativeLayout>

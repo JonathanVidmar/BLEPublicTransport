@@ -32,6 +32,7 @@ public class PaymentFragment extends Fragment {
     // Tag for debugging
     private static final String TAG = "Payment";
     public static final String PREFS_NAME = "MyPrefsFile";
+    private TextView chooseDestination;
 
 
     public PaymentFragment() {
@@ -45,8 +46,14 @@ public class PaymentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
 
         SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
-        boolean silent = settings.getBoolean("dependantPayment", false); // true == dependent travel
+        boolean dependant = settings.getBoolean("dependantPayment", false); // true == dependent travel
+        chooseDestination = (TextView) view.findViewById(R.id.chooseDestinationLabel);
 
+        if(dependant){
+            chooseDestination.setVisibility(View.VISIBLE);
+        } else {
+            chooseDestination.setVisibility(View.INVISIBLE);
+        }
         setRetainInstance(true);
 
         return view;
