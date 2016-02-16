@@ -22,12 +22,13 @@ public class MainActivity extends AppCompatActivity
 
     private NavigationView navigationView;
     private Toolbar toolbar;
+
     private static StationHomeFragment stationFragment;
     private static PaymentFragment paymentFragment;
     private static SettingsFragment settingsFragment;
     private static String STATION_FRAGMENT = "stationFragment";
     private static String PAYMENT_FRAGMENT = "paymentFragment";
-    private static String SETTINGS_FRAGMENT = "paymentFragment";
+    private static String SETTINGS_FRAGMENT = "settingsFragment";
 
     private String currentFragmentTag;
 
