@@ -16,13 +16,13 @@ import com.lth.thesis.blepublictransport.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends Fragment {
+public class SettingssssFragment extends Fragment {
     public static final String PREFS_NAME = "MyPrefsFile";
     private Switch mSwitch;
     private TextView switchStatus;
 
 
-    public SettingsFragment() {
+    public SettingssssFragment() {
         // Required empty public constructor
     }
 
