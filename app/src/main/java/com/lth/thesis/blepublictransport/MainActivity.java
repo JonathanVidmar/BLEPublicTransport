@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity
 
     private static StationHomeFragment stationFragment;
     private static PaymentFragment paymentFragment;
-    private static SettingssssFragment settingsFragment;
+    private static SettingsFragment settingsFragment;
     private static String STATION_FRAGMENT = "stationFragment";
     private static String PAYMENT_FRAGMENT = "paymentFragment";
     private static String SETTINGS_FRAGMENT = "settingsFragment";
@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
             }
         } else if (id == R.id.nav_settings) {
-            settingsFragment = (SettingssssFragment) getSupportFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT);
+            settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT);
             toolbar.setTitle("Settings");
             if (settingsFragment == null) {
-                settingsFragment = new SettingssssFragment();
+                settingsFragment = new SettingsFragment();
                 fragmentTransaction.replace(R.id.fragment_container, settingsFragment, SETTINGS_FRAGMENT);
             }
         }
