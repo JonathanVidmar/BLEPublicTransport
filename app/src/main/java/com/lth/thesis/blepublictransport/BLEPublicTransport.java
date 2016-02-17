@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -14,7 +15,10 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Observer;
 
@@ -149,6 +153,23 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     public BeaconCommunicator getBeaconCommunicator() {
         return beaconCommunicator;
+    }
+
+    public boolean hasValidTicket(){
+        boolean hasValidTicket = false;
+        SharedPreferences ticket = getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
+        String validUntil = ticket.getString(Constants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            Date date = formatter.parse(validUntil);
+            Date now = new Date();
+            long timeLeft = date.getTime() - now.getTime();
+            hasValidTicket = (timeLeft < 0) ? false : true;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return hasValidTicket;
     }
 }
 
