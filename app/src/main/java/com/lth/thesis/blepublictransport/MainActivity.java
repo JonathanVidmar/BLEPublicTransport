@@ -45,11 +45,29 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        // Set fragment initially
-        stationFragment = new StationHomeFragment();
+        Bundle extras = getIntent().getExtras();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        currentFragmentTag = STATION_FRAGMENT;
-        fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
+        if (extras == null) {
+            stationFragment = new StationHomeFragment();
+            currentFragmentTag = STATION_FRAGMENT;
+            fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
+        } else {
+            String frag = extras.getString("fragment");
+            if (frag != null) {
+                switch (frag) {
+                    case "nearby":
+                        stationFragment = new StationHomeFragment();
+                        currentFragmentTag = STATION_FRAGMENT;
+                        fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
+                        break;
+                    case "payment":
+                        paymentFragment = new PaymentFragment();
+                        currentFragmentTag = PAYMENT_FRAGMENT;
+                        fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
+                        break;
+                }
+            }
+        }
         fragmentTransaction.commit();
 
         /*
@@ -74,14 +92,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         BLEPublicTransport application = (BLEPublicTransport) getApplication();
         application.active = false;
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         BLEPublicTransport application = (BLEPublicTransport) getApplication();
         application.active = true;

@@ -24,11 +24,11 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     private BackgroundPowerSaver backgroundPowerSaver;
     private boolean haveDetectedBeaconsSinceBoot = false;
     public boolean active = true;
-    private NotificationManager notificationManager;
     private BeaconManager beaconManager;
     private BeaconCommunicator beaconCommunicator;
     private boolean notCurrentlyRanging = true;
     private BeaconHelper beaconHelper;
+    public NotificationHandler notificationHandler;
 
 
     public void onCreate() {
@@ -41,18 +41,17 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         //Region region = new Region("backgroundRegion", null, null, null);
         regionBootstrap = new RegionBootstrap(this, BeaconHelper.regions);
         backgroundPowerSaver = new BackgroundPowerSaver(this);
-        notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationHandler = new NotificationHandler(this);
         beaconCommunicator = new BeaconCommunicator();
         beaconHelper = new BeaconHelper();
     }
 
     @Override
     public void didEnterRegion(Region arg0) {
+        if (!beaconHelper.currentlyInMainRegion()) notificationHandler.create();
         beaconHelper.foundRegionInstance(arg0.getId2());
-        Log.d(TAG, "Sending notification.");
-        sendNotification();
 
-        Log.i("region", "did enter region: " + arg0.getId1() + ", " + arg0.getId2() + ", " + arg0.getId3());
+        // Log.i("region", "did enter region: " + arg0.getId1() + ", " + arg0.getId2() + ", " + arg0.getId3());
         if (active) {
             // Currently on a fragment
             // Send data about beacons{
@@ -74,7 +73,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
         if (!beaconHelper.currentlyInMainRegion()) {
             // removes notification of entering a region if it exists
-            notificationManager.cancel(1);
+            notificationHandler.cancel();
             // update mainActivity that region is no more
             beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.EXITED_REGION, null));
             // cancel ranging if active
@@ -97,22 +96,6 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     @Override
     public void didDetermineStateForRegion(int state, Region region) {
         // No use at the moment
-    }
-
-    private void sendNotification() {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setContentTitle("BLE Public Transport")
-                        .setContentText("An beacon is nearby.")
-                        .setSmallIcon(R.drawable.ic_notification_bus)
-                        .setOngoing(true);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addNextIntent(new Intent(this, MainActivity.class));
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(resultPendingIntent);
-        notificationManager.notify(1, builder.build());
     }
 
     @Override
