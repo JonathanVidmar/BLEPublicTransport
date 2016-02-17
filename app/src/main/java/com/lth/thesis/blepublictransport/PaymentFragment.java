@@ -82,6 +82,8 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                 }
 
                 editor.commit();
+                BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
+                app.notificationHandler.update(NotificationHandler.VALID_TICKET_AVAILABLE);
 
                 ShowTicketFragment fragment = new ShowTicketFragment();
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();

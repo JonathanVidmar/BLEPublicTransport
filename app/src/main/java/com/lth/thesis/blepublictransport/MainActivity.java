@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity
     private static String STATION_FRAGMENT = "stationFragment";
     private static String PAYMENT_FRAGMENT = "paymentFragment";
     private static String SETTINGS_FRAGMENT = "settingsFragment";
+    private static String TICKET_FRAGMENT = "ticketFragment";
 
     private String currentFragmentTag;
 
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity
                         paymentFragment = new PaymentFragment();
                         currentFragmentTag = PAYMENT_FRAGMENT;
                         fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
+                        break;
+                    case "ticket":
+                        ShowTicketFragment ticketFragment = new ShowTicketFragment();
+                        currentFragmentTag = TICKET_FRAGMENT;
+                        fragmentTransaction.replace(R.id.fragment_container, ticketFragment, TICKET_FRAGMENT);
                         break;
                 }
             }

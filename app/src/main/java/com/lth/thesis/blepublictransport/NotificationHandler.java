@@ -14,21 +14,24 @@ import android.support.v4.content.ContextCompat;
  */
 public class NotificationHandler {
     private NotificationManager notificationManager;
-    private Application application;
+    private BLEPublicTransport application;
 
     public final static int VALID_TICKET_AVAILABLE = 0;
     public final static int NO_TICKET_AVAILABLE = 1;
 
     private final static int NOTIFICATION_ID = 1;
 
-    public NotificationHandler(Application application) {
+    public NotificationHandler(BLEPublicTransport application) {
         this.application = application;
         notificationManager = (NotificationManager) application.getSystemService(Context.NOTIFICATION_SERVICE);
-        init();
     }
 
-    private void init() {
-        update(NO_TICKET_AVAILABLE);
+    public void create() {
+        if (application.hasValidTicket()){
+            update(VALID_TICKET_AVAILABLE);
+        } else {
+            update(NO_TICKET_AVAILABLE);
+        }
     }
 
     public void update(int type) {
@@ -39,14 +42,14 @@ public class NotificationHandler {
                 Intent ticketFragmentIntent = new Intent(application, MainActivity.class);
                 ticketFragmentIntent.putExtra("fragment", "ticket");
                 PendingIntent ticketPendingIntent = PendingIntent.getActivity(application.getApplicationContext(),1,ticketFragmentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Action ticketAction = new NotificationCompat.Action(R.drawable.ic_ticket, "Buy ticket", ticketPendingIntent);
+                NotificationCompat.Action ticketAction = new NotificationCompat.Action(R.drawable.ic_ticket, "Show ticket", ticketPendingIntent);
                 builder.addAction(ticketAction);
                 break;
             case NO_TICKET_AVAILABLE:
                 Intent paymentFragmentIntent = new Intent(application, MainActivity.class);
                 paymentFragmentIntent.putExtra("fragment", "payment");
                 PendingIntent paymentPendingIntent = PendingIntent.getActivity(application.getApplicationContext(),1,paymentFragmentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Action paymentAction = new NotificationCompat.Action(R.drawable.ic_add_ticket, "Show ticket", paymentPendingIntent);
+                NotificationCompat.Action paymentAction = new NotificationCompat.Action(R.drawable.ic_add_ticket, "Buy ticket", paymentPendingIntent);
                 builder.addAction(paymentAction);
                 break;
         }

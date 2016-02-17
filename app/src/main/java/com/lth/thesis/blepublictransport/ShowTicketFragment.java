@@ -4,6 +4,8 @@ package com.lth.thesis.blepublictransport;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +28,6 @@ public class ShowTicketFragment extends Fragment {
     public ShowTicketFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,8 +59,7 @@ public class ShowTicketFragment extends Fragment {
                     }
 
                     public void onFinish() {
-                        TextView mTextField = (TextView) view.findViewById(R.id.validTicketCounter);
-                        mTextField.setText("INVALID TICKET");
+                        clearTicket();
                     }
 
                     public String convertSecondsToHMmSs(long seconds) {
@@ -71,15 +71,19 @@ public class ShowTicketFragment extends Fragment {
 
                 }.start();
             }else{
-                TextView mTextField = (TextView) view.findViewById(R.id.validTicketCounter);
-                mTextField.setText("INVALID TICKET");
+                clearTicket();
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         return view;
     }
 
-
-
+    private void clearTicket() {
+        TextView mTextField = (TextView) getActivity().findViewById(R.id.validTicketCounter);
+        mTextField.setText("INVALID TICKET");
+        BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
+        app.notificationHandler.update(NotificationHandler.NO_TICKET_AVAILABLE);
+    }
 }
