@@ -34,13 +34,13 @@ public class ShowTicketFragment extends Fragment {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-        SharedPreferences settings = getActivity().getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
-        String validUntil = settings.getString(Constants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
+        SharedPreferences ticket = getActivity().getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
+        SharedPreferences settings = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
 
-        SharedPreferences ticket = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
-        boolean dependant = ticket.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true);
+        String validUntil = ticket.getString(Constants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
+        boolean dependant = settings.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true);
         if(dependant){
-            String destination = settings.getString(Constants.VALID_TICKET_DESTINATION, "Nowhere");
+            String destination = ticket.getString(Constants.VALID_TICKET_DESTINATION, "Nowhere");
             TextView mTextField = (TextView) view.findViewById(R.id.validTicketCounterText);
             mTextField.setText("Ticket is valid to " + destination + " until the timer is finished");
 
