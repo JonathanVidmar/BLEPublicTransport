@@ -47,8 +47,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_payment, container, false);
 
@@ -56,21 +55,16 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         boolean dependant = settings.getBoolean("dependantPayment", false); // true == dependent travel
         chooseDestination = (RelativeLayout) view.findViewById(R.id.destinationView);
 
-        if(dependant){
-            chooseDestination.setVisibility(View.VISIBLE);
-            Spinner spinner = (Spinner) view.findViewById(R.id.destination_spinner);
-            // Create an ArrayAdapter using the string array and a default spinner layout
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.destination_array, R.layout.spinner_destination_item);
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner
-            spinner.setAdapter(adapter);
-            spinner.setOnItemSelectedListener(this);
-        } else {
-            chooseDestination.setVisibility(View.INVISIBLE);
-            //chooseDestination.setVisibility((dependant) ? View.VISIBLE : View.INVISIBLE);
+        Spinner spinner = (Spinner) view.findViewById(R.id.destination_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.destination_array, R.layout.spinner_destination_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+        chooseDestination.setVisibility((dependant) ? View.VISIBLE : View.INVISIBLE);
 
-        }
         setRetainInstance(true);
 
         return view;

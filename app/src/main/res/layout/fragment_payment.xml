@@ -3,17 +3,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
-<<<<<<< HEAD
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/destinationView"
         android:background="?attr/colorPrimary"
         >
-
-=======
->>>>>>> b1879b96a0a167543008e9b94a537cc5815f139f
-    <TextView
+        <TextView
             android:id="@+id/chooseDestinationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
