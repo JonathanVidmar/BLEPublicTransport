@@ -36,8 +36,8 @@ public class SettingsFragment extends Fragment {
         switchStatus = (TextView) view.findViewById(R.id.switchStatus);
 
         // Restore preferences
-        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
-        boolean silent = settings.getBoolean("dependantPayment", true); // false is default value
+        SharedPreferences settings = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
+        boolean silent = settings.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true); // false is default value
 
         mSwitch.setChecked(silent);
 
@@ -46,9 +46,9 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences settings = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean("dependantPayment", isChecked);
+                editor.putBoolean(Constants.DESTINATION_DEPENDENT_PRICE, isChecked);
                 editor.commit();
                 if(isChecked){
                     switchStatus.setText("Prices depends on destination");

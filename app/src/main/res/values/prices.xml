@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="prices">
+        <item name="Lund">25</item>
+        <item name="Malmö">38</item>
+        <item name="Ystad">67</item>
+        <item name="Köpenhamn">125</item>
+    </integer-array>
+</resources>

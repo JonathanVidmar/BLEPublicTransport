@@ -1,13 +1,11 @@
 package com.lth.thesis.blepublictransport;
 
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.Strategy;
-import com.google.android.gms.nearby.messages.SubscribeOptions;
-import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.nearby.messages.Message;
-import com.google.android.gms.common.api.ResultCallback;
-
-import java.util.ArrayList;
 
 
 /**
@@ -51,11 +35,13 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_payment, container, false);
 
-        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
-        boolean dependant = settings.getBoolean("dependantPayment", false); // true == dependent travel
+        SharedPreferences settings = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
+        boolean dependant = settings.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true); // true == dependent travel
         chooseDestination = (RelativeLayout) view.findViewById(R.id.destinationView);
 
         Spinner spinner = (Spinner) view.findViewById(R.id.destination_spinner);
+        spinner.getBackground().setColorFilter((Color.parseColor("#FFFFFF")), PorterDuff.Mode.SRC_ATOP);
+
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.destination_array, R.layout.spinner_destination_item);
         // Specify the layout to use when the list of choices appears
@@ -63,8 +49,13 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        chooseDestination.setVisibility((dependant) ? View.VISIBLE : View.INVISIBLE);
-
+        if(dependant){
+            chooseDestination.setVisibility(View.VISIBLE);
+        }else{
+            chooseDestination.setVisibility(View.GONE);
+            TextView infoText = (TextView) view.findViewById(R.id.paymentInfoText);
+            infoText.setText("The ticket will cost: ");
+        }
         setRetainInstance(true);
 
         return view;
@@ -72,17 +63,21 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
+
         Resources res = getResources();
         String[] destinations = res.getStringArray(R.array.destination_array);
         final String destination =  destinations[pos];
+        int[] prices = res.getIntArray(R.array.prices);
+        final int price =  prices[pos];
+
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 TextView infoText = (TextView) getActivity().findViewById(R.id.paymentInfoText);
-                infoText.setText("This trip to " + destination + " will cost: ");
+                infoText.setText(" A trip from your current station to " + destination + " will cost: ");
+                TextView priceTag = (TextView) getActivity().findViewById(R.id.priceTag);
+                priceTag.setText(price + " kr");
             }
         });
     }

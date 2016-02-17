@@ -32,10 +32,10 @@
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This trip to Lund will cost :"
+        android:text="A trip from your current station to Lund C will cost :"
         android:textSize="22sp"
-        android:textColor="#111"
-        android:layout_marginTop="20dp"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
     <TextView
@@ -45,8 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="25 kr"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="50sp"
-        android:textColor="#111"
         android:layout_margin="20dp" />
     <Button
         android:text="Buy ticket"
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="?attr/colorAccent"
+        android:background="@color/colorAccent"
         android:textColor="#FFF"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
