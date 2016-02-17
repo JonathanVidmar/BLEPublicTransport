@@ -13,4 +13,8 @@ public class NotificationHandler {
     public NotificationHandler(Application application) {
         notificationManager = (NotificationManager) application.getSystemService(Context.NOTIFICATION_SERVICE);
     }
+
+    public void create() {}
+    public void update() {}
+    public void cancel() {}
 }
