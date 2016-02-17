@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="destination_array">
+        <item>Lund</item>
+        <item>Malmö</item>
+        <item>Ystad</item>
+        <item>Köpenhamn</item>
+    </string-array>
+</resources>
