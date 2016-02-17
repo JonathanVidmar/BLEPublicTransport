@@ -48,9 +48,19 @@
         android:textColor="@color/colorPrimaryText"
         android:textSize="50sp"
         android:layout_margin="20dp" />
+    <TextView
+        android:id="@+id/validTag"
+        android:layout_above="@+id/payButton"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ticket is valid for 2 hours"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="14sp"
+        android:layout_margin="20dp" />
     <Button
         android:text="Buy ticket"
-        android:id="@+id/Button"
+        android:id="@+id/payButton"
         android:layout_alignParentRight="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
