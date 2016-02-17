@@ -3,6 +3,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/destinationView"
+        android:background="?attr/colorPrimary"
+        >
 
     <TextView
             android:id="@+id/chooseDestinationLabel"
@@ -10,8 +16,50 @@
             android:layout_height="wrap_content"
             android:text="Choose your destination"
             android:textSize="22sp"
-            android:textColor="#111"
+            android:textColor="#FFF"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
+    <Spinner
+        android:id="@+id/destination_spinner"
+        android:layout_below="@+id/chooseDestinationLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/paymentInfoText"
+        android:layout_below="@+id/destinationView"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This trip to Lund will cost :"
+        android:textSize="22sp"
+        android:textColor="#111"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+    <TextView
+        android:id="@+id/priceTag"
+        android:layout_below="@+id/paymentInfoText"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="25 kr"
+        android:textSize="50sp"
+        android:textColor="#111"
+        android:layout_margin="20dp" />
+    <Button
+        android:text="Buy ticket"
+        android:id="@+id/Button"
+        android:layout_alignParentRight="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/colorAccent"
+        android:textColor="#FFF"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+    </Button>
 </RelativeLayout>
