@@ -1,10 +1,9 @@
 package com.lth.thesis.blepublictransport;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.view.View;
+import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -26,10 +25,11 @@ public class MainActivity extends AppCompatActivity
     private static StationHomeFragment stationFragment;
     private static PaymentFragment paymentFragment;
     private static SettingsFragment settingsFragment;
-    private static String STATION_FRAGMENT = "stationFragment";
-    private static String PAYMENT_FRAGMENT = "paymentFragment";
-    private static String SETTINGS_FRAGMENT = "settingsFragment";
-    private static String TICKET_FRAGMENT = "ticketFragment";
+    private static ShowTicketFragment ticketFragment;
+    private static final String STATION_FRAGMENT = "stationFragment";
+    private static final String PAYMENT_FRAGMENT = "paymentFragment";
+    private static final String SETTINGS_FRAGMENT = "settingsFragment";
+    private static final String TICKET_FRAGMENT = "ticketFragment";
 
     private String currentFragmentTag;
 
@@ -46,35 +46,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        Bundle extras = getIntent().getExtras();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (extras == null) {
-            stationFragment = new StationHomeFragment();
-            currentFragmentTag = STATION_FRAGMENT;
-            fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
-        } else {
-            String frag = extras.getString("fragment");
-            if (frag != null) {
-                switch (frag) {
-                    case "nearby":
-                        stationFragment = new StationHomeFragment();
-                        currentFragmentTag = STATION_FRAGMENT;
-                        fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
-                        break;
-                    case "payment":
-                        paymentFragment = new PaymentFragment();
-                        currentFragmentTag = PAYMENT_FRAGMENT;
-                        fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
-                        break;
-                    case "ticket":
-                        ShowTicketFragment ticketFragment = new ShowTicketFragment();
-                        currentFragmentTag = TICKET_FRAGMENT;
-                        fragmentTransaction.replace(R.id.fragment_container, ticketFragment, TICKET_FRAGMENT);
-                        break;
-                }
-            }
-        }
-        fragmentTransaction.commit();
+        performFragmentTransactionFromIntent();
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -97,6 +69,67 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    private void performFragmentTransactionFromIntent() {
+        Intent i = getIntent();
+        Bundle extras = i.getExtras();
+        if (extras == null) {
+            executeNavigationTo(STATION_FRAGMENT);
+        } else {
+            String frag = extras.getString("fragment");
+            if (frag != null) {
+                switch (frag) {
+                    case "nearby":
+                        executeNavigationTo(STATION_FRAGMENT);
+                        break;
+                    case "payment":
+                        executeNavigationTo(PAYMENT_FRAGMENT);
+                        break;
+                    case "ticket":
+                        executeNavigationTo(TICKET_FRAGMENT);
+                        break;
+                }
+            } else {
+                // Both "Nearby" case as well as default behaviour
+                executeNavigationTo(STATION_FRAGMENT);
+            }
+        }
+    }
+
+    private void executeNavigationTo(String destination){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        switch (destination) {
+            case STATION_FRAGMENT:
+                toolbar.setTitle("Nearby");
+                currentFragmentTag = STATION_FRAGMENT;
+                stationFragment = (StationHomeFragment) getSupportFragmentManager().findFragmentByTag(STATION_FRAGMENT);
+                if (stationFragment == null) stationFragment = new StationHomeFragment();
+                fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
+                break;
+            case PAYMENT_FRAGMENT:
+                toolbar.setTitle("Payment");
+                currentFragmentTag = PAYMENT_FRAGMENT;
+                paymentFragment = (PaymentFragment) getSupportFragmentManager().findFragmentByTag(PAYMENT_FRAGMENT);
+                if (paymentFragment == null) paymentFragment = new PaymentFragment();
+                fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
+                break;
+            case SETTINGS_FRAGMENT:
+                toolbar.setTitle("Settings");
+                currentFragmentTag = SETTINGS_FRAGMENT;
+                settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT);
+                if (settingsFragment == null) settingsFragment = new SettingsFragment();
+                fragmentTransaction.replace(R.id.fragment_container, settingsFragment, SETTINGS_FRAGMENT);
+                break;
+            case TICKET_FRAGMENT:
+                toolbar.setTitle("Ticket");
+                currentFragmentTag = TICKET_FRAGMENT;
+                ticketFragment = (ShowTicketFragment) getSupportFragmentManager().findFragmentByTag(TICKET_FRAGMENT);
+                if (ticketFragment == null) ticketFragment = new ShowTicketFragment();
+                fragmentTransaction.replace(R.id.fragment_container, ticketFragment, TICKET_FRAGMENT);
+                break;
+            }
+        fragmentTransaction.commit();
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -109,6 +142,14 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         BLEPublicTransport application = (BLEPublicTransport) getApplication();
         application.active = true;
+        performFragmentTransactionFromIntent();
+    }
+
+    // Needed to refresh intent to new one when coming from notification with application still running
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     @Override
@@ -149,32 +190,17 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        String tag = "";
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (id == R.id.nav_station_home) {
-            toolbar.setTitle("Home");
-            stationFragment = (StationHomeFragment) getSupportFragmentManager().findFragmentByTag(STATION_FRAGMENT);
-            if (stationFragment == null) {
-                stationFragment = new StationHomeFragment();
-                fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
+        switch (id) {
+            case R.id.nav_station_home:
+                executeNavigationTo(STATION_FRAGMENT);
+                break;
+            case R.id.nav_payment:
+                executeNavigationTo(PAYMENT_FRAGMENT);
+                break;
+            case R.id.nav_settings:
+                executeNavigationTo(SETTINGS_FRAGMENT);
+                break;
             }
-        } else if (id == R.id.nav_payment) {
-            toolbar.setTitle("Payment");
-            paymentFragment = (PaymentFragment) getSupportFragmentManager().findFragmentByTag(PAYMENT_FRAGMENT);
-            if (paymentFragment == null) {
-                paymentFragment = new PaymentFragment();
-                fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
-            }
-        } else if (id == R.id.nav_settings) {
-            settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT);
-            toolbar.setTitle("Settings");
-            if (settingsFragment == null) {
-                settingsFragment = new SettingsFragment();
-                fragmentTransaction.replace(R.id.fragment_container, settingsFragment, SETTINGS_FRAGMENT);
-            }
-        }
-        fragmentTransaction.commit();
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
