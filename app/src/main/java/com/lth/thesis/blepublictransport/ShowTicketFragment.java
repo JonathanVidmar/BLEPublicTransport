@@ -23,6 +23,7 @@ import java.util.Date;
  * A simple {@link Fragment} subclass.
  */
 public class ShowTicketFragment extends Fragment {
+    CountDownTimer timer;
 
 
     public ShowTicketFragment() {
@@ -32,7 +33,6 @@ public class ShowTicketFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_show_ticket, container, false);
-
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
         SharedPreferences ticket = getActivity().getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
@@ -52,14 +52,14 @@ public class ShowTicketFragment extends Fragment {
             Date now = new Date();
             long timeLeft = date.getTime() - now.getTime();
             if(timeLeft > 0) {
-                new CountDownTimer(timeLeft, 1000) {
+                timer = new CountDownTimer(timeLeft, 1000) {
                     public void onTick(long millisUntilFinished) {
                         TextView mTextField = (TextView) view.findViewById(R.id.validTicketCounter);
                         mTextField.setText(convertSecondsToHMmSs(millisUntilFinished / 1000));
                     }
 
                     public void onFinish() {
-                        clearTicket();
+                        clearTicket("INVALID TICKET");
                     }
 
                     public String convertSecondsToHMmSs(long seconds) {
@@ -71,18 +71,36 @@ public class ShowTicketFragment extends Fragment {
 
                 }.start();
             }else{
-                clearTicket();
+                clearTicket("INVALID TICKET");
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Ticket has been removed.", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                SharedPreferences ticket = getActivity().getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
+
+                SharedPreferences.Editor editor = ticket.edit();
+                editor.putString(Constants.VALID_TICKET_DATE, "1999-06-10'T'10:10:10'Z");
+                editor.commit();
+                TextView mTextField = (TextView) getActivity().findViewById(R.id.validTicketCounterText);
+                mTextField.setText("This ticket is no longer valid.");
+                timer.cancel();
+                clearTicket("");
+            }
+        });
+
         return view;
     }
 
-    private void clearTicket() {
+    private void clearTicket(String message) {
         TextView mTextField = (TextView) getActivity().findViewById(R.id.validTicketCounter);
-        mTextField.setText("INVALID TICKET");
+        mTextField.setText(message);
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
         app.notificationHandler.update(NotificationHandler.NO_TICKET_AVAILABLE);
     }
