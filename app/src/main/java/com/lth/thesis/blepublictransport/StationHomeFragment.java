@@ -20,7 +20,7 @@ public class StationHomeFragment extends Fragment{
     protected static final String TAG = "StationHome";
     private View view;
     private ListView listView;
-    private HashMap<String, String> foundBeacons = new HashMap<>();
+    private HashMap<String, Beacon> foundBeacons = new HashMap<>();
     private NearObjectListViewAdapter mAdapter;
 
     public StationHomeFragment() {
@@ -33,8 +33,8 @@ public class StationHomeFragment extends Fragment{
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Adds a placeholder text for when no region has been detected.
-        ArrayList<String> items = new ArrayList<String>();
-        items.add("Looking for nearby facilities");
+        ArrayList<Beacon> items = new ArrayList<Beacon>();
+        //items.add("Looking for nearby facilities");
 
         mAdapter = new NearObjectListViewAdapter(getActivity(), items);
         // Updates the list view
@@ -100,7 +100,8 @@ public class StationHomeFragment extends Fragment{
         BeaconHelper helper = new BeaconHelper();
         for (Beacon oneBeacon : beacons) {
             String beaconName = helper.getBeaconName(oneBeacon.getId2());
-            foundBeacons.put(beaconName, helper.getDistanceText(oneBeacon.getDistance()));
+            // helper.getDistanceText(oneBeacon.getDistance())
+            foundBeacons.put(beaconName, oneBeacon);
         }
         updateList();
     }
@@ -111,17 +112,29 @@ public class StationHomeFragment extends Fragment{
      */
     public void updateList() {
 
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<Beacon> list = new ArrayList<Beacon>();
 
-            for (String beaconName : foundBeacons.keySet()) {
-                String text =  beaconName + " | Distance: " + foundBeacons.get(beaconName);
-                list.add(text);
+            for (String key : foundBeacons.keySet()) {
+                list.add(foundBeacons.get(key));
             }
-            mAdapter.updateList(list);
-            getActivity().runOnUiThread(new Runnable() {
+            Collections.sort(list, new Comparator<Beacon>() {
                 @Override
-                public void run() {
-                    mAdapter.notifyDataSetChanged();
+                public int compare(Beacon b2, Beacon b1){
+                    if(b1.getDistance() < b2.getDistance()){
+                        return 1;
+                    }else if (b1.getDistance() > b2.getDistance()){
+                        return -1;
+                    }else{
+                        return 0;
+                    }
+                }
+            });
+
+            mAdapter.updateList(list);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
                 }
             });
     }
