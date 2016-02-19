@@ -27,3 +27,10 @@ Implemented a lot of the server side authentication towards Google Nearby, and l
 
 **Jacob**
 Installed the beacons and set up the managing panel of them. Looked into Nearby and how to implement it. Implemented the list view with the nearby objects for Use Case 3.
+
+### Week seven
+This week we started with the second iteration. The second iteration included being able to buy a ticket in the application, propted by the beacon. In the beginning of the week a lot of work went into making the application more stable. We had a meeting with the supervisor at LTH on Thuesday. The end of the week the new use cases was completely implemeted and the last day of the week went into researching methods for how we are going to implement the functionalities for the next iteration. Iteration 2 was suppose to be finished next wednesday but since we are already done, the next iteration will begin on monday.
+**Jonathan**
+Jonathan worked a lot with implementing the notifications that brings the user into the application. He created a module to send different notifications depending on the settings screen on the phone. 
+**Jacob**
+Jacob implemented the settings screen, the payment screen and the ticket screen. These were relativly easy screens to implement since they only display information and have little logic behind them. He also started writing about the theoretical background in the thesis report.
