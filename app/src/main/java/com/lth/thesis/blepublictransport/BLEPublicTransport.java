@@ -31,8 +31,12 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     private BeaconManager beaconManager;
     private BeaconCommunicator beaconCommunicator;
     private boolean notCurrentlyRanging = true;
-    private BeaconHelper beaconHelper;
+    public BeaconHelper beaconHelper;
     public NotificationHandler notificationHandler;
+    private long time;
+    private long oldTime = 0;
+    private double count = 0;
+    private boolean start = false;
 
 
     public void onCreate() {
@@ -41,8 +45,14 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.getBeaconParsers().clear();
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19"));
 
-        // Wakes up application
-        //Region region = new Region("backgroundRegion", null, null, null);
+        try {
+            beaconManager.setForegroundScanPeriod(120l); // 20 mS
+            beaconManager.setForegroundBetweenScanPeriod(0l); // 0ms
+            beaconManager.updateScanPeriods();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
         regionBootstrap = new RegionBootstrap(this, BeaconHelper.regions);
         backgroundPowerSaver = new BackgroundPowerSaver(this);
         notificationHandler = new NotificationHandler(this);
@@ -54,11 +64,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     public void didEnterRegion(Region arg0) {
         if (!beaconHelper.currentlyInMainRegion()) notificationHandler.create();
         beaconHelper.foundRegionInstance(arg0.getId2());
-
-        // Log.i("region", "did enter region: " + arg0.getId1() + ", " + arg0.getId2() + ", " + arg0.getId3());
         if (active) {
             // Currently on a fragment
-            // Send data about beacons{
             beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.ENTERED_REGION, null));
             if (notCurrentlyRanging) {
                 startRangingBeaconsInRegion();
@@ -123,7 +130,6 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
-                // Log.i("region", "did range region: " + region.getId1() + ", " + region.getId2() + ", " + region.getId3());
             }
         });
         try {
