@@ -31,7 +31,7 @@ _Prerequisites: The user has launched the application._
 
 ### Use case 4
 
-_Prerequisites: The user has NOT launched the application. 3a: The ticket price is independant of the destination. 3b: The ticket price is dependant of the destination._
+_Prerequisites: The user has NOT launched the application._
 
 1. The user arrives to the station and the application detects a beacon.
 2. A notification is displayed telling the user to buy a ticket.
