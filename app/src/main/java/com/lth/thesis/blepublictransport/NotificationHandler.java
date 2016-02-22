@@ -43,14 +43,16 @@ public class NotificationHandler {
                 ticketFragmentIntent.putExtra("fragment", "ticket");
                 PendingIntent ticketPendingIntent = PendingIntent.getActivity(application.getApplicationContext(),1,ticketFragmentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
                 NotificationCompat.Action ticketAction = new NotificationCompat.Action(R.drawable.ic_ticket, "Show ticket", ticketPendingIntent);
-                builder.addAction(ticketAction);
+                builder.addAction(ticketAction)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText("You have a valid ticket."));
                 break;
             case NO_TICKET_AVAILABLE:
                 Intent paymentFragmentIntent = new Intent(application, MainActivity.class);
                 paymentFragmentIntent.putExtra("fragment", "payment");
                 PendingIntent paymentPendingIntent = PendingIntent.getActivity(application.getApplicationContext(),1,paymentFragmentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
                 NotificationCompat.Action paymentAction = new NotificationCompat.Action(R.drawable.ic_add_ticket, "Buy ticket", paymentPendingIntent);
-                builder.addAction(paymentAction);
+                builder.addAction(paymentAction)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText("You currently don't have a valid ticket."));
                 break;
         }
 
@@ -75,7 +77,6 @@ public class NotificationHandler {
                 .setSmallIcon(R.drawable.ic_notification_bus)
                 .setColor(ContextCompat.getColor(application.getApplicationContext(), R.color.colorAccent))
                 .setOngoing(true)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText("BLE Public Transport"))
                 .addAction(nearbyAction);
     }
 }

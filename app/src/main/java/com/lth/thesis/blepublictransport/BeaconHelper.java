@@ -3,6 +3,8 @@ package com.lth.thesis.blepublictransport;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.Region;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -65,10 +67,12 @@ public class BeaconHelper {
      * @return the text to be displayed.
      */
     public String getDistanceText(Double distance){
-        if(distance < 1){
-            return "Less then 1 meter";
-        } else {
-            return String.valueOf(Math.round(distance)) + " meters";
-        }
+        //if(distance < 1){
+        //    return "Less then 1 meter";
+        //} else {
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+            return String.valueOf(df.format(distance)) + " meters";
+        //}
     }
 }

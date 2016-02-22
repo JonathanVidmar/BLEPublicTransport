@@ -1,5 +1,6 @@
 package com.lth.thesis.blepublictransport;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ public class StationHomeFragment extends Fragment{
     private ListView listView;
     private HashMap<String, Beacon> foundBeacons = new HashMap<>();
     private NearObjectListViewAdapter mAdapter;
+    private ArrayList<Beacon> list;
 
     public StationHomeFragment() {
         // Required empty public constructor
@@ -42,9 +44,9 @@ public class StationHomeFragment extends Fragment{
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                listView = (ListView) view.findViewById(R.id.locationItems);
-                listView.setAdapter(mAdapter);
-                listView.setVisibility(View.INVISIBLE);
+                    listView = (ListView) view.findViewById(R.id.locationItems);
+                    listView.setAdapter(mAdapter);
+                    listView.setVisibility(View.INVISIBLE);
             }});
         return view;
     }
@@ -53,6 +55,13 @@ public class StationHomeFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
+        if (app.beaconHelper.currentlyInMainRegion()) enteredStation();
     }
 
     /**
@@ -112,7 +121,7 @@ public class StationHomeFragment extends Fragment{
      */
     public void updateList() {
 
-        ArrayList<Beacon> list = new ArrayList<Beacon>();
+        list = new ArrayList<>();
 
             for (String key : foundBeacons.keySet()) {
                 list.add(foundBeacons.get(key));
@@ -130,10 +139,10 @@ public class StationHomeFragment extends Fragment{
                 }
             });
 
-            mAdapter.updateList(list);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mAdapter.updateList(list);
                 mAdapter.notifyDataSetChanged();
                 }
             });
