@@ -24,6 +24,7 @@ public class StationHomeFragment extends Fragment{
     private HashMap<String, Beacon> foundBeacons = new HashMap<>();
     private NearObjectListViewAdapter mAdapter;
     private ArrayList<Beacon> list;
+    private BeaconHelper helper;
 
     public StationHomeFragment() {
         // Required empty public constructor
@@ -55,13 +56,14 @@ public class StationHomeFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
+        helper = app.beaconHelper;
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
-        if (app.beaconHelper.currentlyInMainRegion()) enteredStation();
+        if (helper.currentlyInMainRegion()) enteredStation();
     }
 
     /**
@@ -129,9 +131,9 @@ public class StationHomeFragment extends Fragment{
             Collections.sort(list, new Comparator<Beacon>() {
                 @Override
                 public int compare(Beacon b2, Beacon b1){
-                    if(b1.getDistance() < b2.getDistance()){
+                    if(helper.getDistance(b1) < helper.getDistance(b2)){
                         return 1;
-                    }else if (b1.getDistance() > b2.getDistance()){
+                    }else if (helper.getDistance(b1) > helper.getDistance(b2)){
                         return -1;
                     }else{
                         return 0;

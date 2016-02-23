@@ -43,7 +43,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         super.onCreate();
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().clear();
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19"));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconHelper.eddystoneLayout));
 
         try {
             beaconManager.setForegroundScanPeriod(120l); // 20 mS
@@ -72,8 +72,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             }
 
         } //else {
-            // If we have already seen beacons before, but a fragment is not in
-            // the foreground, we send a notification to the user on subsequent detections.
+        // If we have already seen beacons before, but a fragment is not in
+        // the foreground, we send a notification to the user on subsequent detections.
         //}
     }
 
@@ -129,7 +129,15 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                beaconHelper.updateBeaconDistances(beacons);
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
+                /*for (Beacon b :
+                        beacons) {
+                    if (b.getId2().toString().equals(BeaconHelper.region2.getId2().toString())) {
+                        Log.i("RSSI", "old: " + b.getDistance());
+                        Log.i("RSSI", "new: " + beaconHelper.getDistanceText(b));
+                    }
+                }*/
             }
         });
         try {
@@ -144,7 +152,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         return beaconCommunicator;
     }
 
-    public boolean hasValidTicket(){
+    public boolean hasValidTicket() {
         boolean hasValidTicket = false;
         SharedPreferences ticket = getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
         String validUntil = ticket.getString(Constants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");

@@ -1,20 +1,20 @@
 package com.lth.thesis.blepublictransport;
 
+import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.Region;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Jacob Arvidsson on 12/02/16.
  */
 public class BeaconHelper {
-    private final static String eddystoneLayout = "s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19";
+    public final static String eddystoneLayout =   "s:0-1=feaa,m:2-2=00,p:3-3:-41,i:4-13,i:14-19";
     private static Identifier namespace = Identifier.parse("0xf7826da6bc5b71e0893e");
     private static final Identifier instance1 = Identifier.parse("0x41774c564931");
     private static final Identifier instance2 = Identifier.parse("0x4e316a736752");
@@ -24,7 +24,9 @@ public class BeaconHelper {
     public static final Region region3 = new Region("BLEPublicTransport C", namespace, instance3, null);
     public static final List<Region> regions = Arrays.asList(region1, region2, region3);
 
+    private Map<String, BeaconStatHelper> beaconStatList = new HashMap<>();
     public HashMap<Identifier, Boolean> currentlyInBeaconRegionProximity = new HashMap<>();
+    private HashMap<String, String> beaconList = new HashMap<>();
 
     public void lostRegionInstance(Identifier instance){
         currentlyInBeaconRegionProximity.put(instance, false);
@@ -40,12 +42,16 @@ public class BeaconHelper {
                 currentlyInBeaconRegionProximity.get(instance3);
     }
 
-    private HashMap<String, String> beaconList = new HashMap<>();
 
     public BeaconHelper(){
-        beaconList.put("0x41774c564931", "Spår 1");
-        beaconList.put("0x4e316a736752", "Spår 2");
-        beaconList.put("0x526270373372", "Spår 3");
+
+        beaconList.put("0x41774c564931", "Kundservice");
+        beaconList.put("0x4e316a736752", "Spår 1");
+        beaconList.put("0x526270373372", "Espresso House");
+
+        beaconStatList.put("0x41774c564931", new BeaconStatHelper());
+        beaconStatList.put("0x4e316a736752", new BeaconStatHelper());
+        beaconStatList.put("0x526270373372", new BeaconStatHelper());
 
         currentlyInBeaconRegionProximity.put(instance1, false);
         currentlyInBeaconRegionProximity.put(instance2, false);
@@ -62,17 +68,26 @@ public class BeaconHelper {
     }
 
     /**
-     * This method converts the distance to a string to be displayed.
-     * @param distance, the actual distance to the beacon
+     * This method returns the distance in a formatted string.
+     * @param beacon, the beacon of which distance to is to be returned
      * @return the text to be displayed.
      */
-    public String getDistanceText(Double distance){
-        //if(distance < 1){
-        //    return "Less then 1 meter";
-        //} else {
+    public String getDistanceText(Beacon beacon){
+        double distance = getDistance(beacon);
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
-            return String.valueOf(df.format(distance)) + " meters";
-        //}
+        return String.valueOf(df.format(distance)) + " meters";
     }
+
+    public double getDistance(Beacon beacon){
+        return beaconStatList.get(beacon.getId2().toString()).getDistance();
+    }
+
+    public void updateBeaconDistances(Collection<Beacon> beacons){
+        for (Beacon b :
+                beacons) {
+            beaconStatList.get(b.getId2().toString()).updateDistance(b);
+        }
+    }
+
 }

@@ -19,10 +19,12 @@ public class NearObjectListViewAdapter extends BaseAdapter {
     private static ArrayList<Beacon> objecList;
 
     private LayoutInflater mInflater;
+    private BLEPublicTransport app;
 
     public NearObjectListViewAdapter(Context fragment, ArrayList<Beacon> results){
         objecList = results;
         mInflater = LayoutInflater.from(fragment);
+        app = (BLEPublicTransport) fragment.getApplicationContext();
     }
 
     public void updateList(ArrayList<Beacon> list) {
@@ -47,7 +49,8 @@ public class NearObjectListViewAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        BeaconHelper helper = new BeaconHelper();
+
+        BeaconHelper helper = app.beaconHelper;
         if(convertView == null){
             convertView = mInflater.inflate(R.layout.list_row_view, null);
             holder = new ViewHolder();
@@ -60,7 +63,7 @@ public class NearObjectListViewAdapter extends BaseAdapter {
         }
 
         holder.txtname.setText(helper.getBeaconName(objecList.get(position).getId2()));
-        holder.destinationName.setText(helper.getDistanceText(objecList.get(position).getDistance()));
+        holder.destinationName.setText(helper.getDistanceText(objecList.get(position)));
 
         return convertView;
     }
