@@ -41,6 +41,9 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     public void onCreate() {
         super.onCreate();
+
+        WalkDetection w = new WalkDetection(this);
+
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().clear();
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconHelper.eddystoneLayout));
