@@ -239,4 +239,13 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int requestResult, Intent data){
+        //if(requestCode == DISCOVERY_REQUEST) {
+            //notifyWithMessage("Discovery is in progress");
+            //findDevices();
+        //}
+    }
+
 }
