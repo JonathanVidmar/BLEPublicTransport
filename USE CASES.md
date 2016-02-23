@@ -54,6 +54,34 @@ _Prerequisites: The user has bought a ticket and app is running in the backgroun
 
 ## Iteration Three
 
+### Use case 6
+
+_Prerequisites: The user has bought a a subscription and app is running in the background. To enter the transportation vehicle the user has to pass physical gates (gates are represented by another android application in the prototype)._
+
+1. The user is at the station and is about the go through the gates.
+2. The phone recognizes the beacon and starts the validation
+3. Validation is a success:
+  2. The gates display a success message on a screen.
+  3. The gates open.
+4. Validation is a failure:
+  2. The gates display fail message on a screen.
+  3. The gates does not open.
+
+
+### Use case 7
+
+_Prerequisites: The user does NOT have a valid ticket and app is running in the background. To enter the transportation vehicle the user has to pass physical gates (gates are represented by another android application in the prototype)._
+
+1. The user is at the station and is about the go through the gates.
+2. The phone recognizes the beacon
+3. The user does not have a ticket and a ticket is bought
+4. Validation is a success:
+  2. The gates display a success message on a screen.
+  3. The gates open.
+5. Validation is a failure:
+  2. The gates display fail message on a screen.
+  3. The gates does not open.
+
 ## Iteration Four
 
 ## Iteration Five
