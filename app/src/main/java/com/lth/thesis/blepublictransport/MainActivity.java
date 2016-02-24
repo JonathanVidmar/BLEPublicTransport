@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,10 +32,12 @@ public class MainActivity extends AppCompatActivity
     private static PaymentFragment paymentFragment;
     private static SettingsFragment settingsFragment;
     private static ShowTicketFragment ticketFragment;
+    private static BluetoothConnectionFragment bluetoothFragment;
     private static final String STATION_FRAGMENT = "stationFragment";
     private static final String PAYMENT_FRAGMENT = "paymentFragment";
     private static final String SETTINGS_FRAGMENT = "settingsFragment";
     private static final String TICKET_FRAGMENT = "ticketFragment";
+    private static final String BLUETOOTH_PARING_FRAGMENT = "bluetoothFragment";
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
     private String currentFragmentTag;
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity
         Intent i = getIntent();
         Bundle extras = i.getExtras();
         if (extras == null) {
-            executeNavigationTo(STATION_FRAGMENT);
+            executeNavigationTo(BLUETOOTH_PARING_FRAGMENT);
         } else {
             String frag = extras.getString("fragment");
             if (frag != null) {
@@ -149,7 +152,15 @@ public class MainActivity extends AppCompatActivity
                 if (ticketFragment == null) ticketFragment = new ShowTicketFragment();
                 fragmentTransaction.replace(R.id.fragment_container, ticketFragment, TICKET_FRAGMENT);
                 break;
+            case BLUETOOTH_PARING_FRAGMENT:
+                toolbar.setTitle("Bluetooth");
+                currentFragmentTag = BLUETOOTH_PARING_FRAGMENT;
+                bluetoothFragment = (BluetoothConnectionFragment) getSupportFragmentManager().findFragmentByTag(BLUETOOTH_PARING_FRAGMENT);
+                if (bluetoothFragment == null) bluetoothFragment = new BluetoothConnectionFragment();
+                fragmentTransaction.replace(R.id.fragment_container, bluetoothFragment, BLUETOOTH_PARING_FRAGMENT);
+                break;
             }
+
         fragmentTransaction.commit();
     }
 
@@ -223,6 +234,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_settings:
                 executeNavigationTo(SETTINGS_FRAGMENT);
                 break;
+            case R.id.nav_bluetooth_connection:
+                executeNavigationTo(BLUETOOTH_PARING_FRAGMENT);
+                break;
             }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -242,10 +256,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int requestResult, Intent data){
-        //if(requestCode == DISCOVERY_REQUEST) {
+        Log.d("BluetoothFragment", requestCode + " " + requestResult);
+        Log.d("BluetoothFragment", "Should be: " + BluetoothConnectionFragment.DISCOVERY_REQUEST);
+        if(requestCode == BluetoothConnectionFragment.DISCOVERY_REQUEST) {
             //notifyWithMessage("Discovery is in progress");
-            //findDevices();
-        //}
+            if(bluetoothFragment != null) {
+                bluetoothFragment.findDevices();
+            }
+        }
     }
 
 }

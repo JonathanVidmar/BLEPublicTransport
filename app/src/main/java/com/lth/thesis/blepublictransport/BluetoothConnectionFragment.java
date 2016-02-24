@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -26,11 +27,12 @@ import java.util.UUID;
  * A simple {@link Fragment} subclass.
  */
 public class BluetoothConnectionFragment extends Fragment {
-    private static final int DISCOVERY_REQUEST = 1;
-    private static final String tag = "Bluetooth";
+    public static final int DISCOVERY_REQUEST = 1;
+    private static final String tag = "BluetoothFragment";
     private BluetoothAdapter bluetoothAdapter;
     private TextView statusText;
     private BluetoothDevice remoteDevice;
+    private Button connectButton;
 
     /**
      * This can also be done by checking requestCode == REQUEST_ENABLE_BT and
@@ -42,7 +44,6 @@ public class BluetoothConnectionFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
-            int previousState = intent.getIntExtra(BluetoothAdapter.EXTRA_PREVIOUS_STATE, -1);
             switch (state){
                 case(BluetoothAdapter.STATE_TURNING_ON):
                 {
@@ -65,6 +66,7 @@ public class BluetoothConnectionFragment extends Fragment {
                     break;
                 }
             }
+            notifyWithMessage(bluetoothAdapter.getName() + " : " + bluetoothAdapter.getAddress());
         }
     };
 
@@ -72,50 +74,51 @@ public class BluetoothConnectionFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_bluetooth_connection, container, false);
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        final View view = inflater.inflate(R.layout.fragment_bluetooth_connection, container, false);
         statusText = (TextView) view.findViewById(R.id.statusText);
 
+        // Get bluetooth adapter
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(bluetoothAdapter != null){
-            statusText.setText(bluetoothAdapter.getName() + " : " + bluetoothAdapter.getAddress());
-            Log.d(tag, bluetoothAdapter.getName() + " : " + bluetoothAdapter.getAddress());
+            if(!bluetoothAdapter.isEnabled()){
+                IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+                getActivity().getApplicationContext().registerReceiver(bluetoothState, intentFilter);
+
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivity(enableBtIntent);
+            }else {
+                notifyWithMessage(bluetoothAdapter.getName() + " : " + bluetoothAdapter.getAddress());
+            }
         } else {
             notifyWithMessage("Device does not support Bluetooth");
         }
+
+
+        connectButton = (Button) view.findViewById(R.id.connectButton);
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                bluetoothConnect(view);
+            }
+        });
         return view;
     }
 
     public void bluetoothConnect(View view){
-        String scanModeChange = BluetoothAdapter.ACTION_SCAN_MODE_CHANGED;
-        String beDiscoverable = BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE;
-        IntentFilter intentFilter = new IntentFilter(scanModeChange);
-        getActivity().registerReceiver(bluetoothState, intentFilter);
-        startActivityForResult(new Intent(beDiscoverable), DISCOVERY_REQUEST);
-    }
-
-    private void findDevices(){
-        String lastUsedRemoteDevice = getLastUsedRemoteDevice();
-        if(lastUsedRemoteDevice != null){
-            notifyWithMessage("Checking for known paired devices, namely: " + lastUsedRemoteDevice);
-
-            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-            for(BluetoothDevice pairedDevice : pairedDevices){
-                notifyWithMessage("Found device" + pairedDevice.getName());
-                remoteDevice = pairedDevice;
+        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+        // If there are paired devices
+        if (pairedDevices.size() > 0) {
+            // Loop through paired devices
+            for (BluetoothDevice device : pairedDevices) {
+                notifyWithMessage(device.getName() + ": " + device.getAddress());
+                remoteDevice = device;
             }
         }
-        if(remoteDevice == null){
-            notifyWithMessage("Starting discovery for remote device...");
 
-            if(bluetoothAdapter.startDiscovery()) {
-                notifyWithMessage("Discovery thread started, scanning for devices");
-                getActivity().registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-            }
+        if(remoteDevice == null) {
+            findDevices();
         }
     }
 
@@ -124,15 +127,30 @@ public class BluetoothConnectionFragment extends Fragment {
         return prefs.getString("LAST_REMOTE_DEVICE_ADDRESS", null);
     }
 
-    BroadcastReceiver discoveryResult = new BroadcastReceiver() {
+    public void findDevices(){
+        notifyWithMessage("Starting discovery for remote device...");
+        getActivity().registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+
+        if (bluetoothAdapter.isDiscovering()) {
+            bluetoothAdapter.cancelDiscovery();
+        }
+        if(bluetoothAdapter.startDiscovery()) {
+            notifyWithMessage("Discovery thread started, scanning for devices");
+        }
+    }
+
+    private final BroadcastReceiver discoveryResult = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             // When discovery finds a device
+            Log.d(tag, "Found device");
             if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())){
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 notifyWithMessage(device.getName() + " - " + device.getAddress());
+                remoteDevice = device;
+                ConnectThread connection = new ConnectThread(remoteDevice);
+                connection.run();
             }
         }
     };
