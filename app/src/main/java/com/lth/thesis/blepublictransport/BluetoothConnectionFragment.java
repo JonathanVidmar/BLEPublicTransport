@@ -4,6 +4,8 @@ package com.lth.thesis.blepublictransport;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -70,6 +73,22 @@ public class BluetoothConnectionFragment extends Fragment {
         }
     };
 
+    private final BroadcastReceiver discoveryResult = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // When discovery finds a device
+            Log.d(tag, "Found device");
+            if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())){
+                // Get the BluetoothDevice object from the Intent
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                notifyWithMessage(device.getName() + " - " + device.getAddress());
+                remoteDevice = device;
+                //ConnectThread connection = new ConnectThread(remoteDevice);
+                //connection.run();
+            }
+        }
+    };
+
     public BluetoothConnectionFragment() {
         // Required empty public constructor
     }
@@ -81,6 +100,8 @@ public class BluetoothConnectionFragment extends Fragment {
         statusText = (TextView) view.findViewById(R.id.statusText);
 
         // Get bluetooth adapter
+        BLEPublicTransport application = (BLEPublicTransport) getActivity().getApplication();
+        application.stop();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(bluetoothAdapter != null){
             if(!bluetoothAdapter.isEnabled()){
@@ -96,17 +117,18 @@ public class BluetoothConnectionFragment extends Fragment {
             notifyWithMessage("Device does not support Bluetooth");
         }
 
+        getActivity().registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
 
         connectButton = (Button) view.findViewById(R.id.connectButton);
         connectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                bluetoothConnect(view);
+                bluetoothConnect();
             }
         });
         return view;
     }
 
-    public void bluetoothConnect(View view){
+    public void bluetoothConnect(){
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         // If there are paired devices
         if (pairedDevices.size() > 0) {
@@ -122,15 +144,8 @@ public class BluetoothConnectionFragment extends Fragment {
         }
     }
 
-    private String getLastUsedRemoteDevice(){
-        SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-        return prefs.getString("LAST_REMOTE_DEVICE_ADDRESS", null);
-    }
-
     public void findDevices(){
         notifyWithMessage("Starting discovery for remote device...");
-        getActivity().registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-
         if (bluetoothAdapter.isDiscovering()) {
             bluetoothAdapter.cancelDiscovery();
         }
@@ -138,22 +153,6 @@ public class BluetoothConnectionFragment extends Fragment {
             notifyWithMessage("Discovery thread started, scanning for devices");
         }
     }
-
-    private final BroadcastReceiver discoveryResult = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // When discovery finds a device
-            Log.d(tag, "Found device");
-            if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())){
-                // Get the BluetoothDevice object from the Intent
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                notifyWithMessage(device.getName() + " - " + device.getAddress());
-                remoteDevice = device;
-                ConnectThread connection = new ConnectThread(remoteDevice);
-                connection.run();
-            }
-        }
-    };
 
     private void notifyWithMessage(final String message){
         Log.d(tag, message);
