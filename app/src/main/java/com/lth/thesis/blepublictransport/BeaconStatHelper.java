@@ -11,6 +11,7 @@ public class BeaconStatHelper {
     private DescriptiveStatistics stats;
     private KalmanFilter kf;
     private double lastCalculatedDistance;
+    private double lastFilteredReading = -1;
 
     public BeaconStatHelper() {
 
@@ -23,22 +24,23 @@ public class BeaconStatHelper {
         // filter(measuredValue) returnerar det uträknade värdet
         kf = new KFilterBuilder()
                 .R(0.01)
-                .Q(20.0)
+                .Q(50.0)
                 .build();
     }
 
-    public void updateDistance(Beacon b){
+    public void updateDistance(Beacon b, double movementState){
         stats.addValue(b.getRssi());
-        kf.filter(stats.getPercentile(50));
-        calculateDistance(b.getTxPower());
+        lastFilteredReading = stats.getPercentile(50);
+        calculateDistance(b.getTxPower(), movementState);
     }
-    private void calculateDistance(double txPower){
+    private void calculateDistance(double txPower, double movementState){
         double n = 3;   // Signal propogation exponent
         double d0 = 1;  // Reference distance in meters
         double C = 0;   // Gaussian variable for mitigating flat fading
-        double fRSSI = kf.lastMeasurement();
+        double fRSSI = lastFilteredReading;
 
-        lastCalculatedDistance = d0 * Math.pow(10,(fRSSI - txPower - C)/ (-10 * n));
+
+        lastCalculatedDistance = kf.filter(d0 * Math.pow(10,(fRSSI - txPower - C)/ (-10 * n)));
     }
     public double getDistance(){
         return lastCalculatedDistance;

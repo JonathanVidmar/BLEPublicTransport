@@ -33,6 +33,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     private boolean notCurrentlyRanging = true;
     public BeaconHelper beaconHelper;
     public NotificationHandler notificationHandler;
+    private WalkDetection wd;
     private long time;
     private long oldTime = 0;
     private double count = 0;
@@ -42,7 +43,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     public void onCreate() {
         super.onCreate();
 
-        WalkDetection w = new WalkDetection(this);
+        wd = new WalkDetection(this);
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().clear();
@@ -132,7 +133,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                beaconHelper.updateBeaconDistances(beacons);
+                beaconHelper.updateBeaconDistances(beacons, wd.getState());
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
                 /*for (Beacon b :
                         beacons) {

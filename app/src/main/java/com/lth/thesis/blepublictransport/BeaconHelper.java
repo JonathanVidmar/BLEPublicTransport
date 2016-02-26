@@ -24,6 +24,7 @@ public class BeaconHelper {
     public static final Region region3 = new Region("BLEPublicTransport C", namespace, instance3, null);
     public static final List<Region> regions = Arrays.asList(region1, region2, region3);
 
+    private WalkDetection wd;
     private Map<String, BeaconStatHelper> beaconStatList = new HashMap<>();
     public HashMap<Identifier, Boolean> currentlyInBeaconRegionProximity = new HashMap<>();
     private HashMap<String, String> beaconList = new HashMap<>();
@@ -83,10 +84,10 @@ public class BeaconHelper {
         return beaconStatList.get(beacon.getId2().toString()).getDistance();
     }
 
-    public void updateBeaconDistances(Collection<Beacon> beacons){
+    public void updateBeaconDistances(Collection<Beacon> beacons, double movementState){
         for (Beacon b :
                 beacons) {
-            beaconStatList.get(b.getId2().toString()).updateDistance(b);
+            beaconStatList.get(b.getId2().toString()).updateDistance(b, movementState);
         }
     }
 
