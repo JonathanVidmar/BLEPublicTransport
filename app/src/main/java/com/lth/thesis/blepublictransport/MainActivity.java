@@ -254,16 +254,4 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int requestResult, Intent data){
-        Log.d("BluetoothFragment", requestCode + " " + requestResult);
-        Log.d("BluetoothFragment", "Should be: " + BluetoothConnectionFragment.DISCOVERY_REQUEST);
-        if(requestCode == BluetoothConnectionFragment.DISCOVERY_REQUEST) {
-            //notifyWithMessage("Discovery is in progress");
-            if(bluetoothFragment != null) {
-                bluetoothFragment.findDevices();
-            }
-        }
-    }
-
 }
