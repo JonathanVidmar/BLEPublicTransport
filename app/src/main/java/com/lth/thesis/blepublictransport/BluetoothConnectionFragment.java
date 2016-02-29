@@ -100,14 +100,14 @@ public class BluetoothConnectionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_main, container, false);
+        final View view = inflater.inflate(R.layout.fragment_bluetooth_connection, container, false);
         statusText = (TextView) view.findViewById(R.id.statusText);
         deviceInfo = (TextView) view.findViewById(R.id.deviceInfo);
         connectButton = (Button) view.findViewById(R.id.connectButton);
 
         // Get bluetooth adapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
+        connectButton.setEnabled(false);
         if(bluetoothAdapter != null){
             deviceInfo.setText("This device: " + bluetoothAdapter.getName() + " : " + bluetoothAdapter.getAddress());
             // Register for bluetooth states and discovery
@@ -172,6 +172,7 @@ public class BluetoothConnectionFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                connectButton.setEnabled(true);
                 connectButton.setText("Send message");
             }
         });
