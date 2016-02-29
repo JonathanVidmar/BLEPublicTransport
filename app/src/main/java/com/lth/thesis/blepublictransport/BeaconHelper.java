@@ -1,8 +1,10 @@
 package com.lth.thesis.blepublictransport;
 
+import android.util.Log;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.Region;
+import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.math.RoundingMode;
@@ -23,8 +25,8 @@ public class BeaconHelper {
     public static final Region region2 = new Region("BLEPublicTransport B", namespace, instance2, null);
     public static final Region region3 = new Region("BLEPublicTransport C", namespace, instance3, null);
     public static final List<Region> regions = Arrays.asList(region1, region2, region3);
+    private double txPower = -59;
 
-    private WalkDetection wd;
     private Map<String, BeaconStatHelper> beaconStatList = new HashMap<>();
     public HashMap<Identifier, Boolean> currentlyInBeaconRegionProximity = new HashMap<>();
     private HashMap<String, String> beaconList = new HashMap<>();
@@ -87,7 +89,14 @@ public class BeaconHelper {
     public void updateBeaconDistances(Collection<Beacon> beacons, double movementState){
         for (Beacon b :
                 beacons) {
-            beaconStatList.get(b.getId2().toString()).updateDistance(b, movementState);
+            if (b.getId2().toString().equals(instance3.toString())) {
+                txPower = b.getRssi();
+            }
+        }
+        for (Beacon b :
+                beacons) {
+            // Currently using rssi from Beacon 3 as reference txPower
+            beaconStatList.get(b.getId2().toString()).updateDistance(b,movementState,txPower);
         }
     }
 

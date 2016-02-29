@@ -152,13 +152,6 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 beaconHelper.updateBeaconDistances(beacons, wd.getState());
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
-                /*for (Beacon b :
-                        beacons) {
-                    if (b.getId2().toString().equals(BeaconHelper.region2.getId2().toString())) {
-                        Log.i("RSSI", "old: " + b.getDistance());
-                        Log.i("RSSI", "new: " + beaconHelper.getDistanceText(b));
-                    }
-                }*/
             }
         });
         try {

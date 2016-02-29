@@ -1,5 +1,6 @@
 package com.lth.thesis.blepublictransport;
 
+import android.util.Log;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
@@ -64,7 +65,7 @@ public class KalmanFilter {
             cov = (1 / C) * Q * (1 / C);
         } else {
 
-            B = prevXDelta.getMean();
+             R = u == 1 ? 10 : 0.001;
 
             // Compute prediction
             double predX = (A * x) + (B * u);
@@ -74,9 +75,8 @@ public class KalmanFilter {
             double K = predCov * C * (1 / ((C * predCov * C) + Q));
 
             // Correction
-            double temp = predX + K * (z - (C * predX));
-            prevXDelta.addValue(temp-x);
-            x = temp;
+
+            x = predX + K * (z - (C * predX));
             cov = predCov - (K * C * predCov);
         }
 

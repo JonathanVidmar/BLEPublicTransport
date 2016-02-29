@@ -1,5 +1,6 @@
 package com.lth.thesis.blepublictransport;
 
+import android.util.Log;
 import org.altbeacon.beacon.Beacon;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -9,41 +10,55 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 public class BeaconStatHelper {
 
     private DescriptiveStatistics stats;
+    private DescriptiveStatistics stats2;
+    private DescriptiveStatistics filteredStats;
     private KalmanFilter kf;
     private double lastCalculatedDistance;
     private double lastFilteredReading = -1;
+    private static final int WINDOW = 30;
 
     public BeaconStatHelper() {
 
         stats = new DescriptiveStatistics();
-        stats.setWindowSize(15); // sätter antalet mätningar som används vid medianen
+        stats.setWindowSize(WINDOW);
+        stats2 = new DescriptiveStatistics();
+        stats2.setWindowSize(WINDOW);
+        filteredStats = new DescriptiveStatistics();
+        filteredStats.setWindowSize(6);
+
         lastCalculatedDistance = 0;
 
         // Baserat på konstant avstånd från beacon, dvs låga störningar från systemet (R), höga störningar från mätning (Q)
         // Värden borde baseras på faktiska statistiska mätvärden dock
         // filter(measuredValue) returnerar det uträknade värdet
         kf = new KFilterBuilder()
-                .R(0.008)
-                .Q(20.0)
+                .R(0.001)
+                .Q(16.0)
                 .build();
     }
 
-    public void updateDistance(Beacon b, double movementState){
+    public void updateDistance(Beacon b, double movementState, double txPower){
+
         stats.addValue(b.getRssi());
+        stats2.addValue(txPower);
+        stats.getSortedValues();
+        stats2.getSortedValues();
         lastFilteredReading = stats.getPercentile(50);
-        calculateDistance(b.getTxPower(), movementState);
+        //double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(filteredStats.getMean()/filteredStats.getStandardDeviation(), 2)));
+        //if (!Double.isInfinite(mNoise) || !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
+        calculateDistance(stats2.getPercentile(50), movementState);
     }
     private void calculateDistance(double txPower, double movementState){
-        double n = 3;   // Signal propogation exponent
+        double n = 2.5;   // Signal propogation exponent
         double d0 = 1;  // Reference distance in meters
         double C = 0;   // Gaussian variable for mitigating flat fading
-        double fRSSI = lastFilteredReading;
 
-
-        lastCalculatedDistance = kf.filter(d0 * Math.pow(10,(fRSSI - txPower - C)/ (-10 * n)));
+        lastCalculatedDistance = kf.filter(d0 * Math.pow(10,(lastFilteredReading - txPower - C)/ (-10 * n)),movementState);
+        if (!Double.isNaN(lastCalculatedDistance)) filteredStats.addValue(lastCalculatedDistance);
     }
+
     public double getDistance(){
-        return lastCalculatedDistance;
+        return filteredStats.getPercentile(50);
     }
 
 }
