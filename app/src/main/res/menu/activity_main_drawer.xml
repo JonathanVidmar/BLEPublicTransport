@@ -12,6 +12,10 @@
                 android:id="@+id/nav_payment"
                 android:icon="@drawable/ic_attach_money_black_24dp"
                 android:title="Payment"/>
+        <item
+            android:id="@+id/nav_bluetooth_connection"
+            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:title="Bluetooth Connection"/>
     </group>
     <group
             android:id="@+id/settings"

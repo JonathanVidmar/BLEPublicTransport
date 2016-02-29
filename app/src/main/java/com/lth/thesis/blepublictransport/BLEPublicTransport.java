@@ -4,6 +4,8 @@ import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +17,7 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -26,7 +29,6 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     private static final String TAG = "BLEPublicTransport";
     private RegionBootstrap regionBootstrap;
     private BackgroundPowerSaver backgroundPowerSaver;
-    private boolean haveDetectedBeaconsSinceBoot = false;
     public boolean active = true;
     private BeaconManager beaconManager;
     private BeaconCommunicator beaconCommunicator;
@@ -34,17 +36,12 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     public BeaconHelper beaconHelper;
     public NotificationHandler notificationHandler;
     private WalkDetection wd;
-    private long time;
-    private long oldTime = 0;
-    private double count = 0;
-    private boolean start = false;
 
 
     public void onCreate() {
         super.onCreate();
 
         wd = new WalkDetection(this);
-
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().clear();
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconHelper.eddystoneLayout));
@@ -62,6 +59,26 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         notificationHandler = new NotificationHandler(this);
         beaconCommunicator = new BeaconCommunicator();
         beaconHelper = new BeaconHelper();
+    }
+
+    public void stop(){
+        try {
+            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region1);
+            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region2);
+            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region3);
+            beaconManager.stopMonitoringBeaconsInRegion(BeaconHelper.region1);
+            beaconManager.stopMonitoringBeaconsInRegion(BeaconHelper.region2);
+            beaconManager.stopMonitoringBeaconsInRegion(BeaconHelper.region3);
+            regionBootstrap.disable();
+            BluetoothAdapter.getDefaultAdapter().stopLeScan(new BluetoothAdapter.LeScanCallback() {
+                @Override
+                public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+
+                }
+            });
+        }catch (RemoteException e){
+
+        }
     }
 
     @Override

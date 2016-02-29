@@ -1,4 +1,7 @@
 package com.lth.thesis.blepublictransport;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 /**
  * Originally written in JS by Wouter Bulten 2015
  * Rewritten to Java by Jonathan Vidmar 2016
@@ -14,6 +17,7 @@ public class KalmanFilter {
     private double C;
     private double cov;
     private double x;   // estimated signal without noise
+    private DescriptiveStatistics prevXDelta;
 
     /**
      * Create 1-dimensional kalman filter
@@ -32,8 +36,13 @@ public class KalmanFilter {
         this.B = B;
         this.C = C;
 
-        this.cov = Double.NaN;
-        this.x = Double.NaN;
+        cov = Double.NaN;
+        x = Double.NaN;
+
+        prevXDelta = new DescriptiveStatistics();
+        prevXDelta.setWindowSize(5);
+        prevXDelta.addValue(0.0);
+        prevXDelta.addValue(0.0);
     }
 
 
@@ -55,6 +64,8 @@ public class KalmanFilter {
             cov = (1 / C) * Q * (1 / C);
         } else {
 
+            B = prevXDelta.getMean();
+
             // Compute prediction
             double predX = (A * x) + (B * u);
             double predCov = ((A * cov) * A) + R;
@@ -63,7 +74,9 @@ public class KalmanFilter {
             double K = predCov * C * (1 / ((C * predCov * C) + Q));
 
             // Correction
-            x = predX + K * (z - (C * predX));
+            double temp = predX + K * (z - (C * predX));
+            prevXDelta.addValue(temp-x);
+            x = temp;
             cov = predCov - (K * C * predCov);
         }
 

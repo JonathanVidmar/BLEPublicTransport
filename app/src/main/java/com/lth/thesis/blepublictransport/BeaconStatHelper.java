@@ -23,8 +23,8 @@ public class BeaconStatHelper {
         // Värden borde baseras på faktiska statistiska mätvärden dock
         // filter(measuredValue) returnerar det uträknade värdet
         kf = new KFilterBuilder()
-                .R(0.01)
-                .Q(50.0)
+                .R(0.008)
+                .Q(20.0)
                 .build();
     }
 
