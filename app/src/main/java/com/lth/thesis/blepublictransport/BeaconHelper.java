@@ -1,16 +1,12 @@
 package com.lth.thesis.blepublictransport;
 
-import android.util.Log;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.Region;
-import org.apache.commons.math3.exception.MathArithmeticException;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Jacob Arvidsson on 12/02/16.
@@ -49,7 +45,7 @@ public class BeaconHelper {
     public BeaconHelper(){
 
         beaconList.put("0x41774c564931", "Kundservice");
-        beaconList.put("0x4e316a736752", "Spår 1");
+        beaconList.put("0x4e316a736752", "Spår 2");
         beaconList.put("0x526270373372", "Espresso House");
 
         beaconStatList.put("0x41774c564931", new BeaconStatHelper());
@@ -87,16 +83,15 @@ public class BeaconHelper {
     }
 
     public void updateBeaconDistances(Collection<Beacon> beacons, double movementState){
-        for (Beacon b :
+        /*for (Beacon b :
                 beacons) {
             if (b.getId2().toString().equals(instance3.toString())) {
                 txPower = b.getRssi();
             }
-        }
-        for (Beacon b :
-                beacons) {
-            // Currently using rssi from Beacon 3 as reference txPower
-            beaconStatList.get(b.getId2().toString()).updateDistance(b,movementState,txPower);
+        }*/
+        for (Beacon b : beacons) {
+            // Currently not using rssi from Beacon 3 as reference txPower
+            beaconStatList.get(b.getId2().toString()).updateDistance(b,movementState,b.getTxPower());
         }
     }
 
