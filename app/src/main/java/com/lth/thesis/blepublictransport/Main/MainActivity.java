@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Main;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -15,9 +15,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.lth.thesis.blepublictransport.Fragments.BluetoothConnectionFragment;
+import com.lth.thesis.blepublictransport.Fragments.ObserverFragment;
+import com.lth.thesis.blepublictransport.Fragments.PaymentFragment;
+import com.lth.thesis.blepublictransport.Fragments.SettingsFragment;
+import com.lth.thesis.blepublictransport.Fragments.ShowTicketFragment;
+import com.lth.thesis.blepublictransport.Fragments.StationHomeFragment;
+import com.lth.thesis.blepublictransport.R;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -102,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         Intent i = getIntent();
         Bundle extras = i.getExtras();
         if (extras == null) {
-            executeNavigationTo(BLUETOOTH_PARING_FRAGMENT);
+            executeNavigationTo(STATION_FRAGMENT);
         } else {
             String frag = extras.getString("fragment");
             if (frag != null) {

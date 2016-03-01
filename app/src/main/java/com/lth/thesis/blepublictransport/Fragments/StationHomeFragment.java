@@ -1,13 +1,17 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Fragments;
 
-import android.app.Application;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
+import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
+import com.lth.thesis.blepublictransport.Beacons.NearObjectListViewAdapter;
+import com.lth.thesis.blepublictransport.R;
 
 import org.altbeacon.beacon.Beacon;
 

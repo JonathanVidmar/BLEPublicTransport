@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
 
 /**
  * Created by jacobarvidsson on 17/02/16.

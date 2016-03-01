@@ -1,6 +1,7 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
 
 import android.util.Log;
+
 import org.altbeacon.beacon.Beacon;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -52,6 +53,8 @@ public class BeaconStatHelper {
         double n = 2.5;   // Signal propogation exponent
         double d0 = 1;  // Reference distance in meters
         double C = 0;   // Gaussian variable for mitigating flat fading
+
+        Log.d("BluetoothClient", lastFilteredReading + " | " + txPower);
 
         lastCalculatedDistance = kf.filter(d0 * Math.pow(10,(lastFilteredReading - txPower - C)/ (-10 * n)),movementState);
         if (!Double.isNaN(lastCalculatedDistance)) filteredStats.addValue(lastCalculatedDistance);

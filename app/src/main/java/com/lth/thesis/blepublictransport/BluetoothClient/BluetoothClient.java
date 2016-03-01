@@ -1,52 +1,49 @@
-package com.lth.thesis.blepublictransport;
-
+package com.lth.thesis.blepublictransport.BluetoothClient;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+
+import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
+import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
 
 import org.altbeacon.beacon.Beacon;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * Bluetooth Client object.
+ *
+ * <P>A Bluetooth Client that connects to a Bluetooth Server.
+ *
+ * @author Jacob Arvidsson
+ * @version 1.0
  */
-public class BluetoothConnectionFragment extends ObserverFragment {
-    private static final String DEBUG_TAG = "BluetoothFragment";
+
+public class BluetoothClient {
+    private final static String DEBUG_TAG = "BluetoothClient";
     private BluetoothAdapter bluetoothAdapter;
-    private TextView statusText;
-    private Button connectButton;
+    private BLEPublicTransport application;
 
     private BluetoothDevice remoteDevice;
     private ConnectThread connectionThread;
 
-    private final static int PENDING_CONNECTION = 4;
-    private final static int PENDING_DISCOVERABILITY = 3;
-    private final static int AWAITING_CONNECTION = 2;
-    private final static int PAIRED = 1;
-    private final static int NOT_PAIRED = 0;
+    private static final int PENDING_CONNECTION = 4;
+    private static final int PENDING_DISCOVERABILITY = 3;
+    private static final int AWAITING_CONNECTION = 2;
+    private static final int PAIRED = 1;
+    private static final int NOT_PAIRED = 0;
 
     private int currentState = 0;
     private double PAIRING_THRESHOLD = 6;
@@ -54,13 +51,13 @@ public class BluetoothConnectionFragment extends ObserverFragment {
     private final static String SERVER_ADDRESS = "BC:6E:64:29:37:ED";
     private boolean hasOpened = false;
 
+    /* Receiver for when I Bluetooth divice has been found. */
     private final BroadcastReceiver discoveryResult = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // When discovery finds a device
             Log.d(DEBUG_TAG, "Found device");
+
             if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
-                // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (device.getAddress().equals(SERVER_ADDRESS)) {
                     remoteDevice = device;
@@ -70,19 +67,20 @@ public class BluetoothConnectionFragment extends ObserverFragment {
         }
     };
 
-    public BluetoothConnectionFragment() {
-        // Required empty public constructor
+    /* Constructor */
+    public BluetoothClient(BLEPublicTransport application){
+        this.application = application;
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        application.registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
     }
 
-    @Override
+    /* Should be called in Application on ranging */    // och detta skulle kunna göras i app, så kan man bara skicka med distance.
     public void update(Object data) {
         BeaconPacket p = (BeaconPacket) data;
-        BLEPublicTransport application = (BLEPublicTransport) getActivity().getApplication();
-        BeaconHelper beaconHelper = application.beaconHelper;
         if (p.type == BeaconPacket.RANGED_BEACONS) {
             for (Beacon b : p.beacons) {
                 if (b.getId2().toString().equals(BeaconHelper.region2.getId2().toString())) {
-                    checkProximityToGate(b.getDistance());
+                    checkProximityToGate(application.beaconHelper.getDistance(b));
                 }
             }
 
@@ -90,7 +88,6 @@ public class BluetoothConnectionFragment extends ObserverFragment {
     }
 
     private void checkProximityToGate(double distance) {
-        Log.d(DEBUG_TAG, currentState + "");
         if (distance < PAIRING_THRESHOLD) {
             switch (currentState) {
                 case NOT_PAIRED:
@@ -102,11 +99,14 @@ public class BluetoothConnectionFragment extends ObserverFragment {
                         findDevices();
                     }
                     break;
+
                 case PENDING_CONNECTION:
                     startConnectionThread();
                     break;
+
                 case AWAITING_CONNECTION:
                     break;
+
                 case PAIRED:
                     // distance < threshold 2
                     if(distance < OPEN_THRESHOLD) {
@@ -120,43 +120,9 @@ public class BluetoothConnectionFragment extends ObserverFragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_bluetooth_connection, container, false);
-        statusText = (TextView) view.findViewById(R.id.statusText);
-        connectButton = (Button) view.findViewById(R.id.connectButton);
-        connectButton.setVisibility(View.INVISIBLE);
-
-        // Get bluetooth adapter
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        connectButton.setEnabled(false);
-        if (bluetoothAdapter != null) {
-            // Register for bluetooth states and discovery
-            IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            getActivity().registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-
-            if (!bluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivity(enableBtIntent);
-                // Här borde det läggas tille en koll om användaren säger nej.. men det måste göras i
-                // on activity result, så jag pallar inte. Men knappen borde vara dissablad tills vi vet det.
-                // och sen borde findDevices att köras.
-            }
-        } else {
-            notifyWithMessage("Please buy a new phone");
-        }
-
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //connectionThread.sentMessage();
-            }
-        });
-        return view;
-    }
-
     public void findDevices() {
         Log.d(DEBUG_TAG, "Starting discovery for remote device...");
+
         if (bluetoothAdapter.isDiscovering()) {
             bluetoothAdapter.cancelDiscovery();
         }
@@ -168,12 +134,9 @@ public class BluetoothConnectionFragment extends ObserverFragment {
     private boolean findBondedDevices() {
         boolean foundDevice = false;
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-        // If there are paired devices
         if (pairedDevices.size() > 0) {
-            // Loop through paired devices
             for (BluetoothDevice device : pairedDevices) {
                 if (device.getAddress().equals(SERVER_ADDRESS)) {
-                    notifyWithMessage("Device found: " + device.getName());
                     remoteDevice = device;
                     foundDevice = true;
                     currentState = PENDING_CONNECTION;
@@ -188,18 +151,10 @@ public class BluetoothConnectionFragment extends ObserverFragment {
         connectionThread.start();
     }
 
-    private void notifyWithMessage(final String message) {
-        Log.d(DEBUG_TAG, message);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                statusText.setText(message);
-            }
-        });
+    /** Should call some cool method in BLEPublicTransport instead.   */
+    private void callApplication(String string){
+        Log.d(DEBUG_TAG, string);
     }
-
-
-    // ------------  PRIVATE CLASS: CONNECT THREAD ----------------------- //
 
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
@@ -233,7 +188,6 @@ public class BluetoothConnectionFragment extends ObserverFragment {
                 // until it succeeds or throws an exception
                 currentState = AWAITING_CONNECTION;
                 mmSocket.connect();
-                notifyWithMessage("Connected to other device");
                 connectedThread = new ConnectedThread(mmSocket);
                 connectedThread.start();
 
@@ -248,14 +202,11 @@ public class BluetoothConnectionFragment extends ObserverFragment {
                 currentState = PENDING_CONNECTION;
                 return;
             }
-
-            // Do work to manage the connection (in a separate thread)
-            //manageConnectedSocket(mmSocket);
         }
 
         public void sentMessage() {
             connectedThread.write("test".getBytes());
-            notifyWithMessage("Sent message");
+            callApplication("Message sent");
         }
 
         /**
@@ -304,8 +255,10 @@ public class BluetoothConnectionFragment extends ObserverFragment {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
-                    // Send the obtained bytes to the UI activity
-                    notifyWithMessage("Received message");
+                    String message = new String(Arrays.copyOfRange(buffer, 0, bytes));
+                    int rssi = Integer.valueOf(message);
+                    application.beaconHelper.txPower = rssi;
+                    //callApplication("Received message");
                 } catch (IOException e) {
                     break;
                 }
@@ -316,7 +269,7 @@ public class BluetoothConnectionFragment extends ObserverFragment {
         public void write(byte[] bytes) {
             try {
                 mmOutStream.write(bytes);
-                notifyWithMessage("Message sent!");
+                callApplication("Message sent");
             } catch (IOException e) {
             }
         }
@@ -330,4 +283,3 @@ public class BluetoothConnectionFragment extends ObserverFragment {
         }
     }
 }
-

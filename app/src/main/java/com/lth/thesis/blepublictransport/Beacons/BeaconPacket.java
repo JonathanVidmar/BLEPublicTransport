@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
 
 import org.altbeacon.beacon.Beacon;
 

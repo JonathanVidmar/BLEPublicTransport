@@ -1,29 +1,29 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Main;
 
 import android.app.Application;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.RemoteException;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.lth.thesis.blepublictransport.Beacons.BeaconCommunicator;
+import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
+import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
+import com.lth.thesis.blepublictransport.BluetoothClient.BluetoothClient;
+import com.lth.thesis.blepublictransport.Beacons.Constants;
+import com.lth.thesis.blepublictransport.Beacons.NotificationHandler;
+import com.lth.thesis.blepublictransport.Beacons.WalkDetection;
+
 import org.altbeacon.beacon.*;
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Observer;
 
 public class BLEPublicTransport extends Application implements BootstrapNotifier, BeaconConsumer {
     private static final String TAG = "BLEPublicTransport";
@@ -36,18 +36,20 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     public BeaconHelper beaconHelper;
     public NotificationHandler notificationHandler;
     private WalkDetection wd;
+    private BluetoothClient bluetoothClient;
 
 
     public void onCreate() {
         super.onCreate();
 
+        bluetoothClient = new BluetoothClient(this);
         wd = new WalkDetection(this);
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().clear();
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconHelper.eddystoneLayout));
 
         try {
-            beaconManager.setForegroundScanPeriod(120l); // 20 mS
+            beaconManager.setForegroundScanPeriod(120l); // 120 mS
             beaconManager.setForegroundBetweenScanPeriod(0l); // 0ms
             beaconManager.setBackgroundScanPeriod(120l);
             beaconManager.setBackgroundBetweenScanPeriod(0l);
@@ -155,6 +157,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 beaconHelper.updateBeaconDistances(beacons, wd.getState());
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
+                bluetoothClient.update(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
             }
         });
         try {

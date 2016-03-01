@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
@@ -21,7 +21,7 @@ public class BeaconHelper {
     public static final Region region2 = new Region("BLEPublicTransport B", namespace, instance2, null);
     public static final Region region3 = new Region("BLEPublicTransport C", namespace, instance3, null);
     public static final List<Region> regions = Arrays.asList(region1, region2, region3);
-    private double txPower = -59;
+    public double txPower = -59;
 
     private Map<String, BeaconStatHelper> beaconStatList = new HashMap<>();
     public HashMap<Identifier, Boolean> currentlyInBeaconRegionProximity = new HashMap<>();
@@ -90,8 +90,7 @@ public class BeaconHelper {
             }
         }*/
         for (Beacon b : beacons) {
-            // Currently not using rssi from Beacon 3 as reference txPower
-            beaconStatList.get(b.getId2().toString()).updateDistance(b,movementState,b.getTxPower());
+            beaconStatList.get(b.getId2().toString()).updateDistance(b,movementState, txPower);
         }
     }
 

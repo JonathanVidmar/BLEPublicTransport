@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Fragments;
 
 
 import android.content.SharedPreferences;
@@ -7,12 +7,15 @@ import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.Beacons.Constants;
+import com.lth.thesis.blepublictransport.Beacons.NotificationHandler;
+import com.lth.thesis.blepublictransport.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

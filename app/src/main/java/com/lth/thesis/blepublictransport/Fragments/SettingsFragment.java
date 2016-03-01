@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Fragments;
 
 
 import android.content.SharedPreferences;
@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Beacons.Constants;
 import com.lth.thesis.blepublictransport.R;
 
 /**
