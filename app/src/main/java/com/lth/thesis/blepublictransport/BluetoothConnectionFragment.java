@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.altbeacon.beacon.Beacon;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,65 +33,40 @@ import java.util.UUID;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BluetoothConnectionFragment extends Fragment {
+public class BluetoothConnectionFragment extends ObserverFragment {
     private static final String DEBUG_TAG = "BluetoothFragment";
     private BluetoothAdapter bluetoothAdapter;
     private TextView statusText;
-    private TextView deviceInfo;
     private Button connectButton;
 
     private BluetoothDevice remoteDevice;
     private ConnectThread connectionThread;
 
+    private final static int PENDING_CONNECTION = 4;
+    private final static int PENDING_DISCOVERABILITY = 3;
+    private final static int AWAITING_CONNECTION = 2;
+    private final static int PAIRED = 1;
+    private final static int NOT_PAIRED = 0;
 
-    /**
-     * This can also be done by checking requestCode == REQUEST_ENABLE_BT and
-     * resultCode  == RESULT.OK but using a BroadcastReceiver and listening
-     * for this broadcast can be useful to detect changes made to the Bluetooth
-     * state while your app is running.
-     */
-    BroadcastReceiver bluetoothState = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
-            switch (state){
-                case(BluetoothAdapter.STATE_TURNING_ON):
-                {
-                    notifyWithMessage("Bluetooth turning on...");
-                    break;
-                }
-                case(BluetoothAdapter.STATE_ON):
-                {
-                    notifyWithMessage("Bluetooth is on!");
-                    break;
-                }
-                case(BluetoothAdapter.STATE_TURNING_OFF): {
-                    notifyWithMessage("Bluetooth turning off...");
-
-                    break;
-                }
-                case(BluetoothAdapter.STATE_OFF):
-                {
-                    notifyWithMessage("Bluetooth is off!");
-                    break;
-                }
-            }
-            notifyWithMessage(bluetoothAdapter.getName() + " : " + bluetoothAdapter.getAddress());
-        }
-    };
+    private int currentState = 0;
+    private double PAIRING_THRESHOLD = 6;
+    private double OPEN_THRESHOLD = 1.5;
+    private final static String SERVER_ADDRESS = "BC:6E:64:29:37:ED";
+    private boolean hasOpened = false;
 
     private final BroadcastReceiver discoveryResult = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // When discovery finds a device
             Log.d(DEBUG_TAG, "Found device");
-            if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())){
+            if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                notifyWithMessage("Device found:" + device.getName());
-                remoteDevice = device;
+                if (device.getAddress().equals(SERVER_ADDRESS)) {
+                    remoteDevice = device;
+                    currentState = PENDING_CONNECTION;
+                }
             }
-            startConnectionThread();
         }
     };
 
@@ -98,26 +75,68 @@ public class BluetoothConnectionFragment extends Fragment {
     }
 
     @Override
+    public void update(Object data) {
+        BeaconPacket p = (BeaconPacket) data;
+        BLEPublicTransport application = (BLEPublicTransport) getActivity().getApplication();
+        BeaconHelper beaconHelper = application.beaconHelper;
+        if (p.type == BeaconPacket.RANGED_BEACONS) {
+            for (Beacon b : p.beacons) {
+                if (b.getId2().toString().equals(BeaconHelper.region2.getId2().toString())) {
+                    checkProximityToGate(b.getDistance());
+                }
+            }
+
+        }
+    }
+
+    private void checkProximityToGate(double distance) {
+        Log.d(DEBUG_TAG, currentState + "");
+        if (distance < PAIRING_THRESHOLD) {
+            switch (currentState) {
+                case NOT_PAIRED:
+                    if (findBondedDevices()) {
+                        currentState = PENDING_CONNECTION;
+                    } else {
+                        // Kommer inte komma hit i testfallen
+                        currentState = PENDING_DISCOVERABILITY;
+                        findDevices();
+                    }
+                    break;
+                case PENDING_CONNECTION:
+                    startConnectionThread();
+                    break;
+                case AWAITING_CONNECTION:
+                    break;
+                case PAIRED:
+                    // distance < threshold 2
+                    if(distance < OPEN_THRESHOLD) {
+                        if(!hasOpened){
+                            connectionThread.sentMessage();
+                            hasOpened = true;
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_bluetooth_connection, container, false);
         statusText = (TextView) view.findViewById(R.id.statusText);
-        deviceInfo = (TextView) view.findViewById(R.id.deviceInfo);
         connectButton = (Button) view.findViewById(R.id.connectButton);
+        connectButton.setVisibility(View.INVISIBLE);
 
         // Get bluetooth adapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         connectButton.setEnabled(false);
-        if(bluetoothAdapter != null){
-            deviceInfo.setText("This device: " + bluetoothAdapter.getName() + " : " + bluetoothAdapter.getAddress());
+        if (bluetoothAdapter != null) {
             // Register for bluetooth states and discovery
             IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            getActivity().getApplicationContext().registerReceiver(bluetoothState, intentFilter);
             getActivity().registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
 
-            if(bluetoothAdapter.isEnabled()){
-                findDevices();
-            } else {
+            if (!bluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivity(enableBtIntent);
                 // Här borde det läggas tille en koll om användaren säger nej.. men det måste göras i
@@ -126,59 +145,50 @@ public class BluetoothConnectionFragment extends Fragment {
             }
         } else {
             notifyWithMessage("Please buy a new phone");
-            connectButton.setEnabled(false);
         }
 
         connectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                connectionThread.sentMessage();
+                //connectionThread.sentMessage();
             }
         });
         return view;
     }
 
-    public void findDevices(){
-        if(!findBondedDevices()){
-            Log.d(DEBUG_TAG, "Starting discovery for remote device...");
-            if (bluetoothAdapter.isDiscovering()) {
-                bluetoothAdapter.cancelDiscovery();
-            }
-            if (bluetoothAdapter.startDiscovery()) {
-                Log.d(DEBUG_TAG, "Discovery thread started, scanning for devices");
-            }
-        }else{
-            startConnectionThread();
+    public void findDevices() {
+        Log.d(DEBUG_TAG, "Starting discovery for remote device...");
+        if (bluetoothAdapter.isDiscovering()) {
+            bluetoothAdapter.cancelDiscovery();
+        }
+        if (bluetoothAdapter.startDiscovery()) {
+            Log.d(DEBUG_TAG, "Discovery thread started, scanning for devices");
         }
     }
 
-    private boolean findBondedDevices(){
+    private boolean findBondedDevices() {
         boolean foundDevice = false;
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
         // If there are paired devices
         if (pairedDevices.size() > 0) {
             // Loop through paired devices
             for (BluetoothDevice device : pairedDevices) {
-                notifyWithMessage("Device found: " + device.getName());
-                remoteDevice = device;
-                foundDevice = true;
+                if (device.getAddress().equals(SERVER_ADDRESS)) {
+                    notifyWithMessage("Device found: " + device.getName());
+                    remoteDevice = device;
+                    foundDevice = true;
+                    currentState = PENDING_CONNECTION;
+                }
             }
         }
         return foundDevice;
     }
 
-    private void startConnectionThread(){
+    private void startConnectionThread() {
         connectionThread = new ConnectThread(remoteDevice);
         connectionThread.start();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                connectButton.setEnabled(true);
-                connectButton.setText("Send message");
-            }
-        });
     }
 
-    private void notifyWithMessage(final String message){
+    private void notifyWithMessage(final String message) {
         Log.d(DEBUG_TAG, message);
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -221,16 +231,21 @@ public class BluetoothConnectionFragment extends Fragment {
             try {
                 // Connect the device through the socket. This will block
                 // until it succeeds or throws an exception
+                currentState = AWAITING_CONNECTION;
                 mmSocket.connect();
                 notifyWithMessage("Connected to other device");
                 connectedThread = new ConnectedThread(mmSocket);
                 connectedThread.start();
+
             } catch (IOException connectException) {
                 // Unable to connect; close the socket and get out
                 Log.d(DEBUG_TAG, "Failure to connect.");
+
                 try {
                     mmSocket.close();
-                } catch (IOException closeException) {}
+                } catch (IOException closeException) {
+                }
+                currentState = PENDING_CONNECTION;
                 return;
             }
 
@@ -238,16 +253,19 @@ public class BluetoothConnectionFragment extends Fragment {
             //manageConnectedSocket(mmSocket);
         }
 
-        public void sentMessage(){
+        public void sentMessage() {
             connectedThread.write("test".getBytes());
             notifyWithMessage("Sent message");
         }
 
-        /** Will cancel an in-progress connection, and close the socket */
+        /**
+         * Will cancel an in-progress connection, and close the socket
+         */
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
     }
 
@@ -269,10 +287,12 @@ public class BluetoothConnectionFragment extends Fragment {
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+            currentState = PAIRED;
         }
 
         public void run() {
@@ -297,14 +317,16 @@ public class BluetoothConnectionFragment extends Fragment {
             try {
                 mmOutStream.write(bytes);
                 notifyWithMessage("Message sent!");
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
 
         /* Call this from the main activity to shutdown the connection */
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
     }
 }

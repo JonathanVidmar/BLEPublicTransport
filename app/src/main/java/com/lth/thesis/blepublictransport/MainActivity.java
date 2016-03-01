@@ -28,11 +28,14 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private Toolbar toolbar;
 
-    private static StationHomeFragment stationFragment;
-    private static PaymentFragment paymentFragment;
-    private static SettingsFragment settingsFragment;
-    private static ShowTicketFragment ticketFragment;
-    private static BluetoothConnectionFragment bluetoothFragment;
+    //private static StationHomeFragment stationFragment;
+    //private static PaymentFragment paymentFragment;
+    //private static SettingsFragment settingsFragment;
+    //private static ShowTicketFragment ticketFragment;
+    //private static BluetoothConnectionFragment bluetoothFragment;
+
+    private Fragment currentFragment;
+
     private static final String STATION_FRAGMENT = "stationFragment";
     private static final String PAYMENT_FRAGMENT = "paymentFragment";
     private static final String SETTINGS_FRAGMENT = "settingsFragment";
@@ -127,37 +130,37 @@ public class MainActivity extends AppCompatActivity
             case STATION_FRAGMENT:
                 toolbar.setTitle("Nearby");
                 currentFragmentTag = STATION_FRAGMENT;
-                stationFragment = (StationHomeFragment) getSupportFragmentManager().findFragmentByTag(STATION_FRAGMENT);
-                if (stationFragment == null) stationFragment = new StationHomeFragment();
-                fragmentTransaction.replace(R.id.fragment_container, stationFragment, STATION_FRAGMENT);
+                currentFragment = getSupportFragmentManager().findFragmentByTag(STATION_FRAGMENT);
+                if (currentFragment == null) currentFragment = new StationHomeFragment();
+                fragmentTransaction.replace(R.id.fragment_container, currentFragment, STATION_FRAGMENT);
                 break;
             case PAYMENT_FRAGMENT:
                 toolbar.setTitle("Payment");
                 currentFragmentTag = PAYMENT_FRAGMENT;
-                paymentFragment = (PaymentFragment) getSupportFragmentManager().findFragmentByTag(PAYMENT_FRAGMENT);
-                if (paymentFragment == null) paymentFragment = new PaymentFragment();
-                fragmentTransaction.replace(R.id.fragment_container, paymentFragment, PAYMENT_FRAGMENT);
+                currentFragment = getSupportFragmentManager().findFragmentByTag(PAYMENT_FRAGMENT);
+                if (currentFragment == null) currentFragment = new PaymentFragment();
+                fragmentTransaction.replace(R.id.fragment_container, currentFragment, PAYMENT_FRAGMENT);
                 break;
             case SETTINGS_FRAGMENT:
                 toolbar.setTitle("Settings");
                 currentFragmentTag = SETTINGS_FRAGMENT;
-                settingsFragment = (SettingsFragment) getSupportFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT);
-                if (settingsFragment == null) settingsFragment = new SettingsFragment();
-                fragmentTransaction.replace(R.id.fragment_container, settingsFragment, SETTINGS_FRAGMENT);
+                currentFragment = getSupportFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT);
+                if (currentFragment == null) currentFragment = new SettingsFragment();
+                fragmentTransaction.replace(R.id.fragment_container, currentFragment, SETTINGS_FRAGMENT);
                 break;
             case TICKET_FRAGMENT:
                 toolbar.setTitle("Ticket");
                 currentFragmentTag = TICKET_FRAGMENT;
-                ticketFragment = (ShowTicketFragment) getSupportFragmentManager().findFragmentByTag(TICKET_FRAGMENT);
-                if (ticketFragment == null) ticketFragment = new ShowTicketFragment();
-                fragmentTransaction.replace(R.id.fragment_container, ticketFragment, TICKET_FRAGMENT);
+                currentFragment = getSupportFragmentManager().findFragmentByTag(TICKET_FRAGMENT);
+                if (currentFragment == null) currentFragment = new ShowTicketFragment();
+                fragmentTransaction.replace(R.id.fragment_container, currentFragment, TICKET_FRAGMENT);
                 break;
             case BLUETOOTH_PARING_FRAGMENT:
                 toolbar.setTitle("Bluetooth");
                 currentFragmentTag = BLUETOOTH_PARING_FRAGMENT;
-                bluetoothFragment = (BluetoothConnectionFragment) getSupportFragmentManager().findFragmentByTag(BLUETOOTH_PARING_FRAGMENT);
-                if (bluetoothFragment == null) bluetoothFragment = new BluetoothConnectionFragment();
-                fragmentTransaction.replace(R.id.fragment_container, bluetoothFragment, BLUETOOTH_PARING_FRAGMENT);
+                currentFragment = getSupportFragmentManager().findFragmentByTag(BLUETOOTH_PARING_FRAGMENT);
+                if (currentFragment == null) currentFragment = new BluetoothConnectionFragment();
+                fragmentTransaction.replace(R.id.fragment_container, currentFragment, BLUETOOTH_PARING_FRAGMENT);
                 break;
             }
 
@@ -245,11 +248,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void update(Observable observable, Object data) {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentTag);
-        // Should be redundant
         if (currentFragment != null && currentFragment.isVisible()) {
-            if (currentFragment instanceof StationHomeFragment) {
-                ((StationHomeFragment) currentFragment).update(data);
+            if (currentFragment instanceof ObserverFragment) {
+                ((ObserverFragment) currentFragment).update(data);
             }
         }
     }

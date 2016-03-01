@@ -17,7 +17,7 @@ import java.util.*;
  * The main fragment class, subclass of Fragment,
  * which implements the BeaconConsumer which let's it detect iBeacons.
  */
-public class StationHomeFragment extends Fragment{
+public class StationHomeFragment extends ObserverFragment{
     protected static final String TAG = "StationHome";
     private View view;
     private ListView listView;
