@@ -44,8 +44,8 @@ public class BeaconStatHelper {
         stats.getSortedValues();
         stats2.getSortedValues();
         lastFilteredReading = stats.getPercentile(50);
-        //double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(filteredStats.getMean()/filteredStats.getStandardDeviation(), 2)));
-        //if (!Double.isInfinite(mNoise) || !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
+        double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(filteredStats.getMean()/filteredStats.getStandardDeviation(), 2)));
+        if (!Double.isInfinite(mNoise) && !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
         calculateDistance(stats2.getPercentile(50), movementState);
     }
     private void calculateDistance(double txPower, double movementState){
