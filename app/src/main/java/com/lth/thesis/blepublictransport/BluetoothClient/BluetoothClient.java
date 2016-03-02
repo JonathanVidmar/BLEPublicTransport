@@ -10,10 +10,6 @@ import android.content.IntentFilter;
 import android.util.Log;
 
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
-import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
-import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
-
-import org.altbeacon.beacon.Beacon;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,102 +20,124 @@ import java.util.UUID;
 
 /**
  * Bluetooth Client object.
- *
- * <P>A Bluetooth Client that connects to a Bluetooth Server.
+ * A Bluetooth Client that connects to a Bluetooth Server.
  *
  * @author Jacob Arvidsson
  * @version 1.0
  */
 
 public class BluetoothClient {
-    private final static String DEBUG_TAG = "BluetoothClient";
-    private BluetoothAdapter bluetoothAdapter;
+    // Private attributes
     private BLEPublicTransport application;
-
+    private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice remoteDevice;
     private ConnectThread connectionThread;
 
-    private static final int PENDING_CONNECTION = 4;
-    private static final int PENDING_DISCOVERABILITY = 3;
-    private static final int AWAITING_CONNECTION = 2;
-    private static final int PAIRED = 1;
-    private static final int NOT_PAIRED = 0;
-
-    private int currentState = 0;
-    private double PAIRING_THRESHOLD = 6;
-    private double OPEN_THRESHOLD = 1.5;
-    private final static String SERVER_ADDRESS = "BC:6E:64:29:37:ED";
+    // States
     private boolean hasOpened = false;
+    private int currentState = 0;
 
-    /* Receiver for when I Bluetooth divice has been found. */
-    private final BroadcastReceiver discoveryResult = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(DEBUG_TAG, "Found device");
+    // Constants
+    private static final String DEBUG_TAG = "BluetoothClient";
+    private static final String SERVER_ADDRESS = "BC:6E:64:29:37:ED";
+    private static final double PAIRING_THRESHOLD = 6;
+    private static final double OPEN_THRESHOLD = 1.5;
 
-            if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (device.getAddress().equals(SERVER_ADDRESS)) {
-                    remoteDevice = device;
-                    currentState = PENDING_CONNECTION;
-                }
-            }
-        }
-    };
+    // State constants
+    private static final int NOT_PAIRED = 0;
+    private static final int PAIRED = 1;
+    private static final int AWAITING_CONNECTION = 2;
+    private static final int PENDING_DISCOVERABLE = 3;
+    private static final int PENDING_CONNECTION = 4;
 
-    /* Constructor */
-    public BluetoothClient(BLEPublicTransport application){
+    /**
+     * Constructor of the class.
+     * Initiates the Bluetooth Adapter and register for device discovery.
+     *
+     * @param application context from where the ranging is performed.
+     */
+    public BluetoothClient(BLEPublicTransport application) {
         this.application = application;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        BroadcastReceiver discoveryResult = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(DEBUG_TAG, "Found device");
+
+                if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    if (device.getAddress().equals(SERVER_ADDRESS)) {
+                        remoteDevice = device;
+                        currentState = PENDING_CONNECTION;
+                    }
+                }
+            }
+        };
         application.registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
     }
 
-    /* Should be called in Application on ranging */    // och detta skulle kunna göras i app, så kan man bara skicka med distance.
-    public void update(Object data) {
-        BeaconPacket p = (BeaconPacket) data;
-        if (p.type == BeaconPacket.RANGED_BEACONS) {
-            for (Beacon b : p.beacons) {
-                if (b.getId2().toString().equals(BeaconHelper.region2.getId2().toString())) {
-                    checkProximityToGate(application.beaconHelper.getDistance(b));
-                }
+    /**
+     * Checks if the device is in range of connectivity.
+     * Calls checkProximityToGate if in range and if not
+     * in range and the device is paired or attempting connection
+     * it is canceled and the thread is closed.
+     *
+     * @param distance context from where the ranging is performed.
+     */
+    public void updateClient(double distance) {
+        application.connectionState = currentState;
+        if (distance < PAIRING_THRESHOLD) {
+            checkProximityToGate(distance);
+        }else {
+            if(currentState != NOT_PAIRED){
+                currentState = NOT_PAIRED;
+                connectionThread.cancel();
+                Log.d(DEBUG_TAG, "NOT PAIRED ANYMORE");
+                application.beaconHelper.txPower = -59;
             }
-
         }
     }
 
     private void checkProximityToGate(double distance) {
-        if (distance < PAIRING_THRESHOLD) {
-            switch (currentState) {
-                case NOT_PAIRED:
-                    if (findBondedDevices()) {
-                        currentState = PENDING_CONNECTION;
-                    } else {
-                        // Kommer inte komma hit i testfallen
-                        currentState = PENDING_DISCOVERABILITY;
-                        findDevices();
+        switch (currentState) {
+            case NOT_PAIRED:
+                if (findBondedDevices()) {
+                    currentState = PENDING_CONNECTION;
+                } else {
+                    currentState = PENDING_DISCOVERABLE;
+                    findDevices();
+                }
+                break;
+
+            case PENDING_DISCOVERABLE:
+                break;
+
+            case PENDING_CONNECTION:
+                startConnectionThread();
+                break;
+
+            case AWAITING_CONNECTION:
+                break;
+
+            case PAIRED:
+                if (distance < OPEN_THRESHOLD) {
+                    if (!hasOpened) {
+                        connectionThread.sentMessage("200");
+                        hasOpened = true;
                     }
-                    break;
-
-                case PENDING_CONNECTION:
-                    startConnectionThread();
-                    break;
-
-                case AWAITING_CONNECTION:
-                    break;
-
-                case PAIRED:
-                    // distance < threshold 2
-                    if(distance < OPEN_THRESHOLD) {
-                        if(!hasOpened){
-                            connectionThread.sentMessage();
-                            hasOpened = true;
-                        }
+                }else{
+                    if(hasOpened){
+                        connectionThread.sentMessage("410");
+                        hasOpened = false;
                     }
-                    break;
-            }
+                }
+                break;
         }
+
     }
 
+    /** Sets up device to discover other devices. */
     public void findDevices() {
         Log.d(DEBUG_TAG, "Starting discovery for remote device...");
 
@@ -131,6 +149,7 @@ public class BluetoothClient {
         }
     }
 
+    /** Finds already bonded devices. */
     private boolean findBondedDevices() {
         boolean foundDevice = false;
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
@@ -146,104 +165,88 @@ public class BluetoothClient {
         return foundDevice;
     }
 
+    /* Creates and starts a connection thread */
     private void startConnectionThread() {
         connectionThread = new ConnectThread(remoteDevice);
         connectionThread.start();
     }
 
-    /** Should call some cool method in BLEPublicTransport instead.   */
-    private void callApplication(String string){
-        Log.d(DEBUG_TAG, string);
-    }
+    // ------------  PRIVATE CLASS: CONNECT THREAD ----------------------- //
 
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
-        private final BluetoothDevice mmDevice;
-        private ConnectedThread connectedThread;
+        private CommunicationThread connectedThread;
 
         public ConnectThread(BluetoothDevice device) {
-            // Use a temporary object that is later assigned to mmSocket,
-            // because mmSocket is final
             BluetoothSocket tmp = null;
-            mmDevice = device;
-            connectedThread = null;
-
-            // Get a BluetoothSocket to connect with the given BluetoothDevice
             try {
-                // MY_UUID is the app's UUID string, also used by the server code
                 tmp = device.createRfcommSocketToServiceRecord(UUID.fromString("90B41C8F-A6CD-417C-B406-5BC9C5471636"));
                 Log.d(DEBUG_TAG, "Device created");
             } catch (IOException e) {
                 Log.d(DEBUG_TAG, "Failure in creating socket device");
+                currentState = PENDING_CONNECTION;
             }
             mmSocket = tmp;
         }
 
+        /**
+         * Cancels discovery and connects the device through socket.
+         * This will block until it succeeds or throw exception.
+         */
         public void run() {
-            // Cancel discovery because it will slow down the connection
             bluetoothAdapter.cancelDiscovery();
 
             try {
-                // Connect the device through the socket. This will block
-                // until it succeeds or throws an exception
                 currentState = AWAITING_CONNECTION;
                 mmSocket.connect();
-                connectedThread = new ConnectedThread(mmSocket);
+                connectedThread = new CommunicationThread(mmSocket);
                 connectedThread.start();
 
             } catch (IOException connectException) {
-                // Unable to connect; close the socket and get out
-                Log.d(DEBUG_TAG, "Failure to connect.");
-
-                try {
-                    mmSocket.close();
-                } catch (IOException closeException) {
-                }
+                Log.d(DEBUG_TAG, "Unable to connect; close the socket and get out");
                 currentState = PENDING_CONNECTION;
-                return;
+                cancel();
             }
         }
 
-        public void sentMessage() {
-            connectedThread.write("test".getBytes());
-            callApplication("Message sent");
+        public void sentMessage(String message) {
+            Log.d(DEBUG_TAG, message);
+            connectedThread.write(message.getBytes());
         }
 
-        /**
-         * Will cancel an in-progress connection, and close the socket
-         */
+        /* Will cancel an in-progress connection, and close the socket */
         public void cancel() {
             try {
                 mmSocket.close();
             } catch (IOException e) {
+                Log.d(DEBUG_TAG, "Failure to close socket");
             }
         }
     }
 
     // ------------  PRIVATE CLASS: CONNECTED THREAD ----------------------- //
 
-    private class ConnectedThread extends Thread {
-        private final BluetoothSocket mmSocket;
+    private class CommunicationThread extends Thread {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
-        public ConnectedThread(BluetoothSocket socket) {
-            mmSocket = socket;
+        public CommunicationThread(BluetoothSocket socket) {
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
-
-            // Get the input and output streams, using temp objects because
-            // member streams are final
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
+                currentState = PENDING_CONNECTION;
             }
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
-            currentState = PAIRED;
+            if(mmInStream != null && mmOutStream != null){
+                currentState = PAIRED;
+                Log.d(DEBUG_TAG, "Paired");
+            }
         }
 
         public void run() {
@@ -256,10 +259,13 @@ public class BluetoothClient {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
                     String message = new String(Arrays.copyOfRange(buffer, 0, bytes));
-                    int rssi = Integer.valueOf(message);
-                    application.beaconHelper.txPower = rssi;
-                    //callApplication("Received message");
+                    try {
+                        application.beaconHelper.txPower = Integer.valueOf(message);
+                    }catch (NumberFormatException e){
+                        Log.d(DEBUG_TAG, "INTEGER FAILURE");
+                    }
                 } catch (IOException e) {
+                    Log.d(DEBUG_TAG, "Reading input stream failure");
                     break;
                 }
             }
@@ -269,16 +275,11 @@ public class BluetoothClient {
         public void write(byte[] bytes) {
             try {
                 mmOutStream.write(bytes);
-                callApplication("Message sent");
             } catch (IOException e) {
-            }
-        }
-
-        /* Call this from the main activity to shutdown the connection */
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) {
+                Log.d(DEBUG_TAG, "Failure to send message!");
+                currentState = PENDING_CONNECTION;
+                hasOpened = !hasOpened;
+                connectionThread.cancel();
             }
         }
     }
