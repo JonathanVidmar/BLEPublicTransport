@@ -24,16 +24,15 @@ import com.lth.thesis.blepublictransport.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass
+ * This fragment contains the payment options for the application.
+ *
+ * @author      Jacob Arvidsson
+ * @version     1.1                 (current version number of program)
  */
 public class PaymentFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-    // Tag for debugging
-    private static final String TAG = "Payment";
-    public static final String PREFS_NAME = "MyPrefsFile";
-    private RelativeLayout chooseDestination;
-    private View view;
+    SharedPreferences settings;
     private int dest = 0;
 
     public PaymentFragment() {
@@ -42,28 +41,29 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_payment, container, false);
+        View view = inflater.inflate(R.layout.fragment_payment, container, false);
+        setRetainInstance(true);
 
-        SharedPreferences settings = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
-        final boolean dependant = settings.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true); // true == dependent travel
-        chooseDestination = (RelativeLayout) view.findViewById(R.id.destinationView);
+        settings = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
+
+        final boolean dependantPrices = settings.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true);
+        RelativeLayout chooseDestination = (RelativeLayout) view.findViewById(R.id.destinationView);
 
         Spinner spinner = (Spinner) view.findViewById(R.id.destination_spinner);
         spinner.getBackground().setColorFilter((Color.parseColor("#FFFFFF")), PorterDuff.Mode.SRC_ATOP);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.destination_array, R.layout.spinner_destination_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        if(dependant){
+        if(dependantPrices){
             chooseDestination.setVisibility(View.VISIBLE);
         }else{
             chooseDestination.setVisibility(View.GONE);
             TextView infoText = (TextView) view.findViewById(R.id.paymentInfoText);
-            infoText.setText("The ticket will cost: ");
+            infoText.setText(R.string.payment_cost_text);
         }
-        setRetainInstance(true);
 
         final Button button = (Button) view.findViewById(R.id.payButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -73,18 +73,18 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
                 String dateString = formatter.format(validTo);
 
-                SharedPreferences settings = getActivity().getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
-                SharedPreferences.Editor editor = settings.edit();
+                SharedPreferences ticketPreferences = getActivity().getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
+                SharedPreferences.Editor editor = ticketPreferences.edit();
                 editor.putString(Constants.VALID_TICKET_DATE, dateString);
 
-                if(dependant){
+                if(dependantPrices){
                     Resources res = getResources();
                     String[] destinations = res.getStringArray(R.array.destination_array);
                     final String destination =  destinations[dest];
                     editor.putString(Constants.VALID_TICKET_DESTINATION, destination);
                 }
 
-                editor.commit();
+                editor.apply();
                 BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
                 app.notificationHandler.update(NotificationHandler.VALID_TICKET_AVAILABLE);
 
@@ -98,9 +98,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         return view;
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Resources res = getResources();
         String[] destinations = res.getStringArray(R.array.destination_array);
         final String destination =  destinations[pos];

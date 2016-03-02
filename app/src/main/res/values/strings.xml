@@ -9,4 +9,15 @@
     <string name="title_activity_blepublic_transport">BLEPublicTransport</string>
     <string name="main_fragment_text">Home</string>
     <string name="payment_fragment_text">Payment</string>
+
+    <!-- Settings fragment -->
+    <string name="settings_depending_status">Independent/Dependent prices</string>
+    <string name="settings_dependent_text">"Prices depends on destination"</string>
+    <string name="settings_independent_text">"Prices are independent of destination"</string>
+    <string name="settings_automatic_status">Manually/automatically</string>
+    <string name="settings_automatic_text">Pay automatically when approaching gate</string>
+    <string name="settings_manually_text">Pay manually when approaching gate</string>
+
+    <!-- Payment fragment -->
+    <string name="payment_cost_text">"The ticket will cost: "</string>
 </resources>

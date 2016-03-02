@@ -44,11 +44,11 @@ public class BluetoothClient {
     private static final double OPEN_THRESHOLD = 1.5;
 
     // State constants
-    private static final int NOT_PAIRED = 0;
-    private static final int PAIRED = 1;
-    private static final int AWAITING_CONNECTION = 2;
-    private static final int PENDING_DISCOVERABLE = 3;
-    private static final int PENDING_CONNECTION = 4;
+    public static final int NOT_PAIRED = 0;
+    public static final int PAIRED = 1;
+    public static final int AWAITING_CONNECTION = 2;
+    public static final int PENDING_DISCOVERABLE = 3;
+    public static final int PENDING_CONNECTION = 4;
 
     /**
      * Constructor of the class.

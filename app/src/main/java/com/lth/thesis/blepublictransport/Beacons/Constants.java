@@ -10,4 +10,5 @@ public class Constants {
     public static final String DESTINATION_DEPENDENT_PRICE = "destination_dependent_price";
     public static final String VALID_TICKET_DATE = "valid_ticket_date";
     public static final String VALID_TICKET_DESTINATION = "valid_ticket_destination";
+    public static final String PAY_AUTOMATICALLY = "pay_automatically";
 }

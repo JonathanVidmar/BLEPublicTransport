@@ -14,6 +14,7 @@ public class BeaconPacket {
     public final static int ENTERED_REGION = 0;
     public final static int EXITED_REGION = 1;
     public final static int RANGED_BEACONS = 2;
+    public final static int CONNECTION_STATE = 3;
 
 
     public BeaconPacket(int type, Collection<Beacon> beacons){
