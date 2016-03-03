@@ -41,7 +41,7 @@ public class BluetoothClient {
     private static final String DEBUG_TAG = "BluetoothClient";
     private static final String SERVER_ADDRESS = "BC:6E:64:29:37:ED";
     private static final double PAIRING_THRESHOLD = 6;
-    private static final double OPEN_THRESHOLD = 1.5;
+    private static final double OPEN_THRESHOLD = 2;
 
     // State constants
     public static final int NOT_PAIRED = 0;

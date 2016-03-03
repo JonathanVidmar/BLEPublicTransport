@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void executeNavigationTo(String destination){
+    private void executeNavigationTo(String destination) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         currentFragment = getSupportFragmentManager().findFragmentByTag(destination);
         switch (destination) {
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Bluetooth");
                 if (currentFragment == null) currentFragment = new BluetoothConnectionFragment();
                 break;
-            }
+        }
         fragmentTransaction.replace(R.id.fragment_container, currentFragment, destination);
         fragmentTransaction.commit();
     }
@@ -173,30 +173,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        // no use atm for that menu
-        // getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -213,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_bluetooth_connection:
                 executeNavigationTo(BLUETOOTH_PARING_FRAGMENT);
                 break;
-            }
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -1,14 +1,16 @@
 <resources>
+    <!-- Global -->
     <string name="app_name">Public Transport App</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
-    <string name="mainfragmenttext">This is main!</string>
-    <string name="paymentfragmenttext">This is the payment page!</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_blepublic_transport">BLEPublicTransport</string>
-    <string name="main_fragment_text">Home</string>
-    <string name="payment_fragment_text">Payment</string>
+
+    <!-- Menu -->
+    <string name="menu_title">Public Transport\nPrototype Application</string>
+    <string name="menu_authors">By Jacob and Jonathan</string>
+    <string name="menu_item_nearby">Nearby</string>
+    <string name="menu_item_payment">Payment</string>
+    <string name="menu_item_gate_connection">Connect to gate</string>
+    <string name="menu_item_settings">Settings</string>
 
     <!-- Settings fragment -->
     <string name="settings_depending_status">Independent/Dependent prices</string>
@@ -21,9 +23,28 @@
     <!-- Payment fragment -->
     <string name="payment_cost_text">The ticket will cost: </string>
     <string name="payment_ticket_text">A trip from your current station to %1$s will cost: </string>
+    <string name="payment_ticket_text_default">A trip from your current station to Lund C will cost: </string>
     <string name="payment_price_tag">%1$d kr</string>
+    <string name="payment_price_tag_default">25 kr</string>
+    <string name="payment_choose_your_destination">Choose your destination:</string>
+    <string name="payment_valid_text">Ticket is valid for 2 hours</string>
+    <string name="payment_buy_button_text">Buy ticket</string>
 
     <!-- Station home fragment -->
     <string name="station_no_nearby_text">No station near you</string>
     <string name="station_entered_text">Welcome to the station</string>
+
+    <!-- Show ticket fragment -->
+    <string name="ticket_not_valid">This ticket is no longer valid.</string>
+    <string name="ticket_text_with_destination">Ticket is valid to %1$s until the timer is finished</string>
+    <string name="ticket_no_destination">Nowhere</string>
+    <string name="ticket_invalid">INVALID TICKET</string>
+    <string name="ticket_removed">Ticket removed</string>
+    <string name="ticket_countdown_text">Valid countdown:</string>
+    <string name="ticket_text">Ticket </string>
+    <string name="ticket_countdown_default">0</string>
+
+    <!-- Bluetooth server fragment -->
+    <string name="bluetooth_no_connecton_to_gate">No connection to gate</string>
+    <string name="bluetooth_open_gate">Open gate</string>
 </resources>

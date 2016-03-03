@@ -3,44 +3,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
+
     <TextView
         android:id="@+id/switchStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:text="@string/settings_depending_status"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/settings_depending_status"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <Switch
         android:id="@+id/dependentSwitch"
-        android:layout_below="@+id/switchStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/settings_dependent_text"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/switchStatus"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/settings_dependent_text" />
+
     <TextView
         android:id="@+id/nearbyGateSettingStatus"
-        android:layout_below="@+id/dependentSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:text="@string/settings_automatic_status"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/dependentSwitch"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/settings_automatic_status"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <Switch
         android:id="@+id/automaticallySwitch"
-        android:layout_below="@+id/nearbyGateSettingStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/settings_automatic_text"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/nearbyGateSettingStatus"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/settings_automatic_text" />
 
 </RelativeLayout>
