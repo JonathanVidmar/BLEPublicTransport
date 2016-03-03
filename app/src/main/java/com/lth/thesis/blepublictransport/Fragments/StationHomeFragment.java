@@ -18,16 +18,17 @@ import org.altbeacon.beacon.Beacon;
 import java.util.*;
 
 /**
- * The main fragment class, subclass of Fragment,
- * which implements the BeaconConsumer which let's it detect iBeacons.
+ * A simple {@link ObserverFragment} subclass
+ * Shows a list of nearby objects if a station has been
+ * entered. Is empty otherwise.
+ *
+ * @author      Jacob Arvidsson & Jonathan Vidmar
+ * @version     1.1
  */
 public class StationHomeFragment extends ObserverFragment{
-    protected static final String TAG = "StationHome";
-    private View view;
     private ListView listView;
     private HashMap<String, Beacon> foundBeacons = new HashMap<>();
     private NearObjectListViewAdapter mAdapter;
-    private ArrayList<Beacon> list;
     private BeaconHelper helper;
 
     public StationHomeFragment() {
@@ -36,23 +37,14 @@ public class StationHomeFragment extends ObserverFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_main, container, false);
-
-        // Adds a placeholder text for when no region has been detected.
-        ArrayList<Beacon> items = new ArrayList<Beacon>();
-        //items.add("Looking for nearby facilities");
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ArrayList<Beacon> items = new ArrayList<>();
 
         mAdapter = new NearObjectListViewAdapter(getActivity(), items);
-        // Updates the list view
-        // Only the main thread can update the ui
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                    listView = (ListView) view.findViewById(R.id.locationItems);
-                    listView.setAdapter(mAdapter);
-                    listView.setVisibility(View.INVISIBLE);
-            }});
+        listView = (ListView) view.findViewById(R.id.locationItems);
+        listView.setAdapter(mAdapter);
+        listView.setVisibility(View.INVISIBLE);
+
         return view;
     }
 
@@ -70,90 +62,81 @@ public class StationHomeFragment extends ObserverFragment{
         if (helper.currentlyInMainRegion()) enteredStation();
     }
 
-    /**
-     * This is run when the beacon has been detected. It changes the display
-     * text and shows the list view that shows nearest objects.
-     */
+    /* Runs when beacons is in range and updates the views components. */
     public void enteredStation() {
-        // Only the main thread can update the ui
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // Sets the information text
-                TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
-                stationText.setText("Welcome to Kings Cross");
-                listView.setVisibility(View.VISIBLE);
-
-            }
-        });
+        updateLocation(getString(R.string.station_entered_text), View.VISIBLE);
     }
 
-    /**
-     * This is run when the beacons no longer is in range. It changes the display text
-     * and removes the list that shows all nearby objects.
-     */
+    /* Runs when beacons out of range and updates the views components. */
     public void leftStation() {
-        // Only the main thread can update the ui
+        updateLocation(getString(R.string.station_no_nearby_text), View.INVISIBLE);
+    }
+
+    /**
+     * Update view's components.
+     * Sets the text on top of the screen and hides or shows the list of objects.
+     *
+     * @param  visibility if the list of objects should be displayed.
+     * @param  text text to be displayed on top of the screen.
+     */
+    private void updateLocation(final String text, final int visibility){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Sets the information text
                 TextView stationText = (TextView) getActivity().findViewById(R.id.found_label);
-                stationText.setText("No station near you");
-
-                listView.setVisibility(View.INVISIBLE);
+                stationText.setText(text);
+                listView.setVisibility(visibility);
             }
         });
     }
 
     /**
-     * This method is called when ranging has found nearby beacons. It updates
-     * each beacon value in the HashMap foundBeacons and then calls the update list
-     * function.
+     * Called when ranging has found nearby beacons.
+     * It updates each beacon's value in the HashMap: foundBeacons and then calls sortList()
+     * @param  beacons the beacons found by ranging.
      */
     public void foundObjectsNear(Collection<Beacon> beacons) {
         BeaconHelper helper = new BeaconHelper();
         for (Beacon oneBeacon : beacons) {
             String beaconName = helper.getBeaconName(oneBeacon.getId2());
-            // helper.getDistanceText(oneBeacon.getDistance())
             foundBeacons.put(beaconName, oneBeacon);
         }
-        updateList();
+        sortList();
     }
 
-    /**
-     * This methods parses all the found beacons into strings and
-     * updates the list view.
-     */
-    public void updateList() {
-
-        list = new ArrayList<>();
-
+    /* Parses all the found beacons and sorts them in order of distance. */
+    public void sortList() {
+        ArrayList<Beacon> list = new ArrayList<>();
             for (String key : foundBeacons.keySet()) {
                 list.add(foundBeacons.get(key));
             }
             Collections.sort(list, new Comparator<Beacon>() {
                 @Override
-                public int compare(Beacon b2, Beacon b1){
-                    if(helper.getDistance(b1) < helper.getDistance(b2)){
+                public int compare(Beacon b2, Beacon b1) {
+                    if (helper.getDistance(b1) < helper.getDistance(b2)) {
                         return 1;
-                    }else if (helper.getDistance(b1) > helper.getDistance(b2)){
+                    } else if (helper.getDistance(b1) > helper.getDistance(b2)) {
                         return -1;
-                    }else{
+                    } else {
                         return 0;
                     }
                 }
             });
+        updateList(list);
+    }
 
+    /* Updates the list in the adapter and notifies it of changes. */
+    private void updateList(final ArrayList<Beacon> list){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mAdapter.updateList(list);
                 mAdapter.notifyDataSetChanged();
-                }
-            });
+            }
+        });
     }
 
+    /* Observer method from the application. Receives the beacon information. */
     public void update(Object data) {
         BeaconPacket p = (BeaconPacket) data;
         if(p.type == BeaconPacket.ENTERED_REGION){

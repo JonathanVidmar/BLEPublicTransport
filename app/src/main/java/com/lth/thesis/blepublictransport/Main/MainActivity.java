@@ -36,11 +36,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment currentFragment;
 
     // Constants
-    private static final String STATION_FRAGMENT = "stationFragment";
-    private static final String PAYMENT_FRAGMENT = "paymentFragment";
-    private static final String SETTINGS_FRAGMENT = "settingsFragment";
-    private static final String TICKET_FRAGMENT = "ticketFragment";
-    private static final String BLUETOOTH_PARING_FRAGMENT = "bluetoothFragment";
+    public static final String STATION_FRAGMENT = "stationFragment";
+    public static final String PAYMENT_FRAGMENT = "paymentFragment";
+    public static final String SETTINGS_FRAGMENT = "settingsFragment";
+    public static final String TICKET_FRAGMENT = "ticketFragment";
+    public static final String SHOW_TICKET_FRAGMENT = "showTicketFragment";
+    public static final String BLUETOOTH_PARING_FRAGMENT = "bluetoothFragment";
+
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
     @Override

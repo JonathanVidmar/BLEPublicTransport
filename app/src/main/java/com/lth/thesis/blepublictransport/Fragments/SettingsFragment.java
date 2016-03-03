@@ -18,7 +18,7 @@ import com.lth.thesis.blepublictransport.R;
  * This fragment contains the settings for the application.
  *
  * @author      Jacob Arvidsson
- * @version     1.1                 (current version number of program)
+ * @version     1.1
  */
 public class SettingsFragment extends Fragment {
     SharedPreferences settings;

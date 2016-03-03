@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/destinationView"
         android:background="?attr/colorPrimary"
+        android:paddingBottom="20dp"
         >
         <TextView
             android:id="@+id/chooseDestinationLabel"
@@ -24,7 +25,7 @@
         android:layout_below="@+id/chooseDestinationLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp" />
     </RelativeLayout>
     <TextView
         android:id="@+id/paymentInfoText"
@@ -61,7 +62,7 @@
     <Button
         android:text="Buy ticket"
         android:id="@+id/payButton"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

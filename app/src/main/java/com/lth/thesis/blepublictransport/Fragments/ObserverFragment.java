@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
  * It should be extended by fragments wanting to observe the
  * applications update methods.
  *
- * @author      Jacob Arvidsson
- * @version     1.1                 (current version number of program)
+ * @author      Jacob Arvidsson & Jonathan Vidmar
+ * @version     1.1
  */
 public abstract class ObserverFragment extends Fragment {
 

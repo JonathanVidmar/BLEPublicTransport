@@ -16,7 +16,7 @@ import com.lth.thesis.blepublictransport.R;
  * This fragment contains the status for automatically paying and for manually opening gates.
  *
  * @author      Jacob Arvidsson
- * @version     1.1                 (current version number of program)
+ * @version     1.1
  */
 public class BluetoothConnectionFragment extends ObserverFragment {
     private static final String DEBUG_TAG = "BluetoothFragment";
