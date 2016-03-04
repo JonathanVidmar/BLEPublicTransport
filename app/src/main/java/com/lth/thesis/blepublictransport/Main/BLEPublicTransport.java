@@ -206,5 +206,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         }
         return hasValidTicket;
     }
+
+    public boolean payAutomatically(){
+        SharedPreferences settings = getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
+        return settings.getBoolean(Constants.PAY_AUTOMATICALLY, true);
+    }
 }
 

@@ -13,7 +13,7 @@
             android:title="@string/menu_item_payment" />
         <item
             android:id="@+id/nav_bluetooth_connection"
-            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:icon="@drawable/menu_gate"
             android:title="@string/menu_item_gate_connection" />
     </group>
     <group

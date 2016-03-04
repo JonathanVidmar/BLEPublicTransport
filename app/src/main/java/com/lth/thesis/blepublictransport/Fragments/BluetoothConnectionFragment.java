@@ -15,8 +15,8 @@ import com.lth.thesis.blepublictransport.R;
  * A simple {@link ObserverFragment} subclass
  * This fragment contains the status for automatically paying and for manually opening gates.
  *
- * @author      Jacob Arvidsson
- * @version     1.1
+ * @author Jacob Arvidsson
+ * @version 1.1
  */
 public class BluetoothConnectionFragment extends ObserverFragment {
     private static final String DEBUG_TAG = "BluetoothFragment";
@@ -24,7 +24,8 @@ public class BluetoothConnectionFragment extends ObserverFragment {
     private Button button;
     private boolean hasOpenedGate = false;
     private BLEPublicTransport application;
-    private boolean shouldOpenOnClick;
+    private boolean needsToConfigureButton = true;
+    private boolean canConfigureText = true;
 
     public BluetoothConnectionFragment() {
         // Required empty public constructor
@@ -41,8 +42,11 @@ public class BluetoothConnectionFragment extends ObserverFragment {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                application.manageGate((shouldOpenOnClick) ? BluetoothClient.MESSAGE_OPEN : BluetoothClient.MESSAGE_CLOSE);
-                hasOpenedGate = !hasOpenedGate;
+                application.manageGate((hasOpenedGate) ? BluetoothClient.MESSAGE_CLOSE : BluetoothClient.MESSAGE_OPEN);
+                hasOpenedGate = true;
+                configureButton("", View.INVISIBLE);
+                setStatusText("The gate has opened");
+
             }
         });
         return view;
@@ -57,7 +61,7 @@ public class BluetoothConnectionFragment extends ObserverFragment {
         });
     }
 
-    private void configureButton(final String text, final int visible){
+    private void configureButton(final String text, final int visible) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -71,33 +75,36 @@ public class BluetoothConnectionFragment extends ObserverFragment {
     public void update(Object data) {
         switch (application.connectionState) {
             case BluetoothClient.NOT_PAIRED:
-                setStatusText("No gates nearby.");
+                updateView("No gates nearby.");
                 break;
             case BluetoothClient.PENDING_DISCOVERABLE:
-                setStatusText("Searching for gates nearby...");
+                updateView("Searching for gates nearby...");
                 break;
             case BluetoothClient.PENDING_CONNECTION:
-                setStatusText("Connecting to nearby gate...");
+                updateView("Connecting to nearby gate...");
                 break;
             case BluetoothClient.AWAITING_CONNECTION:
-                setStatusText("Trying to connect to gate...");
+                updateView("Connecting to nearby gate...");
                 break;
             case BluetoothClient.PAIRED:
-                setStatusText("Connected to gate, the gate will open when you are close enough.");
+                setStatusText(application.payAutomatically() ? "Connected to gate, the gate will open " +
+                        "when you are close enough." : "Do you want to open the gate?");
                 break;
             case BluetoothClient.PAIRED_AND_WAITING_FOR_USER_INPUT:
-                if(!hasOpenedGate){
+                if (!hasOpenedGate && needsToConfigureButton) {
                     setStatusText("Do you want to open the gate?");
                     configureButton("Open gate", View.VISIBLE);
-                    shouldOpenOnClick = true;
-                }else{
-                    setStatusText("Do you want to close the gate?");
-                    configureButton("Close gate", View.VISIBLE);
-                    shouldOpenOnClick = false;
+                    needsToConfigureButton = false;
                 }
             default:
                 break;
         }
+    }
+
+    public void updateView(String text) {
+        setStatusText(text);
+        needsToConfigureButton = true;
+        hasOpenedGate = false;
     }
 }
 

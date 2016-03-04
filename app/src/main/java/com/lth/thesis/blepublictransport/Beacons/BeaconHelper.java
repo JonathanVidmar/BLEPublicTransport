@@ -1,5 +1,7 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
+import com.lth.thesis.blepublictransport.R;
+
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.Region;
@@ -25,6 +27,7 @@ public class BeaconHelper {
     public static final Region region3 = new Region("BLEPublicTransport C", namespace, instance3, null);
     public static final List<Region> regions = Arrays.asList(region1, region2, region3);
     public double txPower = -59;
+    public HashMap<String, Integer> images = new HashMap<>();
 
     private Map<String, BeaconStatHelper> beaconStatList = new HashMap<>();
     public HashMap<Identifier, Boolean> currentlyInBeaconRegionProximity = new HashMap<>();
@@ -50,6 +53,11 @@ public class BeaconHelper {
         beaconList.put("0x41774c564931", "Kundservice");
         beaconList.put("0x4e316a736752", "Spår 2");
         beaconList.put("0x526270373372", "Espresso House");
+
+        images.put("0x41774c564931", R.drawable.icon_information);
+        images.put("0x4e316a736752", R.drawable.icon_tracks);
+        images.put("0x526270373372", R.drawable.icon_coffe);
+
 
         beaconStatList.put("0x41774c564931", new BeaconStatHelper());
         beaconStatList.put("0x4e316a736752", new BeaconStatHelper());

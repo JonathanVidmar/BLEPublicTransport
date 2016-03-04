@@ -84,8 +84,7 @@ public class BluetoothClient {
             }
         };
         application.registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-        SharedPreferences settings = application.getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
-        payAutomatically = settings.getBoolean(Constants.PAY_AUTOMATICALLY, true);
+        payAutomatically = application.payAutomatically();
 
     }
 
