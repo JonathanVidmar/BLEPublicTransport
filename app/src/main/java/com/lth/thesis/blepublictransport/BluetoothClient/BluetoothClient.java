@@ -55,6 +55,7 @@ public class BluetoothClient {
     public static final int PAIRED_AND_WAITING_FOR_USER_INPUT = 5;
 
     public static final String MESSAGE_OPEN = "200";
+    public static final String MESSAGE_OPEN_TIMER = "201";
     public static final String MESSAGE_CLOSE = "410";
     public static final String MESSAGE_DONT_OPEN = "401";
 

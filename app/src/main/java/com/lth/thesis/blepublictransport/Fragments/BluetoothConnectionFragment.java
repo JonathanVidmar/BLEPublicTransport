@@ -42,7 +42,8 @@ public class BluetoothConnectionFragment extends ObserverFragment {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                application.manageGate((hasOpenedGate) ? BluetoothClient.MESSAGE_CLOSE : BluetoothClient.MESSAGE_OPEN);
+                String open = (application.hasValidTicket()) ?  BluetoothClient.MESSAGE_OPEN_TIMER : BluetoothClient.MESSAGE_DONT_OPEN;
+                application.manageGate((hasOpenedGate) ? BluetoothClient.MESSAGE_CLOSE : open);
                 hasOpenedGate = true;
                 configureButton("", View.INVISIBLE);
                 setStatusText("The gate has opened");
