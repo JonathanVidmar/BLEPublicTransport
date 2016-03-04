@@ -21,7 +21,7 @@ import com.lth.thesis.blepublictransport.R;
  * @version     1.1
  */
 public class SettingsFragment extends Fragment {
-    SharedPreferences settings;
+    private SharedPreferences settings;
     private Switch dependentSwitch;
     private Switch autoSwitch;
 

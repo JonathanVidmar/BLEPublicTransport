@@ -73,6 +73,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconHelper = new BeaconHelper();
     }
 
+    public void manageGate(String state){
+        bluetoothClient.sendMessage(state);
+    }
+
     public void stop(){
         try {
             beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region1);

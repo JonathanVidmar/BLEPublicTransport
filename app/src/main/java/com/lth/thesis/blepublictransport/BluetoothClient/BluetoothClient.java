@@ -7,8 +7,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.lth.thesis.blepublictransport.Beacons.Constants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 
 import java.io.IOException;
@@ -32,6 +34,7 @@ public class BluetoothClient {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice remoteDevice;
     private ConnectThread connectionThread;
+    private boolean payAutomatically;
 
     // States
     private boolean hasOpened = false;
@@ -49,6 +52,12 @@ public class BluetoothClient {
     public static final int AWAITING_CONNECTION = 2;
     public static final int PENDING_DISCOVERABLE = 3;
     public static final int PENDING_CONNECTION = 4;
+    public static final int PAIRED_AND_WAITING_FOR_USER_INPUT = 5;
+
+    public static final String MESSAGE_OPEN = "200";
+    public static final String MESSAGE_CLOSE = "410";
+    public static final String MESSAGE_DONT_OPEN = "401";
+
 
     /**
      * Constructor of the class.
@@ -75,6 +84,9 @@ public class BluetoothClient {
             }
         };
         application.registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        SharedPreferences settings = application.getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
+        payAutomatically = settings.getBoolean(Constants.PAY_AUTOMATICALLY, true);
+
     }
 
     /**
@@ -121,20 +133,30 @@ public class BluetoothClient {
                 break;
 
             case PAIRED:
-                if (distance < OPEN_THRESHOLD) {
-                    if (!hasOpened) {
-                        connectionThread.sentMessage("200");
-                        hasOpened = true;
+                if(payAutomatically) {
+                    if (distance < OPEN_THRESHOLD) {
+                        if (!hasOpened) {
+                            sendMessage(MESSAGE_OPEN);
+                            hasOpened = true;
+                        }
+                    } else {
+                        if (hasOpened) {
+                            sendMessage(MESSAGE_CLOSE);
+                            hasOpened = false;
+                        }
                     }
+                    break;
                 }else{
-                    if(hasOpened){
-                        connectionThread.sentMessage("410");
-                        hasOpened = false;
+                    if(distance < 5){
+                        currentState = PAIRED_AND_WAITING_FOR_USER_INPUT;
                     }
                 }
-                break;
         }
 
+    }
+
+    public void sendMessage(String message){
+        connectionThread.sentMessage(message);
     }
 
     /** Sets up device to discover other devices. */

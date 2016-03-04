@@ -1,7 +1,10 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
 /**
- * Created by jacobarvidsson on 17/02/16.
+ * A class containing constants for the SharedPreference objects.
+ *
+ * @author Jacob Arvidsson
+ * @version 1.0
  */
 public class Constants {
     public static final String SETTINGS_PREFERENCES = "settings_preferences";

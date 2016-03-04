@@ -22,7 +22,9 @@ public class BluetoothConnectionFragment extends ObserverFragment {
     private static final String DEBUG_TAG = "BluetoothFragment";
     private TextView statusText;
     private Button button;
-
+    private boolean hasOpenedGate = false;
+    private BLEPublicTransport application;
+    private boolean shouldOpenOnClick;
 
     public BluetoothConnectionFragment() {
         // Required empty public constructor
@@ -33,13 +35,14 @@ public class BluetoothConnectionFragment extends ObserverFragment {
         final View view = inflater.inflate(R.layout.fragment_bluetooth_connection, container, false);
         statusText = (TextView) view.findViewById(R.id.statusText);
         button = (Button) view.findViewById(R.id.connectButton);
+        application = (BLEPublicTransport) getActivity().getApplication();
 
         button.setVisibility(View.INVISIBLE);
-        button.setEnabled(false);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //connectionThread.sentMessage();
+                application.manageGate((shouldOpenOnClick) ? BluetoothClient.MESSAGE_OPEN : BluetoothClient.MESSAGE_CLOSE);
+                hasOpenedGate = !hasOpenedGate;
             }
         });
         return view;
@@ -54,11 +57,11 @@ public class BluetoothConnectionFragment extends ObserverFragment {
         });
     }
 
-    private void configureButton(final String text, final boolean enabled){
+    private void configureButton(final String text, final int visible){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                button.setEnabled(enabled);
+                button.setVisibility(visible);
                 button.setText(text);
             }
         });
@@ -66,7 +69,6 @@ public class BluetoothConnectionFragment extends ObserverFragment {
 
     @Override
     public void update(Object data) {
-        BLEPublicTransport application = (BLEPublicTransport) getActivity().getApplication();
         switch (application.connectionState) {
             case BluetoothClient.NOT_PAIRED:
                 setStatusText("No gates nearby.");
@@ -83,6 +85,16 @@ public class BluetoothConnectionFragment extends ObserverFragment {
             case BluetoothClient.PAIRED:
                 setStatusText("Connected to gate, the gate will open when you are close enough.");
                 break;
+            case BluetoothClient.PAIRED_AND_WAITING_FOR_USER_INPUT:
+                if(!hasOpenedGate){
+                    setStatusText("Do you want to open the gate?");
+                    configureButton("Open gate", View.VISIBLE);
+                    shouldOpenOnClick = true;
+                }else{
+                    setStatusText("Do you want to close the gate?");
+                    configureButton("Close gate", View.VISIBLE);
+                    shouldOpenOnClick = false;
+                }
             default:
                 break;
         }
