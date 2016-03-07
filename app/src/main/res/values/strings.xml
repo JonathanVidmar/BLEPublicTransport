@@ -30,7 +30,7 @@
     <string name="payment_valid_text">Ticket is valid for 2 hours</string>
     <string name="payment_buy_button_text">Buy ticket</string>
 
-    <!-- Station home fragment -->
+    <!-- Nearby fragment -->
     <string name="station_no_nearby_text">No station near you</string>
     <string name="station_entered_text">Welcome to the station</string>
 
@@ -44,7 +44,7 @@
     <string name="ticket_text">Ticket </string>
     <string name="ticket_countdown_default">0</string>
 
-    <!-- Bluetooth server fragment -->
+    <!-- Gate Connection fragment -->
     <string name="bluetooth_no_connecton_to_gate">No connection to gate</string>
     <string name="bluetooth_open_gate">Open gate</string>
 </resources>
