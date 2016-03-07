@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
 
 import android.app.Application;
 import android.content.Context;

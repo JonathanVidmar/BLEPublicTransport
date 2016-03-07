@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <group
-            android:id="@+id/modules"
-            android:checkableBehavior="single">
+        android:id="@+id/modules"
+        android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_station_home"
-                android:icon="@drawable/ic_location_on_black_24dp"
-                android:title="Nearby"/>
+            android:id="@+id/nav_station_home"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="@string/menu_item_nearby" />
         <item
-                android:id="@+id/nav_payment"
-                android:icon="@drawable/ic_attach_money_black_24dp"
-                android:title="Payment"/>
+            android:id="@+id/nav_payment"
+            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:title="@string/menu_item_payment" />
         <item
             android:id="@+id/nav_bluetooth_connection"
-            android:icon="@drawable/ic_attach_money_black_24dp"
-            android:title="Bluetooth Connection"/>
+            android:icon="@drawable/menu_gate"
+            android:title="@string/menu_item_gate_connection" />
     </group>
     <group
-            android:id="@+id/settings"
-            android:checkableBehavior="single">
+        android:id="@+id/settings"
+        android:checkableBehavior="single">
         <item
-                android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_settings_black_24dp"
-                android:title="Settings"/>
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/menu_item_settings" />
     </group>
 </menu>

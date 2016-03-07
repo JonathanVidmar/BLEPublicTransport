@@ -1,6 +1,5 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
 
-import android.util.Log;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**

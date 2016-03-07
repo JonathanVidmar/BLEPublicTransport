@@ -1,54 +1,63 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Main;
 
 import android.app.Application;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.RemoteException;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.lth.thesis.blepublictransport.Beacons.BeaconCommunicator;
+import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
+import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
+import com.lth.thesis.blepublictransport.BluetoothClient.BluetoothClient;
+import com.lth.thesis.blepublictransport.Beacons.Constants;
+import com.lth.thesis.blepublictransport.Beacons.NotificationHandler;
+import com.lth.thesis.blepublictransport.Beacons.WalkDetection;
+
 import org.altbeacon.beacon.*;
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Observer;
+import java.util.Locale;
 
 public class BLEPublicTransport extends Application implements BootstrapNotifier, BeaconConsumer {
-    private static final String TAG = "BLEPublicTransport";
-    private RegionBootstrap regionBootstrap;
-    private BackgroundPowerSaver backgroundPowerSaver;
-    public boolean active = true;
-    private BeaconManager beaconManager;
+    // Private attributes
+    private static final String DEBUG_TAG = "BLEPublicTransport";
     private BeaconCommunicator beaconCommunicator;
+    private BluetoothClient bluetoothClient;
+    private RegionBootstrap regionBootstrap;
+    private BeaconManager beaconManager;
+    private WalkDetection walkDetection;
+
+    // Private states
     private boolean notCurrentlyRanging = true;
+
+    // Public attributes
     public BeaconHelper beaconHelper;
     public NotificationHandler notificationHandler;
-    private WalkDetection wd;
 
+    // Public states
+    public int connectionState = -1;
+    public boolean active = true;
 
     public void onCreate() {
         super.onCreate();
 
-        wd = new WalkDetection(this);
+        bluetoothClient = new BluetoothClient(this);
+        walkDetection = new WalkDetection(this);
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().clear();
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconHelper.eddystoneLayout));
 
         try {
-            beaconManager.setForegroundScanPeriod(120l); // 20 mS
-            beaconManager.setForegroundBetweenScanPeriod(0l); // 0ms
+            beaconManager.setForegroundScanPeriod(120l);
+            beaconManager.setForegroundBetweenScanPeriod(0l);
             beaconManager.setBackgroundScanPeriod(120l);
             beaconManager.setBackgroundBetweenScanPeriod(0l);
 
@@ -58,10 +67,14 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         }
 
         regionBootstrap = new RegionBootstrap(this, BeaconHelper.regions);
-        backgroundPowerSaver = new BackgroundPowerSaver(this);
+        BackgroundPowerSaver backgroundPowerSaver = new BackgroundPowerSaver(this);
         notificationHandler = new NotificationHandler(this);
         beaconCommunicator = new BeaconCommunicator();
         beaconHelper = new BeaconHelper();
+    }
+
+    public void manageGate(String state){
+        bluetoothClient.sendMessage(state);
     }
 
     public void stop(){
@@ -80,7 +93,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
                 }
             });
         }catch (RemoteException e){
-
+            e.printStackTrace();
+            Log.d(DEBUG_TAG, "Ranging or monitoring has failed to stop.");
         }
     }
 
@@ -113,7 +127,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.EXITED_REGION, null));
             // cancel ranging if active
             stopRangingBeacons();
-            Log.i("region", "did exit region: " + arg0.getId1() + ", " + arg0.getId2() + ", " + arg0.getId3());
+            Log.d(DEBUG_TAG, "did exit region: " + arg0.getId1() + ", " + arg0.getId2() + ", " + arg0.getId3());
         }
     }
 
@@ -153,8 +167,14 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                beaconHelper.updateBeaconDistances(beacons, wd.getState());
+                beaconHelper.updateBeaconDistances(beacons, walkDetection.getState());
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
+
+                for (Beacon b : beacons) {
+                    if (b.getId2().toString().equals(BeaconHelper.region2.getId2().toString())) {
+                        bluetoothClient.updateClient(beaconHelper.getDistance(b));
+                    }
+                }
             }
         });
         try {
@@ -162,6 +182,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             beaconManager.startRangingBeaconsInRegion(BeaconHelper.region2);
             beaconManager.startRangingBeaconsInRegion(BeaconHelper.region3);
         } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
@@ -174,16 +195,21 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         SharedPreferences ticket = getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
         String validUntil = ticket.getString(Constants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         try {
             Date date = formatter.parse(validUntil);
             Date now = new Date();
             long timeLeft = date.getTime() - now.getTime();
-            hasValidTicket = (timeLeft < 0) ? false : true;
+            hasValidTicket = (timeLeft >= 0);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return hasValidTicket;
+    }
+
+    public boolean payAutomatically(){
+        SharedPreferences settings = getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
+        return settings.getBoolean(Constants.PAY_AUTOMATICALLY, true);
     }
 }
 

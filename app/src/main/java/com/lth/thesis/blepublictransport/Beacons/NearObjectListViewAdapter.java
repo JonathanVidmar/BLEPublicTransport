@@ -1,14 +1,17 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.R;
+
 import org.altbeacon.beacon.Beacon;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -56,6 +59,7 @@ public class NearObjectListViewAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.txtname = (TextView) convertView.findViewById(R.id.row_label);
             holder.destinationName = (TextView) convertView.findViewById(R.id.destinationLabel);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.list_img);
 
             convertView.setTag(holder);
         } else {
@@ -64,6 +68,7 @@ public class NearObjectListViewAdapter extends BaseAdapter {
 
         holder.txtname.setText(helper.getBeaconName(objecList.get(position).getId2()));
         holder.destinationName.setText(helper.getDistanceText(objecList.get(position)));
+        holder.imageView.setImageResource(helper.images.get(objecList.get(position).getId2().toString()));
 
         return convertView;
     }
@@ -71,5 +76,6 @@ public class NearObjectListViewAdapter extends BaseAdapter {
     static class ViewHolder{
         TextView txtname;
         TextView destinationName;
+        ImageView imageView;
     }
 }

@@ -1,4 +1,5 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
+
 import java.util.Observable;
 import java.util.Observer;
 

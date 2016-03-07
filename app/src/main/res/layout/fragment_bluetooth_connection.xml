@@ -2,25 +2,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lth.thesis.blepublictransport.BluetoothConnectionFragment">
+    tools:context=".Fragments.BluetoothConnectionFragment">
 
     <TextView
         android:id="@+id/statusText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No connection to gate"
-        android:textSize="22dp"
+        android:layout_margin="42dp"
+        android:text="@string/bluetooth_no_connecton_to_gate"
         android:textAlignment="center"
-        android:layout_margin="42dp"/>
+        android:textSize="22sp" />
+
     <Button
         android:id="@+id/connectButton"
-        android:layout_below="@+id/statusText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Find Devices"
+        android:layout_below="@+id/statusText"
         android:layout_centerHorizontal="true"
-        android:onClick="bluetoothConnect"
         android:layout_marginLeft="42dp"
         android:layout_marginRight="42dp"
-        />
+        android:text="@string/bluetooth_open_gate" />
 </RelativeLayout>

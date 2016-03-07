@@ -1,55 +1,56 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.lth.thesis.blepublictransport.ShowTicketFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.ShowTicketFragment">
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@color/colorAccent">
+
+        <TextView
+            android:id="@+id/validTicketTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:background="@color/colorAccent">
+            android:layout_margin="20dp"
+            android:text="@string/ticket_text"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="50sp" />
 
         <TextView
-                android:id="@+id/validTicketTitle"
-                android:textAlignment="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ticket "
-                android:textColor="#FFF"
-                android:textSize="50sp"
-                android:layout_margin="20dp"/>
+            android:id="@+id/validTicketCounterText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/validTicketTitle"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/ticket_countdown_text"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="22sp" />
 
         <TextView
-                android:id="@+id/validTicketCounterText"
-                android:layout_below="@+id/validTicketTitle"
-                android:textAlignment="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Valid countdown:"
-                android:textSize="22sp"
-                android:textColor="#FFF"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"/>
-
-        <TextView
-                android:id="@+id/validTicketCounter"
-                android:layout_below="@+id/validTicketCounterText"
-                android:textAlignment="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Null"
-                android:textSize="22sp"
-                android:textColor="#FFF"
-                android:layout_margin="20dp"/>
+            android:id="@+id/validTicketCounter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/validTicketCounterText"
+            android:layout_margin="20dp"
+            android:text="@string/ticket_countdown_default"
+            android:textAlignment="center"
+            android:textColor="#FFF"
+            android:textSize="22sp" />
     </RelativeLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_action_delete"/>
+        android:src="@drawable/ic_action_delete" />
 
 </RelativeLayout>
 

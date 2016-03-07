@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name=".BLEPublicTransport"
+        android:name=".Main.BLEPublicTransport"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".Main.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:launchMode="singleInstance"

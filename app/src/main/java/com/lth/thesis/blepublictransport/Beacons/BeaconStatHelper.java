@@ -1,11 +1,13 @@
-package com.lth.thesis.blepublictransport;
+package com.lth.thesis.blepublictransport.Beacons;
 
-import android.util.Log;
 import org.altbeacon.beacon.Beacon;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
- * Created by Jonathan on 2/23/2016.
+ * A helper class
+ *
+ * @author  Jonathan Vidmar
+ * @version 1.0
  */
 public class BeaconStatHelper {
 
@@ -37,7 +39,7 @@ public class BeaconStatHelper {
                 .build();
     }
 
-    public void updateDistance(Beacon b, double movementState, double txPower){
+    public void updateDistance(Beacon b, double movementState, double txPower) {
 
         stats.addValue(b.getRssi());
         stats2.addValue(txPower);
@@ -48,16 +50,17 @@ public class BeaconStatHelper {
         if (!Double.isInfinite(mNoise) && !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
         calculateDistance(stats2.getPercentile(50), movementState);
     }
-    private void calculateDistance(double txPower, double movementState){
+
+    private void calculateDistance(double txPower, double movementState) {
         double n = 2.5;   // Signal propogation exponent
         double d0 = 1;  // Reference distance in meters
         double C = 0;   // Gaussian variable for mitigating flat fading
 
-        lastCalculatedDistance = kf.filter(d0 * Math.pow(10,(lastFilteredReading - txPower - C)/ (-10 * n)),movementState);
+        lastCalculatedDistance = kf.filter(d0 * Math.pow(10, (lastFilteredReading - txPower - C) / (-10 * n)), movementState);
         if (!Double.isNaN(lastCalculatedDistance)) filteredStats.addValue(lastCalculatedDistance);
     }
 
-    public double getDistance(){
+    public double getDistance() {
         return filteredStats.getPercentile(50);
     }
 
