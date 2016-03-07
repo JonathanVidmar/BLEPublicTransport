@@ -19,6 +19,10 @@
     <string name="settings_automatic_status">Manually/automatically</string>
     <string name="settings_automatic_text">Pay automatically when approaching gate</string>
     <string name="settings_manually_text">Pay manually when approaching gate</string>
+    <string name="settings_subscription_status">Has subscription?</string>
+    <string name="settings_subscription_text">You have payed for a subscription</string>
+    <string name="settings_no_subscription_text">You have not payed for a subscription</string>
+
 
     <!-- Payment fragment -->
     <string name="payment_cost_text">The ticket will cost: </string>
