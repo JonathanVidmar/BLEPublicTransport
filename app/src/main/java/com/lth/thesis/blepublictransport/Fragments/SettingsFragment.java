@@ -24,6 +24,7 @@ public class SettingsFragment extends Fragment {
     private SharedPreferences settings;
     private Switch dependentSwitch;
     private Switch autoSwitch;
+    private Switch subscriptionSwitch;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -35,10 +36,13 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         dependentSwitch = (Switch) view.findViewById(R.id.dependentSwitch);
         autoSwitch = (Switch) view.findViewById(R.id.automaticallySwitch);
+        subscriptionSwitch = (Switch) view.findViewById(R.id.subscriptionSwitch);
+
         settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
 
         setUpDependentPriceSwitch();
         setUpAutomaticPaymentSwitch();
+        setUpSubscriptionSwitch();
 
         return view;
     }
@@ -78,6 +82,26 @@ public class SettingsFragment extends Fragment {
                     autoSwitch.setText(R.string.settings_automatic_text);
                 } else {
                     autoSwitch.setText(R.string.settings_manually_text);
+                }
+            }
+        });
+    }
+
+    /* Sets the correct text and adds an onCheckedChange listener to the automatic payment switch */
+    private void setUpSubscriptionSwitch(){
+        boolean hasSubscription = settings.getBoolean(SettingConstants.HAS_SUBSCRIPTION, true);
+        subscriptionSwitch.setChecked(hasSubscription);
+        subscriptionSwitch.setText((hasSubscription) ? R.string.settings_subscription_text : R.string.settings_no_subscription_text);
+        subscriptionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(SettingConstants.HAS_SUBSCRIPTION, isChecked);
+                editor.apply();
+                if (isChecked) {
+                    subscriptionSwitch.setText(R.string.settings_subscription_text);
+                } else {
+                    subscriptionSwitch.setText(R.string.settings_no_subscription_text);
                 }
             }
         });
