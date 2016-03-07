@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport.Beacons;
+package com.lth.thesis.blepublictransport.Utils;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

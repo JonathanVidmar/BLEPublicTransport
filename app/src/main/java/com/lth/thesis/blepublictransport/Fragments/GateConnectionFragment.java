@@ -12,13 +12,13 @@ import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.R;
 
 /**
- * A simple {@link ObserverFragment} subclass
+ * A simple {@link AbstractObserverFragment} subclass
  * This fragment contains the status for automatically paying and for manually opening gates.
  *
  * @author Jacob Arvidsson
  * @version 1.1
  */
-public class BluetoothConnectionFragment extends ObserverFragment {
+public class GateConnectionFragment extends AbstractObserverFragment {
     private static final String DEBUG_TAG = "BluetoothFragment";
     private TextView statusText;
     private Button button;
@@ -27,7 +27,7 @@ public class BluetoothConnectionFragment extends ObserverFragment {
     private boolean needsToConfigureButton = true;
     private boolean canConfigureText = true;
 
-    public BluetoothConnectionFragment() {
+    public GateConnectionFragment() {
         // Required empty public constructor
     }
 

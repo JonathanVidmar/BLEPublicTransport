@@ -10,10 +10,11 @@ import android.util.Log;
 import com.lth.thesis.blepublictransport.Beacons.BeaconCommunicator;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
+import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.BluetoothClient.BluetoothClient;
-import com.lth.thesis.blepublictransport.Beacons.Constants;
-import com.lth.thesis.blepublictransport.Beacons.NotificationHandler;
-import com.lth.thesis.blepublictransport.Beacons.WalkDetection;
+import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
+import com.lth.thesis.blepublictransport.Utils.WalkDetection;
+import static com.lth.thesis.blepublictransport.Config.BeaconConstants.*;
 
 import org.altbeacon.beacon.*;
 import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
@@ -53,7 +54,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         walkDetection = new WalkDetection(this);
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().clear();
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(BeaconHelper.eddystoneLayout));
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(EDDYSTONE_LAYOUT));
 
         try {
             beaconManager.setForegroundScanPeriod(120l);
@@ -66,7 +67,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             e.printStackTrace();
         }
 
-        regionBootstrap = new RegionBootstrap(this, BeaconHelper.regions);
+        regionBootstrap = new RegionBootstrap(this, REGIONS);
         BackgroundPowerSaver backgroundPowerSaver = new BackgroundPowerSaver(this);
         notificationHandler = new NotificationHandler(this);
         beaconCommunicator = new BeaconCommunicator();
@@ -79,12 +80,12 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     public void stop(){
         try {
-            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region1);
-            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region2);
-            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region3);
-            beaconManager.stopMonitoringBeaconsInRegion(BeaconHelper.region1);
-            beaconManager.stopMonitoringBeaconsInRegion(BeaconHelper.region2);
-            beaconManager.stopMonitoringBeaconsInRegion(BeaconHelper.region3);
+
+            for (Region region :
+                    REGIONS) {
+                beaconManager.stopRangingBeaconsInRegion(region);
+                beaconManager.stopMonitoringBeaconsInRegion(region);
+            }
             regionBootstrap.disable();
             BluetoothAdapter.getDefaultAdapter().stopLeScan(new BluetoothAdapter.LeScanCallback() {
                 @Override
@@ -133,9 +134,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     private void stopRangingBeacons() {
         try {
-            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region1);
-            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region2);
-            beaconManager.stopRangingBeaconsInRegion(BeaconHelper.region3);
+            for (Region region :
+                    REGIONS) {
+                beaconManager.stopRangingBeaconsInRegion(region);
+            }
             notCurrentlyRanging = true;
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -154,9 +156,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     public void startMonitoringBeaconsInRegion() {
         try {
-            beaconManager.startMonitoringBeaconsInRegion(BeaconHelper.region1);
-            beaconManager.startMonitoringBeaconsInRegion(BeaconHelper.region2);
-            beaconManager.startMonitoringBeaconsInRegion(BeaconHelper.region3);
+            for (Region region :
+                    REGIONS) {
+                beaconManager.startRangingBeaconsInRegion(region);
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -171,16 +174,17 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
 
                 for (Beacon b : beacons) {
-                    if (b.getId2().toString().equals(BeaconHelper.region2.getId2().toString())) {
+                    if (b.getId2().equals(INSTANCE_2)) {
                         bluetoothClient.updateClient(beaconHelper.getDistance(b));
                     }
                 }
             }
         });
         try {
-            beaconManager.startRangingBeaconsInRegion(BeaconHelper.region1);
-            beaconManager.startRangingBeaconsInRegion(BeaconHelper.region2);
-            beaconManager.startRangingBeaconsInRegion(BeaconHelper.region3);
+            for (Region region :
+                    REGIONS) {
+                beaconManager.startRangingBeaconsInRegion(region);
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -192,8 +196,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     public boolean hasValidTicket() {
         boolean hasValidTicket = false;
-        SharedPreferences ticket = getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
-        String validUntil = ticket.getString(Constants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
+        SharedPreferences ticket = getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
+        String validUntil = ticket.getString(SettingConstants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         try {
@@ -208,8 +212,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     }
 
     public boolean payAutomatically(){
-        SharedPreferences settings = getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
-        return settings.getBoolean(Constants.PAY_AUTOMATICALLY, true);
+        SharedPreferences settings = getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
+        return settings.getBoolean(SettingConstants.PAY_AUTOMATICALLY, true);
     }
 }
 

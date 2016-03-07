@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
-import com.lth.thesis.blepublictransport.Beacons.Constants;
-import com.lth.thesis.blepublictransport.Beacons.NotificationHandler;
+import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.R;
 
 import java.text.ParseException;
@@ -42,13 +42,13 @@ public class ShowTicketFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_show_ticket, container, false);
 
-        ticketPreferences = getActivity().getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
-        SharedPreferences settingsPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
+        ticketPreferences = getActivity().getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
+        SharedPreferences settingsPreferences = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
 
-        boolean isPriceDependent = settingsPreferences.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true);
+        boolean isPriceDependent = settingsPreferences.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
 
         if(isPriceDependent){
-            String destination = ticketPreferences.getString(Constants.VALID_TICKET_DESTINATION, getString(R.string.ticket_no_destination));
+            String destination = ticketPreferences.getString(SettingConstants.VALID_TICKET_DESTINATION, getString(R.string.ticket_no_destination));
             setValidTicketCounterText(String.format(getResources().getString(R.string.ticket_text_with_destination), destination));
         }
 
@@ -61,7 +61,7 @@ public class ShowTicketFragment extends Fragment {
     /* Initiates the timer and updates the view. */
     private void initTimer(){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-        String validUntil = ticketPreferences.getString(Constants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
+        String validUntil = ticketPreferences.getString(SettingConstants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
         try {
             Date date = formatter.parse(validUntil);
             Date now = new Date();
@@ -102,7 +102,7 @@ public class ShowTicketFragment extends Fragment {
                 Toast.makeText(getActivity(), getString(R.string.ticket_removed), Toast.LENGTH_LONG).show();
 
                 SharedPreferences.Editor editor = ticketPreferences.edit();
-                editor.putString(Constants.VALID_TICKET_DATE, "1999-06-10'T'10:10:10'Z");
+                editor.putString(SettingConstants.VALID_TICKET_DATE, "1999-06-10'T'10:10:10'Z");
                 editor.apply();
 
                 setValidTicketCounterText(getString(R.string.ticket_not_valid));

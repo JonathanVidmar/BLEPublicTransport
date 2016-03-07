@@ -1,5 +1,7 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
+import com.lth.thesis.blepublictransport.Utils.KFBuilder;
+import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
 import org.altbeacon.beacon.Beacon;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -9,7 +11,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
  * @author  Jonathan Vidmar
  * @version 1.0
  */
-public class BeaconStatHelper {
+public class BeaconStatistics {
 
     private DescriptiveStatistics stats;
     private DescriptiveStatistics stats2;
@@ -19,7 +21,7 @@ public class BeaconStatHelper {
     private double lastFilteredReading = -1;
     private static final int WINDOW = 30;
 
-    public BeaconStatHelper() {
+    public BeaconStatistics() {
 
         stats = new DescriptiveStatistics();
         stats.setWindowSize(WINDOW);
@@ -33,7 +35,7 @@ public class BeaconStatHelper {
         // Baserat på konstant avstånd från beacon, dvs låga störningar från systemet (R), höga störningar från mätning (Q)
         // Värden borde baseras på faktiska statistiska mätvärden dock
         // filter(measuredValue) returnerar det uträknade värdet
-        kf = new KFilterBuilder()
+        kf = new KFBuilder()
                 .R(0.001)
                 .Q(16.0)
                 .build();

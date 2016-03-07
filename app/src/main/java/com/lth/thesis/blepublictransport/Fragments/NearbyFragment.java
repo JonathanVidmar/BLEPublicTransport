@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
-import com.lth.thesis.blepublictransport.Beacons.NearObjectListViewAdapter;
+import com.lth.thesis.blepublictransport.Utils.NearbyListViewAdapter;
 import com.lth.thesis.blepublictransport.R;
 
 import org.altbeacon.beacon.Beacon;
@@ -18,20 +18,20 @@ import org.altbeacon.beacon.Beacon;
 import java.util.*;
 
 /**
- * A simple {@link ObserverFragment} subclass
+ * A simple {@link AbstractObserverFragment} subclass
  * Shows a list of nearby objects if a station has been
  * entered. Is empty otherwise.
  *
  * @author      Jacob Arvidsson & Jonathan Vidmar
  * @version     1.1
  */
-public class StationHomeFragment extends ObserverFragment{
+public class NearbyFragment extends AbstractObserverFragment {
     private ListView listView;
     private HashMap<String, Beacon> foundBeacons = new HashMap<>();
-    private NearObjectListViewAdapter mAdapter;
+    private NearbyListViewAdapter mAdapter;
     private BeaconHelper helper;
 
-    public StationHomeFragment() {
+    public NearbyFragment() {
         // Required empty public constructor
     }
 
@@ -40,7 +40,7 @@ public class StationHomeFragment extends ObserverFragment{
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ArrayList<Beacon> items = new ArrayList<>();
 
-        mAdapter = new NearObjectListViewAdapter(getActivity(), items);
+        mAdapter = new NearbyListViewAdapter(getActivity(), items);
         listView = (ListView) view.findViewById(R.id.locationItems);
         listView.setAdapter(mAdapter);
         listView.setVisibility(View.INVISIBLE);
@@ -96,10 +96,9 @@ public class StationHomeFragment extends ObserverFragment{
      * @param  beacons the beacons found by ranging.
      */
     public void foundObjectsNear(Collection<Beacon> beacons) {
-        BeaconHelper helper = new BeaconHelper();
-        for (Beacon oneBeacon : beacons) {
-            String beaconName = helper.getBeaconName(oneBeacon.getId2());
-            foundBeacons.put(beaconName, oneBeacon);
+        for (Beacon b : beacons) {
+            String beaconName = helper.getBeaconName(b);
+            foundBeacons.put(beaconName, b);
         }
         sortList();
     }

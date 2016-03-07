@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
-import com.lth.thesis.blepublictransport.Beacons.Constants;
-import com.lth.thesis.blepublictransport.Beacons.NotificationHandler;
+import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.R;
 
@@ -49,8 +47,8 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         view = inflater.inflate(R.layout.fragment_payment, container, false);
         setRetainInstance(true);
 
-        SharedPreferences settings = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
-        isPricesDependent = settings.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true);
+        SharedPreferences settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
+        isPricesDependent = settings.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
 
         createChooseDestinationArea();
         createButton();
@@ -91,15 +89,15 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
                 String dateString = formatter.format(validTo);
 
-                SharedPreferences ticketPreferences = getActivity().getSharedPreferences(Constants.TICKET_PREFERENCES, 0);
+                SharedPreferences ticketPreferences = getActivity().getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
                 SharedPreferences.Editor editor = ticketPreferences.edit();
-                editor.putString(Constants.VALID_TICKET_DATE, dateString);
+                editor.putString(SettingConstants.VALID_TICKET_DATE, dateString);
 
                 if (isPricesDependent) {
                     Resources res = getResources();
                     String[] destinations = res.getStringArray(R.array.destination_array);
                     final String destination = destinations[dest];
-                    editor.putString(Constants.VALID_TICKET_DESTINATION, destination);
+                    editor.putString(SettingConstants.VALID_TICKET_DESTINATION, destination);
                 }
 
                 editor.apply();

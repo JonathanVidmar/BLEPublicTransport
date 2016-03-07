@@ -1,6 +1,7 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.Identifier;
 
 import java.util.Collection;
 

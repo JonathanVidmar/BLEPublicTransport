@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport.Beacons;
+package com.lth.thesis.blepublictransport.Utils;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -17,7 +17,6 @@ public class KalmanFilter {
     private double C;
     private double cov;
     private double x;   // estimated signal without noise
-    private DescriptiveStatistics prevXDelta;
 
     /**
      * Create 1-dimensional kalman filter
@@ -38,11 +37,6 @@ public class KalmanFilter {
 
         cov = Double.NaN;
         x = Double.NaN;
-
-        prevXDelta = new DescriptiveStatistics();
-        prevXDelta.setWindowSize(5);
-        prevXDelta.addValue(0.0);
-        prevXDelta.addValue(0.0);
     }
 
 
@@ -107,46 +101,6 @@ public class KalmanFilter {
      */
     public void setProcessNoise(double noise) {
         R = noise;
-    }
-}
-
-/**
- * Simple bulider class for 1-dimensional kalman filter
- */
-class KFilterBuilder {
-    private double R = 1;
-    private double Q = 1;
-    private double A = 1;
-    private double B = 0;
-    private double C = 1;
-
-    KFilterBuilder R(double R) {
-        this.R = R;
-        return this;
-    }
-
-    KFilterBuilder Q(double Q) {
-        this.Q = Q;
-        return this;
-    }
-
-    KFilterBuilder A(double A) {
-        this.A = A;
-        return this;
-    }
-
-    KFilterBuilder B(double B) {
-        this.B = B;
-        return this;
-    }
-
-    KFilterBuilder C(double C) {
-        this.C = C;
-        return this;
-    }
-
-    KalmanFilter build() {
-        return new KalmanFilter(R, Q, A, B, C);
     }
 }
 

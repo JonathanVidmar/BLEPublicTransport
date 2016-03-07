@@ -1,4 +1,4 @@
-package com.lth.thesis.blepublictransport.Beacons;
+package com.lth.thesis.blepublictransport.Utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.R;
 
@@ -18,13 +19,13 @@ import java.util.ArrayList;
 /**
  * Created by jacobarvidsson on 11/02/16.
  */
-public class NearObjectListViewAdapter extends BaseAdapter {
+public class NearbyListViewAdapter extends BaseAdapter {
     private static ArrayList<Beacon> objecList;
 
     private LayoutInflater mInflater;
     private BLEPublicTransport app;
 
-    public NearObjectListViewAdapter(Context fragment, ArrayList<Beacon> results){
+    public NearbyListViewAdapter(Context fragment, ArrayList<Beacon> results){
         objecList = results;
         mInflater = LayoutInflater.from(fragment);
         app = (BLEPublicTransport) fragment.getApplicationContext();
@@ -66,9 +67,9 @@ public class NearObjectListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.txtname.setText(helper.getBeaconName(objecList.get(position).getId2()));
+        holder.txtname.setText(helper.getBeaconName(objecList.get(position)));
         holder.destinationName.setText(helper.getDistanceText(objecList.get(position)));
-        holder.imageView.setImageResource(helper.images.get(objecList.get(position).getId2().toString()));
+        holder.imageView.setImageResource(helper.getImage(objecList.get(position)));
 
         return convertView;
     }

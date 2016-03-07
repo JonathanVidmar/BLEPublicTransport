@@ -10,9 +10,9 @@ import android.support.v4.app.Fragment;
  * @author      Jacob Arvidsson & Jonathan Vidmar
  * @version     1.1
  */
-public abstract class ObserverFragment extends Fragment {
+public abstract class AbstractObserverFragment extends Fragment {
 
-    public ObserverFragment() {
+    public AbstractObserverFragment() {
         // Required empty public constructor
     }
 

@@ -7,10 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.lth.thesis.blepublictransport.Beacons.Constants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 
 import java.io.IOException;
@@ -40,7 +38,7 @@ public class BluetoothClient {
     private boolean hasOpened = false;
     private int currentState = 0;
 
-    // Constants
+    // SettingConstants
     private static final String DEBUG_TAG = "BluetoothClient";
     private static final String SERVER_ADDRESS = "BC:6E:64:29:37:ED";
     private static final double PAIRING_THRESHOLD = 6;

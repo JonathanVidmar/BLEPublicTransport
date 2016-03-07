@@ -16,15 +16,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
-import com.lth.thesis.blepublictransport.Fragments.BluetoothConnectionFragment;
-import com.lth.thesis.blepublictransport.Fragments.ObserverFragment;
+import com.lth.thesis.blepublictransport.Fragments.GateConnectionFragment;
+import com.lth.thesis.blepublictransport.Fragments.AbstractObserverFragment;
 import com.lth.thesis.blepublictransport.Fragments.PaymentFragment;
 import com.lth.thesis.blepublictransport.Fragments.SettingsFragment;
 import com.lth.thesis.blepublictransport.Fragments.ShowTicketFragment;
-import com.lth.thesis.blepublictransport.Fragments.StationHomeFragment;
+import com.lth.thesis.blepublictransport.Fragments.NearbyFragment;
 import com.lth.thesis.blepublictransport.R;
 
 import java.util.Observable;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private Fragment currentFragment;
 
-    // Constants
+    // SettingConstants
     public static final String STATION_FRAGMENT = "stationFragment";
     public static final String PAYMENT_FRAGMENT = "paymentFragment";
     public static final String SETTINGS_FRAGMENT = "settingsFragment";
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (destination) {
             case STATION_FRAGMENT:
                 toolbar.setTitle("Nearby");
-                if (currentFragment == null) currentFragment = new StationHomeFragment();
+                if (currentFragment == null) currentFragment = new NearbyFragment();
                 break;
             case PAYMENT_FRAGMENT:
                 toolbar.setTitle("Payment");
@@ -135,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case BLUETOOTH_PARING_FRAGMENT:
                 toolbar.setTitle("Bluetooth");
-                if (currentFragment == null) currentFragment = new BluetoothConnectionFragment();
+                if (currentFragment == null) currentFragment = new GateConnectionFragment();
                 break;
         }
         fragmentTransaction.replace(R.id.fragment_container, currentFragment, destination);
@@ -198,8 +197,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void update(Observable observable, Object data) {
         if (currentFragment != null && currentFragment.isVisible()) {
-            if (currentFragment instanceof ObserverFragment) {
-                ((ObserverFragment) currentFragment).update(data);
+            if (currentFragment instanceof AbstractObserverFragment) {
+                ((AbstractObserverFragment) currentFragment).update(data);
             }
         }
     }

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
-import com.lth.thesis.blepublictransport.Beacons.Constants;
+import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.R;
 
 /**
@@ -35,7 +35,7 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         dependentSwitch = (Switch) view.findViewById(R.id.dependentSwitch);
         autoSwitch = (Switch) view.findViewById(R.id.automaticallySwitch);
-        settings = getActivity().getSharedPreferences(Constants.SETTINGS_PREFERENCES, 0);
+        settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
 
         setUpDependentPriceSwitch();
         setUpAutomaticPaymentSwitch();
@@ -45,14 +45,14 @@ public class SettingsFragment extends Fragment {
 
     /* Sets the correct text and adds an onCheckedChange listener to the dependent price switch */
     private void setUpDependentPriceSwitch(){
-        boolean isDependent = settings.getBoolean(Constants.DESTINATION_DEPENDENT_PRICE, true);
+        boolean isDependent = settings.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
         dependentSwitch.setChecked(isDependent);
         dependentSwitch.setText((isDependent) ? R.string.settings_dependent_text : R.string.settings_independent_text);
         dependentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean(Constants.DESTINATION_DEPENDENT_PRICE, isChecked);
+                editor.putBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, isChecked);
                 editor.apply();
                 if (isChecked) {
                     dependentSwitch.setText(R.string.settings_dependent_text);
@@ -65,14 +65,14 @@ public class SettingsFragment extends Fragment {
 
     /* Sets the correct text and adds an onCheckedChange listener to the automatic payment switch */
     private void setUpAutomaticPaymentSwitch(){
-        boolean payAutomatically = settings.getBoolean(Constants.PAY_AUTOMATICALLY, true);
+        boolean payAutomatically = settings.getBoolean(SettingConstants.PAY_AUTOMATICALLY, true);
         autoSwitch.setChecked(payAutomatically);
         autoSwitch.setText((payAutomatically) ? R.string.settings_automatic_text : R.string.settings_manually_text);
         autoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean(Constants.PAY_AUTOMATICALLY, isChecked);
+                editor.putBoolean(SettingConstants.PAY_AUTOMATICALLY, isChecked);
                 editor.apply();
                 if (isChecked) {
                     autoSwitch.setText(R.string.settings_automatic_text);
