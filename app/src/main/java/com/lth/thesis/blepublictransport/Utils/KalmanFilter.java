@@ -58,7 +58,7 @@ public class KalmanFilter {
             cov = (1 / C) * Q * (1 / C);
         } else {
 
-             R = u == 1 ? 10 : 0.001;
+             //R = u == 1 ? 10 : 0.001;
 
             // Compute prediction
             double predX = (A * x) + (B * u);

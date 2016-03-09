@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import android.view.View;
 import com.lth.thesis.blepublictransport.Fragments.GateConnectionFragment;
 import com.lth.thesis.blepublictransport.Fragments.AbstractObserverFragment;
 import com.lth.thesis.blepublictransport.Fragments.PaymentFragment;
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void executeNavigationTo(String destination) {
+        resetBackgroundColor();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         currentFragment = getSupportFragmentManager().findFragmentByTag(destination);
         switch (destination) {
@@ -203,4 +206,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void resetBackgroundColor() {
+        View v = ((DrawerLayout) findViewById(R.id.drawer_layout)).getRootView();
+        v.setBackgroundColor(Color.WHITE);
+    }
 }

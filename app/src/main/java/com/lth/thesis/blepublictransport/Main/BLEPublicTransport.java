@@ -195,7 +195,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     }
 
     public boolean hasValidTicket() {
-        SharedPreferences ticket = getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
+        SharedPreferences ticket = getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
         boolean hasSubscription = ticket.getBoolean(SettingConstants.HAS_SUBSCRIPTION, false);
         return hasSubscription || hasSingleTicket();
     }

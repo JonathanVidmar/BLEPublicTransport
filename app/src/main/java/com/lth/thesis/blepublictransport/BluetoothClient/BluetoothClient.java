@@ -14,9 +14,7 @@ import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Bluetooth Client object.
@@ -33,16 +31,17 @@ public class BluetoothClient {
     private BluetoothDevice remoteDevice;
     private ConnectThread connectionThread;
     private boolean payAutomatically;
+    private Timer myTimer;
 
     // States
-    private boolean hasOpened = false;
+    private boolean hasNotBeenDeniedBefore = true;
     private int currentState = 0;
 
     // SettingConstants
     private static final String DEBUG_TAG = "BluetoothClient";
     private static final String SERVER_ADDRESS = "BC:6E:64:29:37:ED";
-    private static final double PAIRING_THRESHOLD = 6;
-    private static final double OPEN_THRESHOLD = 2;
+    private static final double PAIRING_THRESHOLD = 10;
+    private static final double OPEN_THRESHOLD = 3;
 
     // State constants
     public static final int NOT_PAIRED = 0;
@@ -50,12 +49,16 @@ public class BluetoothClient {
     public static final int AWAITING_CONNECTION = 2;
     public static final int PENDING_DISCOVERABLE = 3;
     public static final int PENDING_CONNECTION = 4;
-    public static final int PAIRED_AND_WAITING_FOR_USER_INPUT = 5;
+    public static final int MANUAL_AND_WAITING_FOR_USER_INPUT = 5;
+    public static final int AUTOMATIC_AND_INSIDE_THRESHOLD = 6;
+    public static final int WAITING_FOR_USER_TO_LEAVE = 7;
 
     public static final String MESSAGE_OPEN = "200";
     public static final String MESSAGE_OPEN_TIMER = "201";
     public static final String MESSAGE_CLOSE = "410";
-    public static final String MESSAGE_DONT_OPEN = "401";
+    public static final String MESSAGE_UNAUTHORIZED = "400";
+    public static final String MESSAGE_UNAUTHORIZED_TIMER = "401";
+    public static final String MESSAGE_PING = "100";
 
 
     /**
@@ -99,14 +102,18 @@ public class BluetoothClient {
         application.connectionState = currentState;
         if (distance < PAIRING_THRESHOLD) {
             checkProximityToGate(distance);
-        }else {
+        } else {
             if(currentState != NOT_PAIRED){
-                currentState = NOT_PAIRED;
-                connectionThread.cancel();
-                Log.d(DEBUG_TAG, "NOT PAIRED ANYMORE");
-                application.beaconHelper.txPower = -59;
+                killPairing();
             }
         }
+    }
+
+    private void killPairing() {
+        currentState = NOT_PAIRED;
+        connectionThread.cancel();
+        application.beaconHelper.txPower = -59;
+        Log.d(DEBUG_TAG, "NOT PAIRED ANYMORE");
     }
 
     private void checkProximityToGate(double distance) {
@@ -131,26 +138,22 @@ public class BluetoothClient {
                 break;
 
             case PAIRED:
-                if(payAutomatically) {
-                    if (distance < OPEN_THRESHOLD) {
-                        if (!hasOpened) {
-                            sendMessage(MESSAGE_OPEN);
-                            hasOpened = true;
-                        }
-                    } else {
-                        if (hasOpened) {
-                            sendMessage(MESSAGE_CLOSE);
-                            hasOpened = false;
-                        }
-                    }
-                    break;
-                }else{
-                    if(distance < 5){
-                        currentState = PAIRED_AND_WAITING_FOR_USER_INPUT;
-                    }
+                if (payAutomatically) {
+                    if (distance < OPEN_THRESHOLD) currentState = AUTOMATIC_AND_INSIDE_THRESHOLD;
+                } else currentState = MANUAL_AND_WAITING_FOR_USER_INPUT;
+                break;
+            case AUTOMATIC_AND_INSIDE_THRESHOLD:
+                if (application.hasValidTicket()) {
+                    sendMessage(MESSAGE_OPEN);
+                    currentState = WAITING_FOR_USER_TO_LEAVE;
+                } else if (hasNotBeenDeniedBefore) {
+                    sendMessage(MESSAGE_UNAUTHORIZED);
+                    hasNotBeenDeniedBefore = false;
                 }
+                break;
+            case WAITING_FOR_USER_TO_LEAVE:
+                if (distance > OPEN_THRESHOLD) sendMessage(MESSAGE_CLOSE);
         }
-
     }
 
     public void sendMessage(String message){
@@ -231,7 +234,11 @@ public class BluetoothClient {
 
         public void sentMessage(String message) {
             Log.d(DEBUG_TAG, message);
-            connectedThread.write(message.getBytes());
+            if (connectedThread != null) {
+                connectedThread.write(message.getBytes());
+            } else {
+                connectionFailed();
+            }
         }
 
         /* Will cancel an in-progress connection, and close the socket */
@@ -265,6 +272,7 @@ public class BluetoothClient {
             mmOutStream = tmpOut;
             if(mmInStream != null && mmOutStream != null){
                 currentState = PAIRED;
+                setTimerToPingConnection();
                 Log.d(DEBUG_TAG, "Paired");
             }
         }
@@ -297,10 +305,33 @@ public class BluetoothClient {
                 mmOutStream.write(bytes);
             } catch (IOException e) {
                 Log.d(DEBUG_TAG, "Failure to send message!");
-                currentState = PENDING_CONNECTION;
-                hasOpened = !hasOpened;
-                connectionThread.cancel();
+                connectionFailed();
             }
+        }
+    }
+
+    private void connectionFailed() {
+        cancelTimer();
+        currentState = PENDING_CONNECTION;
+        connectionThread.cancel();
+    }
+
+    private void setTimerToPingConnection() {
+        if (myTimer == null) {
+            myTimer = new Timer("myTimer");
+            myTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    sendMessage(MESSAGE_PING);
+                }
+            },0, 1000);
+        }
+    }
+
+    private void cancelTimer(){
+        if (myTimer != null) {
+            myTimer.cancel();
+            myTimer = null;
         }
     }
 }

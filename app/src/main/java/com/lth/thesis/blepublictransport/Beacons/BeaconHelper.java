@@ -64,7 +64,7 @@ public class BeaconHelper {
      */
     public String getDistanceText(Beacon beacon) {
         double distance = getDistance(beacon);
-        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = new DecimalFormat("#.#");
         df.setRoundingMode(RoundingMode.CEILING);
         return String.valueOf(df.format(distance)) + " meters";
     }
@@ -75,6 +75,8 @@ public class BeaconHelper {
 
     public void updateBeaconDistances(Collection<Beacon> beacons, double movementState) {
         for (Beacon b : beacons) {
+
+            //txPower = -59;
             beaconList.get(b.getId2()).updateDistance(b, movementState, txPower);
         }
     }

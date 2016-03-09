@@ -49,6 +49,12 @@
     <string name="ticket_countdown_default">0</string>
 
     <!-- Gate Connection fragment -->
-    <string name="bluetooth_no_connecton_to_gate">No connection to gate</string>
-    <string name="bluetooth_open_gate">Open gate</string>
+    <string name="open_gate_button_text">Press to open</string>
+    <string name="no_gates_nearby">No gates currently nearby.</string>
+    <string name="searching_for_gate">Searching for gates nearby…</string>
+    <string name="connecting_to_gate">Connecting to nearby gate…</string>
+    <string name="approach_gate">Please approach the nearby gate.</string>
+    <string name="connected_to_gate">Connected to nearby gate</string>
+    <string name="gate_authorized">Please enter!</string>
+    <string name="gate_unauthorized">Sorry, you are not authorized to enter.</string>
 </resources>

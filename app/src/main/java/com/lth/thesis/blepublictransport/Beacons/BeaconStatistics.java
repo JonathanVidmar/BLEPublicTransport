@@ -19,7 +19,7 @@ public class BeaconStatistics {
     private KalmanFilter kf;
     private double lastCalculatedDistance;
     private double lastFilteredReading = -1;
-    private static final int WINDOW = 30;
+    private static final int WINDOW =15;
 
     public BeaconStatistics() {
 
@@ -36,8 +36,14 @@ public class BeaconStatistics {
         // Värden borde baseras på faktiska statistiska mätvärden dock
         // filter(measuredValue) returnerar det uträknade värdet
         kf = new KFBuilder()
-                .R(0.001)
+                /*
+                // filter for distance in meters
+                .R(3)
                 .Q(16.0)
+                */
+                // filter for RSSI
+                .R(5)
+                .Q(60.0)
                 .build();
     }
 
@@ -45,25 +51,27 @@ public class BeaconStatistics {
 
         stats.addValue(b.getRssi());
         stats2.addValue(txPower);
-        stats.getSortedValues();
-        stats2.getSortedValues();
-        lastFilteredReading = stats.getPercentile(50);
-        double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(filteredStats.getMean()/filteredStats.getStandardDeviation(), 2)));
+        lastFilteredReading = kf.filter(stats.getPercentile(50));
+        //double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(filteredStats.getMean()/filteredStats.getStandardDeviation(), 2)));
+        double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(stats.getMean()/stats.getStandardDeviation(), 2)));
         if (!Double.isInfinite(mNoise) && !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
         calculateDistance(stats2.getPercentile(50), movementState);
     }
 
     private void calculateDistance(double txPower, double movementState) {
         double n = 2.5;   // Signal propogation exponent
-        double d0 = 1;  // Reference distance in meters
+        double d0 = 0.89976;  // Reference distance in meters, taken from altbeacon
         double C = 0;   // Gaussian variable for mitigating flat fading
 
-        lastCalculatedDistance = kf.filter(d0 * Math.pow(10, (lastFilteredReading - txPower - C) / (-10 * n)), movementState);
-        if (!Double.isNaN(lastCalculatedDistance)) filteredStats.addValue(lastCalculatedDistance);
+        //lastCalculatedDistance = kf.filter(d0 * Math.pow(10, (lastFilteredReading - txPower - C) / (-10 * n)), movementState);
+        lastCalculatedDistance = d0 * Math.pow(10, (lastFilteredReading - txPower - C) / (-10 * n));
+        //if (!Double.isNaN(lastCalculatedDistance)) filteredStats.addValue(lastCalculatedDistance);
+
     }
 
     public double getDistance() {
-        return filteredStats.getPercentile(50);
+        //return filteredStats.getPercentile(50);
+        return lastCalculatedDistance;
     }
 
 }
