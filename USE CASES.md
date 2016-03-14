@@ -84,6 +84,17 @@ _Prerequisites: The user does NOT have a valid ticket and app is running in the 
 
 ## Iteration Four
 
+### Use case 8
+
+_Prerequisites: _
+
+1. The user approaches a pay machine at the station.
+2. The user chooses to buy a digital ticket.
+3. The user chooses his own account displayed on the screen.
+4. The user proceeds with the purchase process as per previously implemented.
+5. The user pays with either cash or card.
+6. The user receives a notification in his/her phone of the newly bought ticket.
+
 ## Iteration Five
 
 ## Iteration Six
