@@ -100,7 +100,7 @@ _Prerequisites:_
 _Prerequisites:_
 
 1. The user is about to begin his journey and checks in at the current station, either by the option in the notification or in the application.
-2. The user has finished his journey and checks out at the final station, either by the option in the notification or in the application.
+2. The user has finished his journey and leaves the transportation vehicle/station.
 3. The user receives information about the finished journey, e.g cost, duration etc.
 
 ## Iteration Five
