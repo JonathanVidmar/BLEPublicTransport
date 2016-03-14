@@ -103,6 +103,17 @@ _Prerequisites:_
 2. The user has finished his journey and leaves the transportation vehicle/station.
 3. The user receives information about the finished journey, e.g cost, duration etc.
 
+### Use case 10
+
+_Prerequisites: The user is at the station and has bought a ticket._
+
+1. The user approaches the gates.
+2. The user receives a notification to open the gates.
+3. The user clicks the notification.
+4. The gates open.
+
+### Improvements to previous use cases as brought up by the first round of usability testing
+
 ## Iteration Five
 
 ## Iteration Six
