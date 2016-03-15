@@ -119,6 +119,11 @@ _Prerequisites:_
 
 ### Improvements to previous use cases as brought up by the first round of usability testing
 * Use case 8 is modified to using a notification instead of a separate screen. When the notification is clicked the gates are opened if validation is successful.
+* In use case 6-7 the user receives feedback in form of vibration when the gate is opened.
+* Extend nearby list by adding funtionality to make navigation to object easier.
+* Nearby list less detailed.
+* Look into lock screen notifications.
+* Add alert before performing buy action.
 
 
 ## Iteration Five
