@@ -1,5 +1,9 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
+import android.app.Application;
+import android.content.SharedPreferences;
+import android.util.Log;
+import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.Region;
@@ -20,10 +24,13 @@ public class BeaconHelper {
 
     public double txPower = -59;
     private Map<Identifier, PublicTransportBeacon> beaconList = new HashMap<>();
+    private boolean selfCorrection;
+    private long lastSelfCorrectingBeaconUpdate = 0;
 
 
 
-    public BeaconHelper() {
+    public BeaconHelper(boolean selfCorrection) {
+        this.selfCorrection = selfCorrection;
         beaconList.put(INSTANCE_1, new PublicTransportBeacon(SIMPLE_NAME_1, THUMB_IMAGE_1));
         beaconList.put(INSTANCE_2, new PublicTransportBeacon(SIMPLE_NAME_2, THUMB_IMAGE_2));
         beaconList.put(INSTANCE_3, new PublicTransportBeacon(SIMPLE_NAME_3, THUMB_IMAGE_3));
@@ -66,22 +73,35 @@ public class BeaconHelper {
         double distance = getDistance(beacon);
         DecimalFormat df = new DecimalFormat("#.#");
         df.setRoundingMode(RoundingMode.CEILING);
-        return String.valueOf(df.format(distance)) + " meters";
+        return df.format(distance) + " meters";
     }
 
     public double getDistance(Beacon beacon) {
         return beaconList.get(beacon.getId2()).getDistance();
     }
 
-    public void updateBeaconDistances(Collection<Beacon> beacons, double movementState) {
+    public void updateBeaconDistances(Collection<Beacon> beacons, double movementState, double processNoise) {
         for (Beacon b : beacons) {
 
-            //txPower = -59;
-            beaconList.get(b.getId2()).updateDistance(b, movementState, txPower);
+            Log.d("kkk", "Updating: " + b.getId2());
+            checkSelfCorrection(b);
+            beaconList.get(b.getId2()).updateDistance(b, movementState, txPower, processNoise);
         }
     }
 
     public int getImage(Beacon b) {
         return beaconList.get(b.getId2()).getImage();
+    }
+
+    private void checkSelfCorrection(Beacon b) {
+        // Reset to preset after 10 seconds without update
+        boolean selfCorrectingBeaconTimedOut = System.currentTimeMillis() - lastSelfCorrectingBeaconUpdate < 10000;
+        lastSelfCorrectingBeaconUpdate = System.currentTimeMillis();
+
+        if (!selfCorrection || selfCorrectingBeaconTimedOut) txPower = b.getTxPower();
+    }
+
+    public void updateSelfCorrection(boolean update) {
+        selfCorrection = update;
     }
 }

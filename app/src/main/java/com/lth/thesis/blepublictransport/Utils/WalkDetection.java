@@ -62,11 +62,10 @@ public class WalkDetection implements SensorEventListener {
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         raw = new ArrayList<>();
         rawBatch = new ArrayList<>();
-        startDetection();
     }
 
     public void startDetection() {
-        mSensorManager.registerListener(this, mSensor, 1000);
+        mSensorManager.registerListener(this,mSensor,1000);
     }
 
     public void killDetection() {

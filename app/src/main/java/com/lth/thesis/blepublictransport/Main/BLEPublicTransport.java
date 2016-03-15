@@ -35,6 +35,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     private RegionBootstrap regionBootstrap;
     private BeaconManager beaconManager;
     private WalkDetection walkDetection;
+    private SharedPreferences settings;
 
     // Private states
     private boolean notCurrentlyRanging = true;
@@ -50,8 +51,11 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     public void onCreate() {
         super.onCreate();
 
+        settings = getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
+        beaconHelper = new BeaconHelper(settings.getBoolean(SettingConstants.SELF_CORRECTING_BEACON, true));
         bluetoothClient = new BluetoothClient(this);
         walkDetection = new WalkDetection(this);
+        updateWalkDetectionListener(settings.getBoolean(SettingConstants.WALK_DETECTION, false));
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().clear();
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(EDDYSTONE_LAYOUT));
@@ -71,7 +75,6 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         BackgroundPowerSaver backgroundPowerSaver = new BackgroundPowerSaver(this);
         notificationHandler = new NotificationHandler(this);
         beaconCommunicator = new BeaconCommunicator();
-        beaconHelper = new BeaconHelper();
     }
 
     public void manageGate(String state){
@@ -170,14 +173,16 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                beaconHelper.updateBeaconDistances(beacons, walkDetection.getState());
+                Log.d("kkk", "Got beacons");
+                beaconHelper.updateBeaconDistances(beacons, walkDetection.getState() , settings.getInt(SettingConstants.KALMAN_SEEK_VALUE, 83));
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
-
+                /*
                 for (Beacon b : beacons) {
                     if (b.getId2().equals(INSTANCE_2)) {
                         bluetoothClient.updateClient(beaconHelper.getDistance(b));
                     }
                 }
+                */
             }
         });
         try {
@@ -218,8 +223,11 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     }
 
     public boolean payAutomatically(){
-        SharedPreferences settings = getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
         return settings.getBoolean(SettingConstants.PAY_AUTOMATICALLY, true);
+    }
+    public void updateWalkDetectionListener(boolean enabled){
+        if(enabled) walkDetection.startDetection();
+        else walkDetection.killDetection();
     }
 }
 

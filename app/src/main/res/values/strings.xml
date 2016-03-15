@@ -22,6 +22,12 @@
     <string name="settings_subscription_status">Has subscription?</string>
     <string name="settings_subscription_text">You have payed for a subscription</string>
     <string name="settings_no_subscription_text">You have not payed for a subscription</string>
+    <string name="settings_kalman_status">Kalman Filter System Noise</string>
+    <string name="settings_kalman_value">5.0</string>
+    <string name="settings_wd_status">Walk detection?</string>
+    <string name="settings_enabled">Enabled</string>
+    <string name="settings_disabled">Disabled</string>
+    <string name="settings_selfcorrection_status">Self-correcting beacon</string>
 
 
     <!-- Payment fragment -->

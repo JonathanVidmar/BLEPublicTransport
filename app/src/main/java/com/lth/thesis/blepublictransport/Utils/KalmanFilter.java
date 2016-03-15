@@ -1,5 +1,6 @@
 package com.lth.thesis.blepublictransport.Utils;
 
+import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 /**
@@ -101,6 +102,11 @@ public class KalmanFilter {
      */
     public void setProcessNoise(double noise) {
         R = noise;
+    }
+
+    public static double getCalculatedNoise(int p) {
+        double percent = (double) p / 100.0;
+        return SettingConstants.KALMAN_NOISE_MIN +  (SettingConstants.KALMAN_NOISE_MAX - SettingConstants.KALMAN_NOISE_MIN) * percent;
     }
 }
 

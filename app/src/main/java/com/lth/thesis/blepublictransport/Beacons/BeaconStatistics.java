@@ -1,5 +1,6 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
+import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Utils.KFBuilder;
 import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
 import org.altbeacon.beacon.Beacon;
@@ -47,7 +48,7 @@ public class BeaconStatistics {
                 .build();
     }
 
-    public void updateDistance(Beacon b, double movementState, double txPower) {
+    public void updateDistance(Beacon b, double movementState, double txPower, double processNoise) {
 
         stats.addValue(b.getRssi());
         stats2.addValue(txPower);
@@ -55,6 +56,7 @@ public class BeaconStatistics {
         //double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(filteredStats.getMean()/filteredStats.getStandardDeviation(), 2)));
         double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(stats.getMean()/stats.getStandardDeviation(), 2)));
         if (!Double.isInfinite(mNoise) && !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
+        kf.setProcessNoise(processNoise);
         calculateDistance(stats2.getPercentile(50), movementState);
     }
 

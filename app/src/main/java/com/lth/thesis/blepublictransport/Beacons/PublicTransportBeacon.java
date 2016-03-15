@@ -30,8 +30,8 @@ public class PublicTransportBeacon {
         return stats.getDistance();
     }
 
-    public void updateDistance(Beacon b, double movementState, double txPower){
-        stats.updateDistance(b, movementState, txPower);
+    public void updateDistance(Beacon b, double movementState, double txPower, double processNoise){
+        stats.updateDistance(b, movementState, txPower, processNoise);
     }
 
     public Integer getImage() {

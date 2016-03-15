@@ -4,14 +4,22 @@ package com.lth.thesis.blepublictransport.Fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 
+import android.widget.TextView;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
+import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.R;
+import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 /**
  * A simple {@link Fragment} subclass
@@ -25,6 +33,10 @@ public class SettingsFragment extends Fragment {
     private Switch dependentSwitch;
     private Switch autoSwitch;
     private Switch subscriptionSwitch;
+    private SeekBar kalmanSeek;
+    private TextView kalmanFilterValue;
+    private Switch selfCorrectionSwitch;
+    private Switch wdSwitch;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -37,12 +49,19 @@ public class SettingsFragment extends Fragment {
         dependentSwitch = (Switch) view.findViewById(R.id.dependentSwitch);
         autoSwitch = (Switch) view.findViewById(R.id.automaticallySwitch);
         subscriptionSwitch = (Switch) view.findViewById(R.id.subscriptionSwitch);
+        kalmanSeek = (SeekBar) view.findViewById(R.id.kalmanSeek);
+        kalmanFilterValue = (TextView) view.findViewById(R.id.kalmanValue);
+        selfCorrectionSwitch = (Switch) view.findViewById(R.id.selfCorrectionSwitch);
+        wdSwitch = (Switch) view.findViewById(R.id.walkDetectionSwitch);
 
         settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
 
         setUpDependentPriceSwitch();
         setUpAutomaticPaymentSwitch();
         setUpSubscriptionSwitch();
+        setUpKalmanSeek();
+        setUpSelfcorrectingSwitch();
+        setUpWalkDetectionSwitch();
 
         return view;
     }
@@ -103,6 +122,65 @@ public class SettingsFragment extends Fragment {
                 } else {
                     subscriptionSwitch.setText(R.string.settings_no_subscription_text);
                 }
+            }
+        });
+    }
+
+    /* Sets the correct text and adds an onCheckedChange listener to the kalman filter switch */
+    private void setUpKalmanSeek(){
+        int kalmanSeekValue = settings.getInt(SettingConstants.KALMAN_SEEK_VALUE, 83);
+        kalmanSeek.setProgress(kalmanSeekValue);
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        kalmanFilterValue.setText(df.format(KalmanFilter.getCalculatedNoise(kalmanSeekValue)));
+        kalmanSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                DecimalFormat df = new DecimalFormat("#.##");
+                df.setRoundingMode(RoundingMode.CEILING);
+                kalmanFilterValue.setText(df.format(KalmanFilter.getCalculatedNoise(progress)));
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt(SettingConstants.KALMAN_SEEK_VALUE, seekBar.getProgress());
+                editor.apply();
+            }
+        });
+    }
+
+    /* Sets the correct text and adds an onCheckedChange listener to the self-correcting beacon switch */
+    private void setUpSelfcorrectingSwitch(){
+        boolean selfcorrection = settings.getBoolean(SettingConstants.SELF_CORRECTING_BEACON, true);
+        selfCorrectionSwitch.setChecked(selfcorrection);
+        selfCorrectionSwitch.setText((selfcorrection) ? R.string.settings_enabled : R.string.settings_disabled);
+        selfCorrectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(SettingConstants.SELF_CORRECTING_BEACON, isChecked);
+                editor.apply();
+                ((BLEPublicTransport) getActivity().getApplication()).beaconHelper.updateSelfCorrection(isChecked);
+                selfCorrectionSwitch.setText((isChecked) ? R.string.settings_enabled : R.string.settings_disabled);
+            }
+        });
+    }
+
+    /* Sets the correct text and adds an onCheckedChange listener to the walk detection switch */
+    private void setUpWalkDetectionSwitch(){
+        boolean walkDetection = settings.getBoolean(SettingConstants.WALK_DETECTION, true);
+        wdSwitch.setChecked(walkDetection);
+        wdSwitch.setText((walkDetection) ? R.string.settings_enabled : R.string.settings_disabled);
+        wdSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(SettingConstants.WALK_DETECTION, isChecked);
+                editor.apply();
+                ((BLEPublicTransport) getActivity().getApplication()).updateWalkDetectionListener(isChecked);
+                wdSwitch.setText((isChecked) ? R.string.settings_enabled : R.string.settings_disabled);
             }
         });
     }
