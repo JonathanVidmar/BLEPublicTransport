@@ -61,11 +61,11 @@ _Prerequisites: The user has bought a a subscription and app is running in the b
 1. The user is at the station and is about the go through the gates.
 2. The phone recognizes the beacon and starts the validation
 3. Validation is a success:
-  2. The gates display a success message on a screen.
-  3. The gates open.
+  1. The gates display a success message on a screen.
+  2. The gates open.
 4. Validation is a failure:
-  2. The gates display fail message on a screen.
-  3. The gates does not open.
+  1. The gates display fail message on a screen.
+  2. The gates does not open.
 
 
 ### Use case 7
@@ -74,28 +74,42 @@ _Prerequisites: The user does NOT have a valid ticket and app is running in the 
 
 1. The user is at the station and is about the go through the gates.
 2. The phone recognizes the beacon
-3. The user does not have a ticket and a ticket is bought
+3. The user buys a single ticket and the gate then performs validation
 4. Validation is a success:
-  2. The gates display a success message on a screen.
-  3. The gates open.
+  1. The gates display a success message on a screen.
+  2. The gates open.
 5. Validation is a failure:
-  2. The gates display fail message on a screen.
-  3. The gates does not open.
-
-## Iteration Four
+  1. The gates display fail message on a screen.
+  2. The gates does not open.
 
 ### Use case 8
 
-_Prerequisites:_
+_Prerequisites: The user is at the station and has bought a ticket._
 
-1. The user approaches a pay machine at the station.
-2. The user chooses to buy a digital ticket.
-3. The user chooses his own account displayed on the screen.
-4. The user proceeds with the purchase process as per previously implemented.
-5. The user pays with either cash or card.
-6. The user receives a notification in his/her phone of the newly bought ticket.
+1. The user approaches the gates with the "connect to gate"-screen open.
+2. When the user is within a certain distance a button to open the gates becomes visible.
+3. The user clicks the button and validation is performed.
+4. Validation is a success:
+  1. The gates display a success message on a screen.
+  2. The gates open.
+5. Validation is a failure:
+  1. The gates display fail message on a screen.
+  2. The gates does not open.
 
-### Use case 9
+## Iteration Four
+
+### ~~Use case 9~~
+
+_~~Prerequisites:~~_
+
+1. ~~The user approaches a pay machine at the station.~~
+2. ~~The user chooses to buy a digital ticket.~~
+3. ~~The user chooses his own account displayed on the screen.~~
+4. ~~The user proceeds with the purchase process as per previously implemented.~~
+5. ~~The user pays with either cash or card.~~
+6. ~~The user receives a notification in his/her phone of the newly bought ticket.~~
+
+### Use case 10
 
 _Prerequisites:_
 
@@ -103,16 +117,14 @@ _Prerequisites:_
 2. The user has finished his journey and leaves the transportation vehicle/station.
 3. The user receives information about the finished journey, e.g cost, duration etc.
 
-### Use case 10
-
-_Prerequisites: The user is at the station and has bought a ticket._
-
-1. The user approaches the gates.
-2. The user receives a notification to open the gates.
-3. The user clicks the notification.
-4. The gates open.
-
 ### Improvements to previous use cases as brought up by the first round of usability testing
+* Use case 8 is modified to using a notification instead of a separate screen. When the notification is clicked the gates are opened if validation is successful.
+* In use case 6-7 the user receives feedback in form of vibration when the gate is opened.
+* Extend nearby list by adding funtionality to make navigation to object easier.
+* Nearby list less detailed.
+* Look into lock screen notifications.
+* Add alert before performing buy action.
+
 
 ## Iteration Five
 
