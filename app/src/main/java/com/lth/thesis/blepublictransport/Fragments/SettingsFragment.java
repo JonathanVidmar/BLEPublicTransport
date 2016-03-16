@@ -37,6 +37,7 @@ public class SettingsFragment extends Fragment {
     private TextView kalmanFilterValue;
     private Switch selfCorrectionSwitch;
     private Switch wdSwitch;
+    private Switch gateSimulationSwitch;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -53,6 +54,7 @@ public class SettingsFragment extends Fragment {
         kalmanFilterValue = (TextView) view.findViewById(R.id.kalmanValue);
         selfCorrectionSwitch = (Switch) view.findViewById(R.id.selfCorrectionSwitch);
         wdSwitch = (Switch) view.findViewById(R.id.walkDetectionSwitch);
+        gateSimulationSwitch = (Switch) view.findViewById(R.id.gateSimulationSwitch);
 
         settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
 
@@ -62,6 +64,7 @@ public class SettingsFragment extends Fragment {
         setUpKalmanSeek();
         setUpSelfcorrectingSwitch();
         setUpWalkDetectionSwitch();
+        setUpGateSimulationSwitch();
 
         return view;
     }
@@ -126,7 +129,9 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-    /* Sets the correct text and adds an onCheckedChange listener to the kalman filter switch */
+
+
+    /* Sets the correct text and adds a onChange listener to the kalman filter seekbar */
     private void setUpKalmanSeek(){
         int kalmanSeekValue = settings.getInt(SettingConstants.KALMAN_SEEK_VALUE, 83);
         kalmanSeek.setProgress(kalmanSeekValue);
@@ -170,7 +175,7 @@ public class SettingsFragment extends Fragment {
 
     /* Sets the correct text and adds an onCheckedChange listener to the walk detection switch */
     private void setUpWalkDetectionSwitch(){
-        boolean walkDetection = settings.getBoolean(SettingConstants.WALK_DETECTION, true);
+        boolean walkDetection = settings.getBoolean(SettingConstants.WALK_DETECTION, false);
         wdSwitch.setChecked(walkDetection);
         wdSwitch.setText((walkDetection) ? R.string.settings_enabled : R.string.settings_disabled);
         wdSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -181,6 +186,22 @@ public class SettingsFragment extends Fragment {
                 editor.apply();
                 ((BLEPublicTransport) getActivity().getApplication()).updateWalkDetectionListener(isChecked);
                 wdSwitch.setText((isChecked) ? R.string.settings_enabled : R.string.settings_disabled);
+            }
+        });
+    }
+
+    /* Sets the correct text and adds an onCheckedChange listener to the gate simulation switch */
+    private void setUpGateSimulationSwitch(){
+        boolean simulateGate = settings.getBoolean(SettingConstants.SIMULATE_GATE, false);
+        gateSimulationSwitch.setChecked(simulateGate);
+        gateSimulationSwitch.setText((simulateGate) ? R.string.settings_enabled : R.string.settings_disabled);
+        gateSimulationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putBoolean(SettingConstants.SIMULATE_GATE, isChecked);
+                editor.apply();
+                gateSimulationSwitch.setText((isChecked) ? R.string.settings_enabled : R.string.settings_disabled);
             }
         });
     }

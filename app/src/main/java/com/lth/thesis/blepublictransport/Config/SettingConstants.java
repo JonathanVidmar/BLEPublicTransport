@@ -18,6 +18,8 @@ public class SettingConstants {
     public static final String KALMAN_SEEK_VALUE = "kalman_filter_mode";
     public static final String SELF_CORRECTING_BEACON = "self_correcting_beacon";
     public static final String WALK_DETECTION = "walk_detection";
+    public static final String SIMULATE_GATE = "simulate_gate";
+
 
     public static final double KALMAN_NOISE_MIN = 0.01;
     public static final double KALMAN_NOISE_MAX = 10.0;

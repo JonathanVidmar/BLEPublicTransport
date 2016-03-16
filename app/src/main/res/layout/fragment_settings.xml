@@ -162,6 +162,30 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:text="@string/settings_enabled"/>
+            android:checked="false"
+            android:text="@string/settings_disabled"/>
+
+    <TextView
+            android:id="@+id/gateSimulation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/walkDetectionSwitch"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/settings_gate_simulation_status"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Switch
+            android:id="@+id/gateSimulationSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gateSimulation"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:checked="false"
+            android:text="@string/settings_disabled"/>
 </RelativeLayout>
     </ScrollView>
