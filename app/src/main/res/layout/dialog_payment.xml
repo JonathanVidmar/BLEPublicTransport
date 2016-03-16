@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="TICKET SUMMERY"
+        android:textColor="#838588"
+        android:textSize="22dp"
+        android:layout_margin="22dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEF4FC" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/staticText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="From:\nTo:\nValid until:"
+            android:layout_margin="22dp"
+            android:textColor="#838588"
+            android:textSize="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Malmö C\nLund C\n14:22"
+            android:textSize="16dp"
+            android:textColor="#838588"
+            android:layout_margin="22dp"
+            android:layout_toEndOf="@+id/staticText"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment options:"
+        android:layout_marginTop="22dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="#838588"
+        android:textSize="16dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEF4FC" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/visaButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="XXXX XXXX XXXX 1454"
+            android:textColor="#838588"
+            android:textAlignment="textStart"
+            android:paddingLeft="100dp"
+            android:layout_margin="0dp"
+            android:background="#EEF4FC"/>
+        <ImageView
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="22dp"
+            android:layout_width="50dp"
+            android:layout_height="22dp"
+            android:src="@drawable/logo_visa"
+            android:scaleType="centerInside"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEF4FC" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/mastercardButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="XXXX XXXX XXXX 5467"
+            android:textColor="#838588"
+            android:textAlignment="textStart"
+            android:paddingStart="100dp"
+            android:layout_margin="0dp"
+            android:background="@android:color/transparent"/>
+        <ImageView
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="22dp"
+            android:layout_width="50dp"
+            android:layout_height="22dp"
+            android:src="@drawable/logo_mastercard"
+            android:scaleType="centerInside"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEF4FC" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/addCardButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add card"
+            android:textColor="#838588"
+            android:textAlignment="textStart"
+            android:paddingStart="100dp"
+            android:layout_margin="0dp"
+            android:background="@android:color/transparent"/>
+        <TextView
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="28dp"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:textSize="28dp"
+            android:textAlignment="center"
+            />
+    </RelativeLayout>
+</LinearLayout>

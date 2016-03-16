@@ -1,11 +1,15 @@
 package com.lth.thesis.blepublictransport.Fragments;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
@@ -84,32 +89,54 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         final Button button = (Button) view.findViewById(R.id.payButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Date validTo = new Date();
-                validTo.setTime(System.currentTimeMillis() + (120 * 60 * 1000));
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-                String dateString = formatter.format(validTo);
-
-                SharedPreferences ticketPreferences = getActivity().getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
-                SharedPreferences.Editor editor = ticketPreferences.edit();
-                editor.putString(SettingConstants.VALID_TICKET_DATE, dateString);
-
-                if (isPricesDependent) {
-                    Resources res = getResources();
-                    String[] destinations = res.getStringArray(R.array.destination_array);
-                    final String destination = destinations[dest];
-                    editor.putString(SettingConstants.VALID_TICKET_DESTINATION, destination);
-                }
-
-                editor.apply();
-                BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
-                app.notificationHandler.update(NotificationHandler.VALID_TICKET_AVAILABLE);
-
-                ShowTicketFragment fragment = new ShowTicketFragment();
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment, MainActivity.SHOW_TICKET_FRAGMENT);
-                fragmentTransaction.commit();
+                showDialog();
             }
         });
+    }
+
+    private void showDialog(){
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        new AlertDialog.Builder(getActivity())
+                .setView(inflater.inflate(R.layout.dialog_payment, null))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        performPayment();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .show();
+    }
+
+    private void performPayment(){
+        Date validTo = new Date();
+        validTo.setTime(System.currentTimeMillis() + (120 * 60 * 1000));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        String dateString = formatter.format(validTo);
+
+        SharedPreferences ticketPreferences = getActivity().getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
+        SharedPreferences.Editor editor = ticketPreferences.edit();
+        editor.putString(SettingConstants.VALID_TICKET_DATE, dateString);
+
+        if (isPricesDependent) {
+            Resources res = getResources();
+            String[] destinations = res.getStringArray(R.array.destination_array);
+            final String destination = destinations[dest];
+            editor.putString(SettingConstants.VALID_TICKET_DESTINATION, destination);
+        }
+
+        editor.apply();
+        BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
+        app.notificationHandler.update(NotificationHandler.VALID_TICKET_AVAILABLE);
+
+        ShowTicketFragment fragment = new ShowTicketFragment();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment, MainActivity.SHOW_TICKET_FRAGMENT);
+        fragmentTransaction.commit();
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
