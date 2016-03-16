@@ -174,15 +174,17 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 Log.d("kkk", "Got beacons");
-                beaconHelper.updateBeaconDistances(beacons, walkDetection.getState() , settings.getInt(SettingConstants.KALMAN_SEEK_VALUE, 83));
+                beaconHelper.updateBeaconDistances(beacons, walkDetectionEnabled() ? walkDetection.getState() : 1 , settings.getInt(SettingConstants.KALMAN_SEEK_VALUE, 83));
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
-                /*
-                for (Beacon b : beacons) {
-                    if (b.getId2().equals(INSTANCE_2)) {
-                        bluetoothClient.updateClient(beaconHelper.getDistance(b));
+
+                if (simulatingGate()) {
+                    for (Beacon b : beacons) {
+                        if (b.getId2().equals(INSTANCE_2)) {
+                            bluetoothClient.updateClient(beaconHelper.getDistance(b));
+                        }
                     }
                 }
-                */
+
             }
         });
         try {
@@ -221,7 +223,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         }
         return hasValidTicket;
     }
-
+    private boolean walkDetectionEnabled() { return settings.getBoolean(SettingConstants.WALK_DETECTION, false); }
+    private boolean simulatingGate() { return settings.getBoolean(SettingConstants.SIMULATE_GATE, false); }
     public boolean payAutomatically(){
         return settings.getBoolean(SettingConstants.PAY_AUTOMATICALLY, true);
     }

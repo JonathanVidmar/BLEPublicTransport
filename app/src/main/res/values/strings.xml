@@ -25,6 +25,7 @@
     <string name="settings_kalman_status">Kalman Filter System Noise</string>
     <string name="settings_kalman_value">5.0</string>
     <string name="settings_wd_status">Walk detection?</string>
+    <string name="settings_gate_simulation_status">Simulate a gate at Spår 2</string>
     <string name="settings_enabled">Enabled</string>
     <string name="settings_disabled">Disabled</string>
     <string name="settings_selfcorrection_status">Self-correcting beacon</string>
