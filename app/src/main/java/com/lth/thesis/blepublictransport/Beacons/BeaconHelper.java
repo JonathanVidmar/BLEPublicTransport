@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
+import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
+import com.lth.thesis.blepublictransport.Utils.MeasurementUtil;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.Region;
@@ -23,9 +25,11 @@ import static com.lth.thesis.blepublictransport.Config.BeaconConstants.*;
 public class BeaconHelper {
 
     public double txPower = -59;
+    private double processNoise;
     private Map<Identifier, PublicTransportBeacon> beaconList = new HashMap<>();
     private boolean selfCorrection;
     private long lastSelfCorrectingBeaconUpdate = 0;
+    public MeasurementUtil measurementUtil;
 
 
 
@@ -34,6 +38,7 @@ public class BeaconHelper {
         beaconList.put(INSTANCE_1, new PublicTransportBeacon(SIMPLE_NAME_1, THUMB_IMAGE_1));
         beaconList.put(INSTANCE_2, new PublicTransportBeacon(SIMPLE_NAME_2, THUMB_IMAGE_2));
         beaconList.put(INSTANCE_3, new PublicTransportBeacon(SIMPLE_NAME_3, THUMB_IMAGE_3));
+        measurementUtil = new MeasurementUtil();
     }
 
     public void lostRegionInstance(Identifier instance) {
@@ -80,13 +85,13 @@ public class BeaconHelper {
         return beaconList.get(beacon.getId2()).getDistance();
     }
 
-    public void updateBeaconDistances(Collection<Beacon> beacons, double movementState, double processNoise) {
+    public void updateBeaconDistances(Collection<Beacon> beacons, double movementState) {
         for (Beacon b : beacons) {
-
-            Log.d("kkk", "Updating: " + b.getId2());
             checkSelfCorrection(b);
             beaconList.get(b.getId2()).updateDistance(b, movementState, txPower, processNoise);
+            measurementUtil.update(b, this);
         }
+
     }
 
     public int getImage(Beacon b) {
@@ -103,5 +108,12 @@ public class BeaconHelper {
 
     public void updateSelfCorrection(boolean update) {
         selfCorrection = update;
+    }
+
+    public void updateProcessNoise(int progress) {
+        processNoise = KalmanFilter.getCalculatedNoise(progress);
+    }
+    public double getProcessNoise() {
+        return processNoise;
     }
 }

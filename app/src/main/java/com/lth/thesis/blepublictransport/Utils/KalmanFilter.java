@@ -1,5 +1,6 @@
 package com.lth.thesis.blepublictransport.Utils;
 
+import android.util.Log;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 

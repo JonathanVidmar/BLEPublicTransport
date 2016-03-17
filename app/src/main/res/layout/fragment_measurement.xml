@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <Button
+            android:id="@+id/markDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorAccent"
+            android:text="Begin test!"
+            android:textColor="#FFF"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="Beacon distance test"
+            android:id="@+id/measurementTitle"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="#111"
+            android:layout_marginTop="10dp"/>
+
+    <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/numberPicker"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/measurementTitle"
+            android:layout_centerHorizontal="true"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Step length in decimeters"
+            android:id="@+id/numberPickerText"
+            android:layout_below="@id/numberPicker"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Distance to beacon"
+            android:id="@+id/metersMarkedText"
+            android:layout_above="@id/markDistance"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="40dp"
+            android:layout_centerHorizontal="true"/>
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20.00"
+            android:inputType="numberDecimal"
+            android:id="@+id/currentMetersMarked"
+            android:layout_above="@id/metersMarkedText"
+            android:layout_centerHorizontal="true"
+            android:textSize="60dp"/>
+
+</RelativeLayout>

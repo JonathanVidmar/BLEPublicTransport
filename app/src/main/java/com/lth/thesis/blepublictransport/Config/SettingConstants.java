@@ -21,6 +21,6 @@ public class SettingConstants {
     public static final String SIMULATE_GATE = "simulate_gate";
 
 
-    public static final double KALMAN_NOISE_MIN = 0.01;
-    public static final double KALMAN_NOISE_MAX = 10.0;
+    public static final double KALMAN_NOISE_MIN = 1;
+    public static final double KALMAN_NOISE_MAX = 25.0;
 }

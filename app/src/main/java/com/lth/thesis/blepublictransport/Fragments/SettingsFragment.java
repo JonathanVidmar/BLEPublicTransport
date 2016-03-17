@@ -152,6 +152,7 @@ public class SettingsFragment extends Fragment {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putInt(SettingConstants.KALMAN_SEEK_VALUE, seekBar.getProgress());
                 editor.apply();
+                ((BLEPublicTransport) getActivity().getApplication()).beaconHelper.updateProcessNoise(seekBar.getProgress());
             }
         });
     }

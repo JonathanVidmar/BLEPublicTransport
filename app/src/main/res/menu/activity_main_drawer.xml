@@ -23,5 +23,9 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/menu_item_settings" />
+        <item
+                android:id="@+id/nav_measurement"
+                android:icon="@drawable/ic_assessment_black_24dp"
+                android:title="@string/menu_item_measurement" />
     </group>
 </menu>
