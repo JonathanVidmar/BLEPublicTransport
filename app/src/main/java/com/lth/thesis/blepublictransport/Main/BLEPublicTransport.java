@@ -53,6 +53,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
         settings = getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
         beaconHelper = new BeaconHelper(settings.getBoolean(SettingConstants.SELF_CORRECTING_BEACON, true));
+        beaconHelper.updateProcessNoise(settings.getInt(SettingConstants.KALMAN_SEEK_VALUE, 83));
         bluetoothClient = new BluetoothClient(this);
         walkDetection = new WalkDetection(this);
         updateWalkDetectionListener(settings.getBoolean(SettingConstants.WALK_DETECTION, false));
@@ -173,8 +174,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                Log.d("kkk", "Got beacons");
-                beaconHelper.updateBeaconDistances(beacons, walkDetectionEnabled() ? walkDetection.getState() : 1 , settings.getInt(SettingConstants.KALMAN_SEEK_VALUE, 83));
+                beaconHelper.updateBeaconDistances(beacons, walkDetectionEnabled() ? walkDetection.getState() : 1);
                 beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
 
                 if (simulatingGate()) {

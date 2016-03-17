@@ -11,6 +11,8 @@
     <string name="menu_item_payment">Payment</string>
     <string name="menu_item_gate_connection">Connect to gate</string>
     <string name="menu_item_settings">Settings</string>
+    <string name="menu_item_measurement">Measurement</string>
+
 
     <!-- Settings fragment -->
     <string name="settings_depending_status">Independent/Dependent prices</string>

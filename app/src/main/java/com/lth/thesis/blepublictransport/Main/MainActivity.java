@@ -20,12 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import android.view.View;
-import com.lth.thesis.blepublictransport.Fragments.GateConnectionFragment;
-import com.lth.thesis.blepublictransport.Fragments.AbstractObserverFragment;
-import com.lth.thesis.blepublictransport.Fragments.PaymentFragment;
-import com.lth.thesis.blepublictransport.Fragments.SettingsFragment;
-import com.lth.thesis.blepublictransport.Fragments.ShowTicketFragment;
-import com.lth.thesis.blepublictransport.Fragments.NearbyFragment;
+import com.lth.thesis.blepublictransport.Fragments.*;
 import com.lth.thesis.blepublictransport.R;
 
 import java.util.Observable;
@@ -43,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String TICKET_FRAGMENT = "ticketFragment";
     public static final String SHOW_TICKET_FRAGMENT = "showTicketFragment";
     public static final String BLUETOOTH_PARING_FRAGMENT = "bluetoothFragment";
+    public static final String MEASUREMENT_FRAGMENT = "measurementFragment";
 
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
 
@@ -139,6 +135,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle("Bluetooth");
                 if (currentFragment == null) currentFragment = new GateConnectionFragment();
                 break;
+            case MEASUREMENT_FRAGMENT:
+            toolbar.setTitle("Measurement");
+            if (currentFragment == null) currentFragment = new MeasurementFragment();
+            break;
         }
         fragmentTransaction.replace(R.id.fragment_container, currentFragment, destination);
         fragmentTransaction.commit();
@@ -190,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_bluetooth_connection:
                 executeNavigationTo(BLUETOOTH_PARING_FRAGMENT);
+                break;
+            case R.id.nav_measurement:
+                executeNavigationTo(MEASUREMENT_FRAGMENT);
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

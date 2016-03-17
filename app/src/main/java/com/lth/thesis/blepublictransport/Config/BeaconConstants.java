@@ -20,6 +20,7 @@ public class BeaconConstants {
     public static final Identifier INSTANCE_1 = Identifier.parse("0x41774c564931");
     public static final Identifier INSTANCE_2 = Identifier.parse("0x4e316a736752");
     public static final Identifier INSTANCE_3 = Identifier.parse("0x526270373372");
+    public static final Identifier TEST_BEACON_INSTANCE = INSTANCE_1;
     public static final String SIMPLE_NAME_1 = "Kundservice";
     public static final String SIMPLE_NAME_2 = "Spår 2";
     public static final String SIMPLE_NAME_3 = "Espresso House";
