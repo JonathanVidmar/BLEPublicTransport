@@ -42,6 +42,9 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
     private View view;
     private boolean isPricesDependent;
     private int dest = 0;
+    private boolean visaPayment = true;
+    private Button visa;
+    private Button mastercard;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -96,8 +99,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
 
     private void showDialog(){
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        new AlertDialog.Builder(getActivity())
+        AlertDialog alert = new AlertDialog.Builder(getActivity())
                 .setView(inflater.inflate(R.layout.dialog_payment, null))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -108,8 +110,32 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }
-                })
-                .show();
+                }).create();
+        alert.show();
+        visa = (Button) alert.findViewById(R.id.visaButton);
+        mastercard = (Button) alert.findViewById(R.id.mastercardButton);
+
+        visa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!visaPayment) {
+                    visaPayment = true;
+                    visa.setBackgroundColor(Color.parseColor("#EEF4FC"));
+                    mastercard.setBackgroundColor(Color.WHITE);
+                }
+            }
+        });
+
+        mastercard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (visaPayment) {
+                    visaPayment = false;
+                    visa.setBackgroundColor(Color.WHITE);
+                    mastercard.setBackgroundColor(Color.parseColor("#EEF4FC"));
+                }
+            }
+        });
     }
 
     private void performPayment(){
@@ -121,19 +147,19 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         SharedPreferences ticketPreferences = getActivity().getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
         SharedPreferences.Editor editor = ticketPreferences.edit();
         editor.putString(SettingConstants.VALID_TICKET_DATE, dateString);
+        editor.apply();
 
+        ShowTicketFragment fragment = new ShowTicketFragment();
         if (isPricesDependent) {
             Resources res = getResources();
             String[] destinations = res.getStringArray(R.array.destination_array);
             final String destination = destinations[dest];
-            editor.putString(SettingConstants.VALID_TICKET_DESTINATION, destination);
+            fragment.destination = destination;
         }
 
-        editor.apply();
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
         app.notificationHandler.update(NotificationHandler.VALID_TICKET_AVAILABLE);
 
-        ShowTicketFragment fragment = new ShowTicketFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment, MainActivity.SHOW_TICKET_FRAGMENT);
         fragmentTransaction.commit();

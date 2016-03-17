@@ -30,9 +30,10 @@ import java.util.Locale;
  * @version     1.1
  */
 public class ShowTicketFragment extends Fragment {
-    SharedPreferences ticketPreferences;
-    View view;
-    CountDownTimer timer;
+    public String destination;
+    private SharedPreferences ticketPreferences;
+    private View view;
+    private CountDownTimer timer;
 
     public ShowTicketFragment() {
         // Required empty public constructor
@@ -48,12 +49,11 @@ public class ShowTicketFragment extends Fragment {
         boolean isPriceDependent = settingsPreferences.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
 
         if(isPriceDependent){
-            String destination = ticketPreferences.getString(SettingConstants.VALID_TICKET_DESTINATION, getString(R.string.ticket_no_destination));
-            setValidTicketCounterText(String.format(getResources().getString(R.string.ticket_text_with_destination), destination));
+            //setValidTicketCounterText(String.format(getResources().getString(R.string.ticket_text_with_destination), destination));
         }
 
         initTimer();
-        addRemoveButton();
+        //addRemoveButton();
 
         return view;
     }
@@ -94,7 +94,7 @@ public class ShowTicketFragment extends Fragment {
     }
 
     /* Adds a floating button with the remove action and its handler*/
-    private void addRemoveButton(){
+    /*private void addRemoveButton(){
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +110,7 @@ public class ShowTicketFragment extends Fragment {
                 clearTicket("");
             }
         });
-    }
+    }*/
 
     /* Clears the ticket from the system. */
     private void clearTicket(String message) {
@@ -125,8 +125,8 @@ public class ShowTicketFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TextView mTextField = (TextView) view.findViewById(R.id.validTicketCounterText);
-                mTextField.setText(text);
+                //TextView mTextField = (TextView) view.findViewById(R.id.validTicketCounterText);
+                //mTextField.setText(text);
             }
         });
     }
