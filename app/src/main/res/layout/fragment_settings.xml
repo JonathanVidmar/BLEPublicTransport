@@ -104,7 +104,7 @@
 
         <TextView
                 android:id="@+id/kalmanValue"
-                android:layout_width="40dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:text="@string/settings_kalman_value"

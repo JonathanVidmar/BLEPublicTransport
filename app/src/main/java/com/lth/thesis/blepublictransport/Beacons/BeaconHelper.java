@@ -86,6 +86,7 @@ public class BeaconHelper {
     }
 
     public void updateBeaconDistances(Collection<Beacon> beacons, double movementState) {
+        Log.d("hejhej", "update");
         for (Beacon b : beacons) {
             checkSelfCorrection(b);
             beaconList.get(b.getId2()).updateDistance(b, movementState, txPower, processNoise);

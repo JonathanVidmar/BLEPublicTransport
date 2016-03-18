@@ -20,7 +20,7 @@ public class BeaconStatistics {
     private KalmanFilter kf;
     private double lastCalculatedDistance;
     private double lastFilteredReading = -1;
-    private static final int WINDOW =15;
+    private static final int WINDOW = 15;
 
     public BeaconStatistics() {
 
