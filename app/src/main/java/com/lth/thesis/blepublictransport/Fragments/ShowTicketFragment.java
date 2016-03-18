@@ -3,18 +3,19 @@ package com.lth.thesis.blepublictransport.Fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.Utils.Station;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.R;
+import com.lth.thesis.blepublictransport.Utils.TicketHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,10 +31,23 @@ import java.util.Locale;
  * @version     1.1
  */
 public class ShowTicketFragment extends Fragment {
-    public String destination;
+    public Station destination;
     private SharedPreferences ticketPreferences;
     private View view;
     private CountDownTimer timer;
+    private ImageView destinationImage;
+    private TextView currentStationShortLabel;
+    private TextView currentStationLabel;
+    private TextView destinationStationShortLabel;
+    private TextView destinationLabel;
+    private TextView boughtTimeLabel;
+    private TextView boughtDayLabel;
+    private TextView validTimeLabel;
+    private TextView validDayLabel;
+    private TextView nextDepartureLabel;
+    private TextView timeOfNextDepartureLabel;
+    private TextView trackNumberLabel;
+    private TextView distanceLabel;
 
     public ShowTicketFragment() {
         // Required empty public constructor
@@ -44,18 +58,57 @@ public class ShowTicketFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_show_ticket, container, false);
 
         ticketPreferences = getActivity().getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
-        SharedPreferences settingsPreferences = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
 
-        boolean isPriceDependent = settingsPreferences.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
+        destinationImage = (ImageView) view.findViewById(R.id.header_image);
+        currentStationShortLabel = (TextView) view.findViewById(R.id.currentStationShortLabel);
+        currentStationLabel = (TextView) view.findViewById(R.id.currentStationLabel);
+        destinationStationShortLabel = (TextView) view.findViewById(R.id.destStationShortLabel);
+        destinationLabel = (TextView) view.findViewById(R.id.destStationLabel);
+        boughtTimeLabel = (TextView) view.findViewById(R.id.boughtTimeLabel);
+        boughtDayLabel = (TextView) view.findViewById(R.id.boughtDayLabel);
+        validTimeLabel = (TextView) view.findViewById(R.id.validUntilTimeLabel);
+        validDayLabel = (TextView) view.findViewById(R.id.validDayLabel);
+        nextDepartureLabel = (TextView) view.findViewById(R.id.nextDeparture);
+        timeOfNextDepartureLabel = (TextView) view.findViewById(R.id.timeOfNextDepartureLabel);
+        trackNumberLabel = (TextView) view.findViewById(R.id.track);
+        distanceLabel = (TextView) view.findViewById(R.id.trackDistanceLabel);
 
-        if(isPriceDependent){
-            //setValidTicketCounterText(String.format(getResources().getString(R.string.ticket_text_with_destination), destination));
-        }
-
+        configureView();
         initTimer();
         //addRemoveButton();
 
         return view;
+    }
+
+    private void configureView(){
+        int id = getResources().getIdentifier("com.lth.thesis.blepublictransport:drawable/" + destination.image, null, null);
+        destinationImage.setImageResource(id);
+        destinationStationShortLabel.setText(destination.abbreviation);
+        destinationLabel.setText(destination.name);
+        SimpleDateFormat getFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        String ticketBought = ticketPreferences.getString(SettingConstants.BOUGHT_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
+        String validUntil = ticketPreferences.getString(SettingConstants.VALID_TICKET_DATE, "2016-06-10'T'10:10:10'Z'");
+        try {
+            Date bought = getFormatter.parse(ticketBought);
+            Date valid = getFormatter.parse(validUntil);
+            SimpleDateFormat dayFormatter = new SimpleDateFormat("EEE dd MMM", Locale.US);
+            SimpleDateFormat timeFormatter = new SimpleDateFormat("HH.mm", Locale.US);
+            boughtDayLabel.setText(dayFormatter.format(bought));
+            validDayLabel.setText(dayFormatter.format(valid));
+            boughtTimeLabel.setText(timeFormatter.format(bought));
+            validTimeLabel.setText(timeFormatter.format(valid));
+
+            Date nextDeparture = new Date();
+            nextDeparture.setTime(System.currentTimeMillis() + (14 * 60 * 1000));
+            timeOfNextDepartureLabel.setText(timeFormatter.format(nextDeparture));
+        }catch (ParseException e) {
+
+        }
+        nextDepartureLabel.setText(destination.transportType);
+        trackNumberLabel.setText(destination.track);
+
+        currentStationLabel.setText(TicketHelper.homeStation.name);
+        currentStationShortLabel.setText(TicketHelper.homeStation.abbreviation);
     }
 
     /* Initiates the timer and updates the view. */
@@ -118,16 +171,5 @@ public class ShowTicketFragment extends Fragment {
         mTextField.setText(message);
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
         app.notificationHandler.update(NotificationHandler.NO_TICKET_AVAILABLE);
-    }
-
-    /* Sets the status message. */
-    private void setValidTicketCounterText(final String text){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //TextView mTextField = (TextView) view.findViewById(R.id.validTicketCounterText);
-                //mTextField.setText(text);
-            }
-        });
     }
 }

@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (currentFragment == null) currentFragment = new SettingsFragment();
                 break;
             case TICKET_FRAGMENT:
-                toolbar.setTitle("Destination");
+                toolbar.setTitle("Station");
                 if (currentFragment == null) currentFragment = new ShowTicketFragment();
                 break;
             case BLUETOOTH_PARING_FRAGMENT:

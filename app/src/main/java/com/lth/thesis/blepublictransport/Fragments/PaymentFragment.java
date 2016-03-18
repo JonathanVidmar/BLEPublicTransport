@@ -26,6 +26,7 @@ import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.R;
+import com.lth.thesis.blepublictransport.Utils.TicketHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -143,9 +144,13 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         validTo.setTime(System.currentTimeMillis() + (120 * 60 * 1000));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         String dateString = formatter.format(validTo);
+        Date boughtDate = new Date();
+        boughtDate.setTime(System.currentTimeMillis());
+        String boughtString = formatter.format(boughtDate);
 
         SharedPreferences ticketPreferences = getActivity().getSharedPreferences(SettingConstants.TICKET_PREFERENCES, 0);
         SharedPreferences.Editor editor = ticketPreferences.edit();
+        editor.putString(SettingConstants.BOUGHT_TICKET_DATE, boughtString);
         editor.putString(SettingConstants.VALID_TICKET_DATE, dateString);
         editor.apply();
 
@@ -154,7 +159,8 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
             Resources res = getResources();
             String[] destinations = res.getStringArray(R.array.destination_array);
             final String destination = destinations[dest];
-            fragment.destination = destination;
+            TicketHelper helper = new TicketHelper();
+            fragment.destination = helper.destinationsMap.get(destination);;
         }
 
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
@@ -178,7 +184,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
             public void run() {
                 TextView infoText = (TextView) getActivity().findViewById(R.id.paymentInfoText);
                 Resources res = getResources();
-                infoText.setText(String.format(res.getString(R.string.payment_ticket_text), destination));
+                infoText.setText(String.format(res.getString(R.string.payment_ticket_text), TicketHelper.homeStation.name, destination));
                 TextView priceTag = (TextView) getActivity().findViewById(R.id.priceTag);
                 priceTag.setText(String.format(res.getString(R.string.payment_price_tag), price));
             }
