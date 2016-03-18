@@ -2,25 +2,250 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F0F0F0"
     tools:context=".Fragments.ShowTicketFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:background="@color/colorAccent">
+        android:layout_margin="15dp"
+        android:background="#FFF"
+        >
 
-        <TextView
-            android:id="@+id/validTicketTitle"
+        <ImageView
+            android:id="@+id/header_image"
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/img_mlm"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentStationAb"
+                android:text="LU"
+                android:textColor="#FFF"
+                android:textSize="28dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/currentStationAb"
+                android:text="Lund central"
+                android:layout_alignStart="@+id/currentStationAb"
+                android:textColor="#FFF"
+                android:textSize="10dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/destStationAb"
+                android:text="MLM"
+                android:textColor="#FFF"
+                android:textSize="28dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/destStationAb"
+                android:text="Malmö central"
+                android:layout_alignStart="@+id/destStationAb"
+                android:textColor="#FFF"
+                android:textSize="10dp"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/timeInfoBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="@string/ticket_text"
-            android:textAlignment="center"
-            android:textColor="#FFF"
-            android:textSize="50sp" />
+            android:layout_below="@id/header_image"
+            android:layout_margin="20dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bought ticket"
+                    android:textColor="#95989A"
+                    android:textSize="10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/currStationLabel"
+                    android:text="08.27"
+                    android:textColor="#000"
+                    android:textSize="28dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wed 07 Sep"
+                    android:textAlignment="center"
+                    android:textColor="#95989A"
+                    android:textSize="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/typeOfVehicleLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Train/Bus"
+                    android:textColor="#95989A"
+                    android:textSize="10dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/train"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_directions_transit_24dp"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_directions_bus_24dp"/>
+                </RelativeLayout>
+                <TextView
+                    android:id="@+id/validTicketCounter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ticket_countdown_default"
+                    android:textAlignment="center"
+                    android:textColor="#95989A"
+                    android:textSize="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_alignParentEnd="true"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Valid until"
+                    android:textColor="#95989A"
+                    android:textSize="10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/destStationLabel"
+                    android:text="09.57"
+                    android:textColor="#000"
+                    android:textSize="28dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wed 07 Sep"
+                    android:textAlignment="center"
+                    android:textColor="#95989A"
+                    android:textSize="10dp"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DEE2E7"
+            android:layout_below="@id/timeInfoBox"
+            android:padding="20dp">
+            <TextView
+                android:id="@+id/nextDepartureLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NEXT DEPARTURE"
+                android:textColor="#95989A"
+                android:textSize="10dp"
+                />
+            <TextView
+                android:id="@+id/nextDeparture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nextDepartureLabel"
+                android:text="Pågatåg"
+                android:textColor="#000"
+                android:textSize="16dp"
+                />
+            <TextView
+                android:id="@+id/timeOfDepartureLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nextDeparture"
+                android:text="TIME TO NEXT DEPARTURE"
+                android:textColor="#95989A"
+                android:layout_marginTop="10dp"
+                android:textSize="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/timeOfDepartureLabel"
+                android:text="08.52"
+                android:textColor="#000"
+                android:textSize="16dp"
+                />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+                <TextView
+                    android:id="@+id/trackLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TRACK NUMBER"
+                    android:textColor="#95989A"
+                    android:textSize="10dp"
+                    />
+                <TextView
+                    android:id="@+id/track"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/trackLabel"
+                    android:text="10B"
+                    android:textColor="#000"
+                    android:textSize="16dp"
+                    />
+                <TextView
+                    android:id="@+id/distanceToTrackLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/track"
+                    android:text="DISTANCE TO TRACK"
+                    android:textColor="#95989A"
+                    android:layout_marginTop="10dp"
+                    android:textSize="10dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distanceToTrackLabel"
+                    android:text="11 m"
+                    android:textColor="#000"
+                    android:textSize="16dp"
+                    />
 
-        <TextView
+            </RelativeLayout>
+        </RelativeLayout>
+        <!--<TextView
             android:id="@+id/validTicketCounterText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +254,7 @@
             android:layout_marginRight="20dp"
             android:text="@string/ticket_countdown_text"
             android:textAlignment="center"
-            android:textColor="#FFF"
+            android:textColor="#000"
             android:textSize="22sp" />
 
         <TextView
@@ -40,17 +265,17 @@
             android:layout_margin="20dp"
             android:text="@string/ticket_countdown_default"
             android:textAlignment="center"
-            android:textColor="#FFF"
-            android:textSize="22sp" />
+            android:textColor="#000"
+            android:textSize="22sp" />-->
     </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_action_delete" />
+        android:src="@drawable/ic_action_delete" />-->
 
 </RelativeLayout>
 
