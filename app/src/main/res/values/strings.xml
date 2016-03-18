@@ -35,7 +35,7 @@
 
     <!-- Payment fragment -->
     <string name="payment_cost_text">The ticket will cost: </string>
-    <string name="payment_ticket_text">A trip from your current station to %1$s will cost: </string>
+    <string name="payment_ticket_text">A trip from %1$s to %2$s will cost: </string>
     <string name="payment_ticket_text_default">A trip from your current station to Lund C will cost: </string>
     <string name="payment_price_tag">%1$d kr</string>
     <string name="payment_price_tag_default">25 kr</string>
@@ -56,6 +56,13 @@
     <string name="ticket_countdown_text">Valid countdown:</string>
     <string name="ticket_text">Ticket </string>
     <string name="ticket_countdown_default">0</string>
+    <string name="placeholder_current_station_name">Lund central</string>
+    <string name="placeholder_current_station_abbreviation">LU</string>
+    <string name="placeholder_destination_name">Malmö central</string>
+    <string name="placeholder_destination_abbreviation">MLM</string>
+    <string name="placeholder_time">08.00</string>
+    <string name="placeholder_date">Wed 07 Sep</string>
+
 
     <!-- Gate Connection fragment -->
     <string name="open_gate_button_text">Press to open</string>

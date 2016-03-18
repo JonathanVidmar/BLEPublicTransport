@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:background="#FFF"
-        >
+        android:background="@android:color/white">
 
         <ImageView
             android:id="@+id/header_image"
@@ -21,49 +20,47 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
             <TextView
+                android:id="@+id/currentStationShortLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/currentStationAb"
-                android:text="LU"
-                android:textColor="#FFF"
-                android:textSize="28dp"/>
+                android:text="@string/placeholder_current_station_abbreviation"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"/>
             <TextView
+                android:id="@+id/currentStationLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/currentStationAb"
-                android:text="Lund central"
-                android:layout_alignStart="@+id/currentStationAb"
-                android:textColor="#FFF"
-                android:textSize="10dp"/>
+                android:text="@string/placeholder_current_station_name"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
             <TextView
+                android:id="@+id/destStationShortLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/destStationAb"
-                android:text="MLM"
-                android:textColor="#FFF"
-                android:textSize="28dp"/>
+                android:text="@string/placeholder_destination_abbreviation"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"/>
             <TextView
+                android:id="@+id/destStationLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/destStationAb"
-                android:text="Malmö central"
-                android:layout_alignStart="@+id/destStationAb"
-                android:textColor="#FFF"
-                android:textSize="10dp"/>
+                android:text="@string/placeholder_destination_name"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -82,27 +79,28 @@
                     android:layout_height="wrap_content"
                     android:text="Bought ticket"
                     android:textColor="#95989A"
-                    android:textSize="10dp"/>
+                    android:textSize="12sp"/>
                 <TextView
+                    android:id="@+id/boughtTimeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/currStationLabel"
-                    android:text="08.27"
-                    android:textColor="#000"
-                    android:textSize="28dp"/>
+                    android:text="@string/placeholder_time"
+                    android:textColor="@android:color/black"
+                    android:textSize="28sp"/>
                 <TextView
+                    android:id="@+id/boughtDayLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Wed 07 Sep"
+                    android:text="@string/placeholder_date"
                     android:textAlignment="center"
                     android:textColor="#95989A"
-                    android:textSize="10dp"/>
+                    android:textSize="12sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/typeOfVehicleLabel"
@@ -110,12 +108,11 @@
                     android:layout_height="wrap_content"
                     android:text="Train/Bus"
                     android:textColor="#95989A"
-                    android:textSize="10dp"/>
+                    android:textSize="12sp"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:id="@+id/train"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_directions_transit_24dp"/>
@@ -132,41 +129,42 @@
                     android:text="@string/ticket_countdown_default"
                     android:textAlignment="center"
                     android:textColor="#95989A"
-                    android:textSize="10dp"/>
+                    android:textSize="12sp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_alignParentEnd="true"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Valid until"
                     android:textColor="#95989A"
-                    android:textSize="10dp"/>
+                    android:textSize="12sp"/>
                 <TextView
+                    android:id="@+id/validUntilTimeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/destStationLabel"
-                    android:text="09.57"
-                    android:textColor="#000"
-                    android:textSize="28dp"/>
+                    android:text="@string/placeholder_time"
+                    android:textColor="@android:color/black"
+                    android:textSize="28sp"/>
                 <TextView
+                    android:id="@+id/validDayLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Wed 07 Sep"
+                    android:text="@string/placeholder_date"
                     android:textAlignment="center"
                     android:textColor="#95989A"
-                    android:textSize="10dp"/>
+                    android:textSize="12sp"/>
             </LinearLayout>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#DEE2E7"
             android:layout_below="@id/timeInfoBox"
+            android:background="#DEE2E7"
             android:padding="20dp">
             <TextView
                 android:id="@+id/nextDepartureLabel"
@@ -174,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:text="NEXT DEPARTURE"
                 android:textColor="#95989A"
-                android:textSize="10dp"
+                android:textSize="12sp"
                 />
             <TextView
                 android:id="@+id/nextDeparture"
@@ -182,26 +180,27 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nextDepartureLabel"
                 android:text="Pågatåg"
-                android:textColor="#000"
-                android:textSize="16dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
                 />
             <TextView
                 android:id="@+id/timeOfDepartureLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nextDeparture"
+                android:layout_marginTop="10dp"
                 android:text="TIME TO NEXT DEPARTURE"
                 android:textColor="#95989A"
-                android:layout_marginTop="10dp"
-                android:textSize="10dp"
+                android:textSize="12sp"
                 />
             <TextView
+                android:id="@+id/timeOfNextDepartureLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/timeOfDepartureLabel"
-                android:text="08.52"
-                android:textColor="#000"
-                android:textSize="16dp"
+                android:text="@string/placeholder_time"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
                 />
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -213,7 +212,7 @@
                     android:layout_height="wrap_content"
                     android:text="TRACK NUMBER"
                     android:textColor="#95989A"
-                    android:textSize="10dp"
+                    android:textSize="12sp"
                     />
                 <TextView
                     android:id="@+id/track"
@@ -221,52 +220,31 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/trackLabel"
                     android:text="10B"
-                    android:textColor="#000"
-                    android:textSize="16dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
                     />
                 <TextView
                     android:id="@+id/distanceToTrackLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/track"
+                    android:layout_marginTop="10dp"
                     android:text="DISTANCE TO TRACK"
                     android:textColor="#95989A"
-                    android:layout_marginTop="10dp"
-                    android:textSize="10dp"
+                    android:textSize="12sp"
                     />
                 <TextView
+                    android:id="@+id/trackDistanceLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/distanceToTrackLabel"
                     android:text="11 m"
-                    android:textColor="#000"
-                    android:textSize="16dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
                     />
 
             </RelativeLayout>
         </RelativeLayout>
-        <!--<TextView
-            android:id="@+id/validTicketCounterText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/validTicketTitle"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="@string/ticket_countdown_text"
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:textSize="22sp" />
-
-        <TextView
-            android:id="@+id/validTicketCounter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/validTicketCounterText"
-            android:layout_margin="20dp"
-            android:text="@string/ticket_countdown_default"
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:textSize="22sp" />-->
     </RelativeLayout>
 
     <!--<android.support.design.widget.FloatingActionButton
