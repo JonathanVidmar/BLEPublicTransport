@@ -46,3 +46,15 @@ Jonathan worked on estimating distances to the beacon, to be able to know when t
 **Jacob** 
 Jacob worked on the new application, called the Gate app. Creating the application and then making it as a Bluetooth server where nearby devices can connect to, through bluetooth pairing, to open the gates. This was more difficult than we first thought, and in the end it didn't really work as well as we hoped. A few other ways was investigated (using BLE all the way or by connecting to a webserver) which we will talk more about in the report. It was decided that we would stick with our bluetooth solution because it would take to much time to implement anything else and for our use cases it would not make any difference.
 
+### Week nine
+This week we prepared for our usability tests and performed them. We started by writing a usability test plan, and on thursday and friday we performed the tests on a few persons. Friday afternoon was spent analysing the results from the tests.
+
+### Week ten
+This week started by going through the new iterration. We realised that one of the things we were going to do during this iterration was unneccesairy and decided together with our supervisor not to do it. Instead we will focus this iterration on improving the system related to the feedback we got from the usability tests.
+
+**Jonathan**
+Jonathan has been improving the Kalman filter used in the distance estimation since the tests showed our distance calculations was off. 
+
+**Jacob**
+Jacob has been working on improving the user interface related to the results of the usability tests.
+

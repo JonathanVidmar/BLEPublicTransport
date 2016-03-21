@@ -28,14 +28,14 @@
                 android:id="@+id/currentStationShortLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/placeholder_current_station_abbreviation"
+                android:text="@string/ticket_placeholder_current_station_abbreviation"
                 android:textColor="@android:color/white"
                 android:textSize="28sp"/>
             <TextView
                 android:id="@+id/currentStationLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/placeholder_current_station_name"
+                android:text="@string/ticket_placeholder_current_station_name"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"/>
         </LinearLayout>
@@ -51,14 +51,14 @@
                 android:id="@+id/destStationShortLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/placeholder_destination_abbreviation"
+                android:text="@string/ticket_placeholder_destination_abbreviation"
                 android:textColor="@android:color/white"
                 android:textSize="28sp"/>
             <TextView
                 android:id="@+id/destStationLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/placeholder_destination_name"
+                android:text="@string/ticket_placeholder_destination_name"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"/>
         </LinearLayout>
@@ -77,21 +77,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bought ticket"
+                    android:text="@string/ticket_bought_ticket"
                     android:textColor="#95989A"
                     android:textSize="12sp"/>
                 <TextView
                     android:id="@+id/boughtTimeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/placeholder_time"
+                    android:text="@string/ticket_placeholder_time"
                     android:textColor="@android:color/black"
                     android:textSize="28sp"/>
                 <TextView
                     android:id="@+id/boughtDayLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/placeholder_date"
+                    android:text="@string/ticket_placeholder_date"
                     android:textAlignment="center"
                     android:textColor="#95989A"
                     android:textSize="12sp"/>
@@ -106,7 +106,7 @@
                     android:id="@+id/typeOfVehicleLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Train/Bus"
+                    android:text="@string/ticket_transportation_type"
                     android:textColor="#95989A"
                     android:textSize="12sp"/>
                 <RelativeLayout
@@ -140,21 +140,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Valid until"
+                    android:text="@string/ticket_valid_until"
                     android:textColor="#95989A"
                     android:textSize="12sp"/>
                 <TextView
                     android:id="@+id/validUntilTimeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/placeholder_time"
+                    android:text="@string/ticket_placeholder_time"
                     android:textColor="@android:color/black"
                     android:textSize="28sp"/>
                 <TextView
                     android:id="@+id/validDayLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/placeholder_date"
+                    android:text="@string/ticket_placeholder_date"
                     android:textAlignment="center"
                     android:textColor="#95989A"
                     android:textSize="12sp"/>
@@ -170,7 +170,7 @@
                 android:id="@+id/nextDepartureLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NEXT DEPARTURE"
+                android:text="@string/ticket_next_departure"
                 android:textColor="#95989A"
                 android:textSize="12sp"
                 />
@@ -179,7 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nextDepartureLabel"
-                android:text="Pågatåg"
+                android:text="@string/ticket_placeholder_transport"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 />
@@ -189,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nextDeparture"
                 android:layout_marginTop="10dp"
-                android:text="TIME TO NEXT DEPARTURE"
+                android:text="@string/ticket_time_to_next_departure"
                 android:textColor="#95989A"
                 android:textSize="12sp"
                 />
@@ -198,7 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/timeOfDepartureLabel"
-                android:text="@string/placeholder_time"
+                android:text="@string/ticket_placeholder_time"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
                 />
@@ -210,7 +210,7 @@
                     android:id="@+id/trackLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TRACK NUMBER"
+                    android:text="@string/ticket_track_number"
                     android:textColor="#95989A"
                     android:textSize="12sp"
                     />
@@ -219,7 +219,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/trackLabel"
-                    android:text="10B"
+                    android:text="@string/ticket_placeholder_track_number"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     />
@@ -229,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/track"
                     android:layout_marginTop="10dp"
-                    android:text="DISTANCE TO TRACK"
+                    android:text="@string/ticket_distance_to_track"
                     android:textColor="#95989A"
                     android:textSize="12sp"
                     />
@@ -238,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/distanceToTrackLabel"
-                    android:text="11 m"
+                    android:text="@string/ticket_placeholder_distance_to_track"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     />

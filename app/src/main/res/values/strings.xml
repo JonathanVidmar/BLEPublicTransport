@@ -42,6 +42,17 @@
     <string name="payment_choose_your_destination">Choose your destination:</string>
     <string name="payment_valid_text">Ticket is valid for 2 hours</string>
     <string name="payment_buy_button_text">Buy ticket</string>
+    <string name="payment_dialog_cancel">Cancel</string>
+
+    <!-- Buy ticket dialog -->
+    <string name="dialog_ticket_summery">TICKET SUMMERY</string>
+    <string name="dialog_summary_labels">From:\nTo:\nValid until:\nPrice:</string>
+    <string name="dialog_summary_placeholders">Malmö C\nLund C\n14:22\n39kr</string>
+    <string name="dialog_payment_options">Payment options:</string>
+    <string name="dialog_add_card">Add card</string>
+    <string name="dialog_plus">+</string>
+    <string name="dialog_visa_code">XXXX XXXX XXXX 1454</string>
+    <string name="dialog_mastercard_code">XXXX XXXX XXXX 5467</string>
 
     <!-- Nearby fragment -->
     <string name="station_no_nearby_text">No station near you</string>
@@ -56,12 +67,22 @@
     <string name="ticket_countdown_text">Valid countdown:</string>
     <string name="ticket_text">Ticket </string>
     <string name="ticket_countdown_default">0</string>
-    <string name="placeholder_current_station_name">Lund central</string>
-    <string name="placeholder_current_station_abbreviation">LU</string>
-    <string name="placeholder_destination_name">Malmö central</string>
-    <string name="placeholder_destination_abbreviation">MLM</string>
-    <string name="placeholder_time">08.00</string>
-    <string name="placeholder_date">Wed 07 Sep</string>
+    <string name="ticket_placeholder_current_station_name">Lund central</string>
+    <string name="ticket_placeholder_current_station_abbreviation">LU</string>
+    <string name="ticket_placeholder_destination_name">Malmö central</string>
+    <string name="ticket_placeholder_destination_abbreviation">MLM</string>
+    <string name="ticket_placeholder_time">08.00</string>
+    <string name="ticket_placeholder_date">Wed 07 Sep</string>
+    <string name="ticket_placeholder_distance_to_track">11 m</string>
+    <string name="ticket_placeholder_transport">Pågatåg</string>
+    <string name="ticket_placeholder_track_number">10 B</string>
+    <string name="ticket_distance_to_track">DISTANCE TO TRACK</string>
+    <string name="ticket_bought_ticket">Bought ticket</string>
+    <string name="ticket_transportation_type">Train/Bus</string>
+    <string name="ticket_valid_until">Valid until</string>
+    <string name="ticket_next_departure">NEXT DEPARTURE</string>
+    <string name="ticket_time_to_next_departure">TIME TO NEXT DEPARTURE</string>
+    <string name="ticket_track_number">TRACK NUMBER</string>
 
 
     <!-- Gate Connection fragment -->

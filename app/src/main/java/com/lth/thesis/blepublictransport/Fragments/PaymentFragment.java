@@ -1,14 +1,13 @@
 package com.lth.thesis.blepublictransport.Fragments;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
@@ -41,11 +39,14 @@ import java.util.Locale;
  */
 public class PaymentFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private View view;
-    private boolean isPricesDependent;
     private int dest = 0;
+    private String destination;
+    private boolean isPricesDependent;
     private boolean visaPayment = true;
     private Button visa;
     private Button mastercard;
+    private int ticketPrice;
+    private TicketHelper helper;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -55,10 +56,9 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_payment, container, false);
         setRetainInstance(true);
-
+        helper = new TicketHelper();
         SharedPreferences settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
         isPricesDependent = settings.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
-
         createChooseDestinationArea();
         createButton();
 
@@ -99,29 +99,45 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     private void showDialog(){
+        final Date validTo = new Date();
+        validTo.setTime(System.currentTimeMillis() + (120 * 60 * 1000));
+        SimpleDateFormat timeFormatter = new SimpleDateFormat("HH.mm", Locale.US);
+
+        String summeryText = "";
+        if (isPricesDependent) {
+            Resources res = getResources();
+            String[] destinations = res.getStringArray(R.array.destination_array);
+            destination = destinations[dest];
+            summeryText = TicketHelper.homeStation.name +  "\n" + destination + "\n" + timeFormatter.format(validTo) + "\n" + ticketPrice + " kr";
+        }
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         AlertDialog alert = new AlertDialog.Builder(getActivity())
                 .setView(inflater.inflate(R.layout.dialog_payment, null))
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.payment_buy_button_text), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        performPayment();
+                        performPayment(destination, validTo);
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.payment_dialog_cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }
                 }).create();
         alert.show();
+
         visa = (Button) alert.findViewById(R.id.visaButton);
         mastercard = (Button) alert.findViewById(R.id.mastercardButton);
 
+        TextView dialog_description_box = (TextView) alert.findViewById(R.id.dialog_description_box);
+        dialog_description_box.setText(summeryText);
+        final int selectedColor = ContextCompat.getColor(getActivity(), R.color.color_dialog_selected);
         visa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!visaPayment) {
                     visaPayment = true;
-                    visa.setBackgroundColor(Color.parseColor("#EEF4FC"));
+                    visa.setBackgroundColor(selectedColor);
                     mastercard.setBackgroundColor(Color.WHITE);
                 }
             }
@@ -133,15 +149,13 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                 if (visaPayment) {
                     visaPayment = false;
                     visa.setBackgroundColor(Color.WHITE);
-                    mastercard.setBackgroundColor(Color.parseColor("#EEF4FC"));
+                    mastercard.setBackgroundColor(selectedColor);
                 }
             }
         });
     }
 
-    private void performPayment(){
-        Date validTo = new Date();
-        validTo.setTime(System.currentTimeMillis() + (120 * 60 * 1000));
+    private void performPayment(String destination, Date validTo){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         String dateString = formatter.format(validTo);
         Date boughtDate = new Date();
@@ -155,13 +169,8 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         editor.apply();
 
         ShowTicketFragment fragment = new ShowTicketFragment();
-        if (isPricesDependent) {
-            Resources res = getResources();
-            String[] destinations = res.getStringArray(R.array.destination_array);
-            final String destination = destinations[dest];
-            TicketHelper helper = new TicketHelper();
-            fragment.destination = helper.destinationsMap.get(destination);;
-        }
+
+        if (isPricesDependent) { fragment.destination = helper.destinationsMap.get(destination);}
 
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
         app.notificationHandler.update(NotificationHandler.VALID_TICKET_AVAILABLE);
@@ -176,8 +185,9 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         String[] destinations = res.getStringArray(R.array.destination_array);
         final String destination =  destinations[pos];
         int[] prices = res.getIntArray(R.array.prices);
-        final int price =  prices[pos];
         dest = pos;
+        ticketPrice = prices[pos];
+
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -186,7 +196,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                 Resources res = getResources();
                 infoText.setText(String.format(res.getString(R.string.payment_ticket_text), TicketHelper.homeStation.name, destination));
                 TextView priceTag = (TextView) getActivity().findViewById(R.id.priceTag);
-                priceTag.setText(String.format(res.getString(R.string.payment_price_tag), price));
+                priceTag.setText(String.format(res.getString(R.string.payment_price_tag), ticketPrice));
             }
         });
     }
