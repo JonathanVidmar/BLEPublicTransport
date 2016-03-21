@@ -11,4 +11,6 @@
     <color name="colorSuccess">#74cf85</color>
     <color name="colorFailure">#eb6763</color>
 
+    <color name="color_dialog_selected">#EEF4FC</color>
+    <color name="color_dialog_text">#838588</color>
 </resources>
