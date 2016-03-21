@@ -43,7 +43,7 @@ public class BeaconStatistics {
                 .Q(16.0)
                 */
                 // filter for RSSI
-                .R(5)
+                .R(10)
                 .Q(60.0)
                 .build();
     }
@@ -61,7 +61,7 @@ public class BeaconStatistics {
     }
 
     private void calculateDistance(double txPower, double movementState) {
-        double n = 2.5;   // Signal propogation exponent
+        double n = 2;   // Signal propogation exponent
         double d0 = 0.89976;  // Reference distance in meters, taken from altbeacon
         double C = 0;   // Gaussian variable for mitigating flat fading
 

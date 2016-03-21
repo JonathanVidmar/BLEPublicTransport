@@ -19,6 +19,8 @@ public class KalmanFilter {
     private double C;
     private double cov;
     private double x;   // estimated signal without noise
+    private double x1;
+    private double x2;
 
     /**
      * Create 1-dimensional kalman filter
@@ -57,20 +59,22 @@ public class KalmanFilter {
 
         if (Double.isNaN(x)) {
             x = (1 / C) * z;
+            x1 = x;
+            x2 = x1;
             cov = (1 / C) * Q * (1 / C);
         } else {
 
              R = u == 1 ? R : 0.01 * R;
 
             // Compute prediction
-            double predX = (A * x) + (B * u);
+            double predX = (A * x) + (x - x1)/2 /*(B * u) */;
             double predCov = ((A * cov) * A) + R;
 
             // Kalman gain
             double K = predCov * C * (1 / ((C * predCov * C) + Q));
 
             // Correction
-
+            x1 = x;
             x = predX + K * (z - (C * predX));
             cov = predCov - (K * C * predCov);
         }
