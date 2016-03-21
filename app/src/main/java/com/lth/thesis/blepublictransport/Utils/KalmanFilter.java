@@ -64,10 +64,11 @@ public class KalmanFilter {
             cov = (1 / C) * Q * (1 / C);
         } else {
 
-             R = u == 1 ? R : 0.01 * R;
+            // Calculate previous update step
+            B = (x - x1)/2;
 
             // Compute prediction
-            double predX = (A * x) + (x - x1)/2 /*(B * u) */;
+            double predX = (A * x) + (B * u);
             double predCov = ((A * cov) * A) + R;
 
             // Kalman gain

@@ -1,10 +1,12 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
-import com.lth.thesis.blepublictransport.Config.SettingConstants;
+import android.util.Log;
 import com.lth.thesis.blepublictransport.Utils.KFBuilder;
 import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
 import org.altbeacon.beacon.Beacon;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
+import java.util.Arrays;
 
 /**
  * A helper class
@@ -14,22 +16,19 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
  */
 public class BeaconStatistics {
 
-    private DescriptiveStatistics stats;
-    private DescriptiveStatistics stats2;
-    private DescriptiveStatistics filteredStats;
+    private DescriptiveStatistics mostRecentRSSI;
+    private DescriptiveStatistics mostRecentTxPower;
     private KalmanFilter kf;
     private double lastCalculatedDistance;
     private double lastFilteredReading = -1;
-    private static final int WINDOW = 15;
+    private static final int WINDOW = 20;
 
     public BeaconStatistics() {
 
-        stats = new DescriptiveStatistics();
-        stats.setWindowSize(WINDOW);
-        stats2 = new DescriptiveStatistics();
-        stats2.setWindowSize(WINDOW);
-        filteredStats = new DescriptiveStatistics();
-        filteredStats.setWindowSize(6);
+        mostRecentRSSI = new DescriptiveStatistics();
+        mostRecentRSSI.setWindowSize(WINDOW);
+        mostRecentTxPower = new DescriptiveStatistics();
+        mostRecentTxPower.setWindowSize(WINDOW);
 
         lastCalculatedDistance = 0;
 
@@ -37,42 +36,36 @@ public class BeaconStatistics {
         // Värden borde baseras på faktiska statistiska mätvärden dock
         // filter(measuredValue) returnerar det uträknade värdet
         kf = new KFBuilder()
-                /*
-                // filter for distance in meters
-                .R(3)
-                .Q(16.0)
-                */
                 // filter for RSSI
-                .R(10)
-                .Q(60.0)
+                .R(10) // Initial process noise
+                .Q(60.0) // Initial measurement noise
                 .build();
     }
 
     public void updateDistance(Beacon b, double movementState, double txPower, double processNoise) {
 
-        stats.addValue(b.getRssi());
-        stats2.addValue(txPower);
-        lastFilteredReading = kf.filter(stats.getPercentile(50));
-        //double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(filteredStats.getMean()/filteredStats.getStandardDeviation(), 2)));
-        double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(stats.getMean()/stats.getStandardDeviation(), 2)));
+        mostRecentRSSI.addValue(b.getRssi());
+        mostRecentTxPower.addValue(txPower);
+
+        // Update measurement noise continually
+        double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(mostRecentRSSI.getMean()/ mostRecentRSSI.getStandardDeviation(), 2)));
         if (!Double.isInfinite(mNoise) && !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
-        kf.setProcessNoise(processNoise);
-        calculateDistance(stats2.getPercentile(50), movementState);
+        kf.setProcessNoise(processNoise);;
+        lastFilteredReading = kf.filter(mostRecentRSSI.getPercentile(50), movementState);
+        calculateDistance(mostRecentTxPower.getPercentile(50));
     }
 
-    private void calculateDistance(double txPower, double movementState) {
+    private void calculateDistance(double txPower) {
         double n = 2;   // Signal propogation exponent
         double d0 = 0.89976;  // Reference distance in meters, taken from altbeacon
         double C = 0;   // Gaussian variable for mitigating flat fading
 
-        //lastCalculatedDistance = kf.filter(d0 * Math.pow(10, (lastFilteredReading - txPower - C) / (-10 * n)), movementState);
+        // Log-distance path loss model
         lastCalculatedDistance = d0 * Math.pow(10, (lastFilteredReading - txPower - C) / (-10 * n));
-        //if (!Double.isNaN(lastCalculatedDistance)) filteredStats.addValue(lastCalculatedDistance);
 
     }
 
     public double getDistance() {
-        //return filteredStats.getPercentile(50);
         return lastCalculatedDistance;
     }
 
