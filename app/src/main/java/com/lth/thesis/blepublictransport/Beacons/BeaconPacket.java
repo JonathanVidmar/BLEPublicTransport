@@ -1,9 +1,8 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
 import org.altbeacon.beacon.Beacon;
-import org.altbeacon.beacon.Identifier;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * A class describing a packet sent with the {@link BeaconCommunicator}
@@ -13,13 +12,13 @@ import java.util.Collection;
  */
 public class BeaconPacket {
     public int type;
-    public Collection<Beacon> beacons;
+    public ArrayList<PublicTransportBeacon> beacons;
 
     public final static int ENTERED_REGION = 0;
     public final static int EXITED_REGION = 1;
     public final static int RANGED_BEACONS = 2;
 
-    public BeaconPacket(int type, Collection<Beacon> beacons) {
+    public BeaconPacket(int type, ArrayList<PublicTransportBeacon> beacons) {
         this.type = type;
         this.beacons = beacons;
     }

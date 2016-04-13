@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
+import com.lth.thesis.blepublictransport.Beacons.PublicTransportBeacon;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.Models.Train;
 import com.lth.thesis.blepublictransport.R;
 
 import org.altbeacon.beacon.Beacon;
@@ -20,29 +22,45 @@ import java.util.ArrayList;
  * Created by jacobarvidsson on 11/02/16.
  */
 public class NearbyListViewAdapter extends BaseAdapter {
-    private static ArrayList<Beacon> objecList;
+    private static ArrayList<PublicTransportBeacon> nearbyList;
+    private static ArrayList<Train> arrivalList;
+    private static boolean showsNearby = true;
 
     private LayoutInflater mInflater;
     private BLEPublicTransport app;
 
-    public NearbyListViewAdapter(Context fragment, ArrayList<Beacon> results){
-        objecList = results;
+    public NearbyListViewAdapter(Context fragment, ArrayList<PublicTransportBeacon> results){
+        nearbyList = results;
         mInflater = LayoutInflater.from(fragment);
         app = (BLEPublicTransport) fragment.getApplicationContext();
     }
 
-    public void updateList(ArrayList<Beacon> list) {
-        objecList = list;
+    public void showNearby(boolean show){
+        showsNearby = show;
     }
+
+    public void updateList(ArrayList<PublicTransportBeacon> list) {
+        nearbyList = list;
+    }
+
+    public void updateArrivalsList(ArrayList<Train> list) { arrivalList = list; }
 
     @Override
     public int getCount() {
-        return objecList.size();
+        if(showsNearby){
+            return nearbyList.size();
+        }else{
+            return arrivalList.size();
+        }
     }
 
     @Override
     public Object getItem(int arg0) {
-        return objecList.get(arg0);
+        if(showsNearby){
+            return nearbyList.get(arg0);
+        }else{
+            return arrivalList.get(arg0);
+        }
     }
 
     @Override
@@ -66,10 +84,19 @@ public class NearbyListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        if(showsNearby){
+            holder.txtname.setText(nearbyList.get(position).getName());
+            holder.destinationName.setText(helper.getDistanceText(nearbyList.get(position)));
+            holder.imageView.setImageResource(nearbyList.get(position).getImage());
+        }else{
+            Train t = arrivalList.get(position);
+            String header = t.nextArrival + " - " + t.name;
+            holder.txtname.setText(header);
+            String detailLabel = "Train leaves from track " + t.track;
+            holder.destinationName.setText(detailLabel);
+            holder.imageView.setImageResource(R.drawable.icon_tracks);
+        }
 
-        holder.txtname.setText(helper.getBeaconName(objecList.get(position)));
-        holder.destinationName.setText(helper.getDistanceText(objecList.get(position)));
-        holder.imageView.setImageResource(helper.getImage(objecList.get(position)));
 
         return convertView;
     }

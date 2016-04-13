@@ -1,15 +1,16 @@
-package com.lth.thesis.blepublictransport.Utils;
+package com.lth.thesis.blepublictransport.Models;
 
+import java.util.ArrayList;
 /**
  * Created by jacobarvidsson on 17/03/16.
  */
-public class Station {
-    public String name;
+public class Station extends AbstractBeaconPlace{
     public String image;
     public String abbreviation;
     public String transportType;
-    public String track; // This could point to a beacon or something. This is actually the
-                         // track which you take the train from, to get to this station
+    public String track;
+    public ArrayList<Train> arrivalsList;
+
 
     public Station(String name, String abbreviation, String image, String transportType, String track){
         this.name = name;

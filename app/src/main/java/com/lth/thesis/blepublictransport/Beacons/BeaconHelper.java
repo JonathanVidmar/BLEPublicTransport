@@ -1,9 +1,5 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
-import android.app.Application;
-import android.content.SharedPreferences;
-import android.util.Log;
-import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
 import com.lth.thesis.blepublictransport.Utils.MeasurementUtil;
 import org.altbeacon.beacon.Beacon;
@@ -26,7 +22,7 @@ public class BeaconHelper {
 
     public double txPower = -59;
     private double processNoise;
-    private Map<Identifier, PublicTransportBeacon> beaconList = new HashMap<>();
+    public Map<Identifier, PublicTransportBeacon> beaconList = new HashMap<>();
     private boolean selfCorrection;
     private long lastSelfCorrectingBeaconUpdate = 0;
     public MeasurementUtil measurementUtil;
@@ -35,10 +31,14 @@ public class BeaconHelper {
 
     public BeaconHelper(boolean selfCorrection) {
         this.selfCorrection = selfCorrection;
-        beaconList.put(INSTANCE_1, new PublicTransportBeacon(SIMPLE_NAME_1, THUMB_IMAGE_1));
-        beaconList.put(INSTANCE_2, new PublicTransportBeacon(SIMPLE_NAME_2, THUMB_IMAGE_2));
-        beaconList.put(INSTANCE_3, new PublicTransportBeacon(SIMPLE_NAME_3, THUMB_IMAGE_3));
+        beaconList.put(INSTANCE_1, BEACON1);
+        beaconList.put(INSTANCE_2, BEACON2);
+        beaconList.put(INSTANCE_3, BEACON3);
         measurementUtil = new MeasurementUtil();
+    }
+
+    public boolean isBeaconAtStation(Identifier instance){
+        return beaconList.get(instance).getType() == BEACON_TYPE_STATION;
     }
 
     public void lostRegionInstance(Identifier instance) {
@@ -74,15 +74,15 @@ public class BeaconHelper {
      * @param beacon, the beacon of which distance to is to be returned
      * @return the text to be displayed.
      */
-    public String getDistanceText(Beacon beacon) {
-        double distance = getDistance(beacon);
+    public String getDistanceText(PublicTransportBeacon beacon) {
+        double distance = beacon.getDistance();
         DecimalFormat df = new DecimalFormat("#.#");
         df.setRoundingMode(RoundingMode.CEILING);
         return df.format(distance) + " meters";
     }
 
     public double getDistance(Beacon beacon) {
-        return beaconList.get(beacon.getId2()).getDistance();
+        return beacon.getDistance();
     }
 
     public void updateBeaconDistances(Collection<Beacon> beacons, double movementState) {

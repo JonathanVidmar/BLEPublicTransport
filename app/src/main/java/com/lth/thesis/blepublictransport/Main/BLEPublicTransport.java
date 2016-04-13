@@ -6,10 +6,12 @@ import android.bluetooth.BluetoothDevice;
 import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.View;
 
 import com.lth.thesis.blepublictransport.Beacons.BeaconCommunicator;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
+import com.lth.thesis.blepublictransport.Beacons.PublicTransportBeacon;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.BluetoothClient.BluetoothClient;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
@@ -23,8 +25,12 @@ import org.altbeacon.beacon.startup.BootstrapNotifier;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class BLEPublicTransport extends Application implements BootstrapNotifier, BeaconConsumer {
@@ -47,6 +53,9 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     // Public states
     public int connectionState = -1;
     public boolean active = true;
+
+    private HashMap<String, Beacon> foundBeacons = new HashMap<>();
+
 
     public void onCreate() {
         super.onCreate();
@@ -175,7 +184,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 beaconHelper.updateBeaconDistances(beacons, walkDetectionEnabled() ? walkDetection.getState() : 1);
-                beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, beacons));
+                beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, sortedListOfBeacons(beacons)));
 
                 if (simulatingGate()) {
                     for (Beacon b : beacons) {
@@ -195,6 +204,47 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Called when ranging has found nearby beacons.
+     * It updates each beacon's value in the HashMap: foundBeacons and then calls sortList()
+     * @param  beacons the beacons found by ranging.
+     */
+    public ArrayList<PublicTransportBeacon> sortedListOfBeacons(Collection<Beacon> beacons) {
+        for (Beacon b : beacons) {
+
+            String beaconName = beaconHelper.getBeaconName(b);
+            foundBeacons.put(beaconName, b);
+        }
+        return sortList();
+    }
+
+    /* Parses all the found beacons and sorts them in order of distance. */
+    public ArrayList<PublicTransportBeacon> sortList() {
+        ArrayList<PublicTransportBeacon> list = new ArrayList<>();
+        ArrayList<Beacon> temp = new ArrayList<>();
+
+        for (String key : foundBeacons.keySet()) {
+            temp.add(foundBeacons.get(key));
+        }
+        Collections.sort(temp, new Comparator<Beacon>() {
+            @Override
+            public int compare(Beacon b2, Beacon b1) {
+                if (beaconHelper.getDistance(b1) < beaconHelper.getDistance(b2)) {
+                    return 1;
+                } else if (beaconHelper.getDistance(b1) > beaconHelper.getDistance(b2)) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        for(Beacon b: temp){
+            list.add(beaconHelper.beaconList.get(b.getId2()));
+        }
+        return list;
     }
 
     public BeaconCommunicator getBeaconCommunicator() {

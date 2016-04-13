@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
-import com.lth.thesis.blepublictransport.Utils.Station;
+import com.lth.thesis.blepublictransport.Models.Station;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.R;
-import com.lth.thesis.blepublictransport.Utils.TicketHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -107,8 +107,8 @@ public class ShowTicketFragment extends Fragment {
         nextDepartureLabel.setText(destination.transportType);
         trackNumberLabel.setText(destination.track);
 
-        currentStationLabel.setText(TicketHelper.homeStation.name);
-        currentStationShortLabel.setText(TicketHelper.homeStation.abbreviation);
+        currentStationLabel.setText(BeaconConstants.HOME_STATION.name);
+        currentStationShortLabel.setText(BeaconConstants.HOME_STATION.abbreviation);
     }
 
     /* Initiates the timer and updates the view. */

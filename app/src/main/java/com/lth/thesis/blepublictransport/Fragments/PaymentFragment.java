@@ -19,16 +19,20 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.Models.Station;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.R;
-import com.lth.thesis.blepublictransport.Utils.TicketHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+
+import static com.lth.thesis.blepublictransport.Config.BeaconConstants.*;
 
 /**
  * A simple {@link Fragment} subclass
@@ -46,7 +50,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
     private Button visa;
     private Button mastercard;
     private int ticketPrice;
-    private TicketHelper helper;
+    public HashMap<String, Station> destinationsMap = new HashMap<>();
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -56,13 +60,20 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_payment, container, false);
         setRetainInstance(true);
-        helper = new TicketHelper();
+        createDestinations();
         SharedPreferences settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
         isPricesDependent = settings.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
         createChooseDestinationArea();
         createButton();
 
         return view;
+    }
+
+    public void createDestinations(){
+        destinationsMap.put("Helsingborg central", HSB_STATION);
+        destinationsMap.put("Ystad station", YSD_STATION);
+        destinationsMap.put("Malmö central", MLM_STATION);
+        destinationsMap.put("Köpenhamn central", CPH_STATION);
     }
 
     @Override
@@ -108,7 +119,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
             Resources res = getResources();
             String[] destinations = res.getStringArray(R.array.destination_array);
             destination = destinations[dest];
-            summeryText = TicketHelper.homeStation.name +  "\n" + destination + "\n" + timeFormatter.format(validTo) + "\n" + ticketPrice + " kr";
+            summeryText = BeaconConstants.HOME_STATION.name +  "\n" + destination + "\n" + timeFormatter.format(validTo) + "\n" + ticketPrice + " kr";
         }
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -170,7 +181,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
 
         ShowTicketFragment fragment = new ShowTicketFragment();
 
-        if (isPricesDependent) { fragment.destination = helper.destinationsMap.get(destination);}
+        if (isPricesDependent) { fragment.destination = destinationsMap.get(destination);}
 
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
         app.notificationHandler.update(NotificationHandler.VALID_TICKET_AVAILABLE);
@@ -194,7 +205,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
             public void run() {
                 TextView infoText = (TextView) getActivity().findViewById(R.id.paymentInfoText);
                 Resources res = getResources();
-                infoText.setText(String.format(res.getString(R.string.payment_ticket_text), TicketHelper.homeStation.name, destination));
+                infoText.setText(String.format(res.getString(R.string.payment_ticket_text), BeaconConstants.HOME_STATION.name, destination));
                 TextView priceTag = (TextView) getActivity().findViewById(R.id.priceTag);
                 priceTag.setText(String.format(res.getString(R.string.payment_price_tag), ticketPrice));
             }

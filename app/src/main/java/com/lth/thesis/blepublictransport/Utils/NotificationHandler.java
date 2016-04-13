@@ -74,7 +74,7 @@ public class NotificationHandler {
         PendingIntent nearbyPendingIntent = PendingIntent.getActivity(application.getApplicationContext(),0,nearbyFragmentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action nearbyAction = new NotificationCompat.Action(R.drawable.ic_location_on_black_24dp,"Nearby", nearbyPendingIntent);
         return new NotificationCompat.Builder(application)
-                .setContentTitle("Welcome to King's Cross Station")
+                .setContentTitle("Welcome to Lunds Central Station")
                 .setContentText("Swipe down to view options")
                 .setSmallIcon(R.drawable.ic_notification_bus)
                 .setColor(ContextCompat.getColor(application.getApplicationContext(), R.color.colorAccent))

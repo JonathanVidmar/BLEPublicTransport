@@ -1,0 +1,66 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/header_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_lund"/>
+    <TextView
+        android:id="@+id/found_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:paddingTop="65dp"
+        android:paddingBottom="65dp"
+        android:gravity="center"
+        android:text="@string/beacons_lost"
+        android:textColor="#FFF"
+        android:textSize="25sp" />
+    <View
+        android:layout_width="match_parent"
+        android:id="@+id/tabDividerOne"
+        android:layout_below="@+id/found_label"
+        android:layout_height="1dp"
+        android:background="@color/colorDividerLight" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tabDividerOne"
+        android:id="@+id/tabs">
+        <Button
+            android:id="@+id/nearbyTabButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorIcons"
+            android:textColor="@color/colorAccent"
+            android:text="Nearby"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorDividerLight" />
+        <Button
+            android:id="@+id/timetableTabButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:background="@color/colorIcons"
+            android:layout_weight="1"
+            android:text="Timetable"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:id="@+id/tabDivider"
+        android:layout_below="@+id/tabs"
+        android:layout_height="1dp"
+        android:background="@color/colorDividerLight" />
+    <ListView
+        android:id="@+id/locationItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabDivider" />
+</RelativeLayout>

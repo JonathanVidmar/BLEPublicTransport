@@ -1,19 +1,29 @@
 package com.lth.thesis.blepublictransport.Fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Beacons.PublicTransportBeacon;
+import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
+import com.lth.thesis.blepublictransport.Main.MainActivity;
+import com.lth.thesis.blepublictransport.Models.Train;
 import com.lth.thesis.blepublictransport.Utils.NearbyListViewAdapter;
 import com.lth.thesis.blepublictransport.R;
 
 import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.Identifier;
+import org.w3c.dom.Text;
 
 import java.util.*;
 
@@ -30,6 +40,9 @@ public class NearbyFragment extends AbstractObserverFragment {
     private HashMap<String, Beacon> foundBeacons = new HashMap<>();
     private NearbyListViewAdapter mAdapter;
     private BeaconHelper helper;
+    private ArrayList<Train> arrivalList = new ArrayList<>();
+    private boolean isNearbyMode = true;
+
 
     public NearbyFragment() {
         // Required empty public constructor
@@ -37,13 +50,53 @@ public class NearbyFragment extends AbstractObserverFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ArrayList<Beacon> items = new ArrayList<>();
-
-        mAdapter = new NearbyListViewAdapter(getActivity(), items);
+        View view = inflater.inflate(R.layout.nearby_fragment, container, false);
+        addTrains();
+        mAdapter = new NearbyListViewAdapter(getActivity(), new ArrayList<PublicTransportBeacon>());
+        mAdapter.updateArrivalsList(arrivalList);
         listView = (ListView) view.findViewById(R.id.locationItems);
         listView.setAdapter(mAdapter);
         listView.setVisibility(View.INVISIBLE);
+
+        final Button nearbyButton = (Button) view.findViewById(R.id.nearbyTabButton);
+        final Button timeTableButton = (Button) view.findViewById(R.id.timetableTabButton);
+
+        nearbyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isNearbyMode){
+                    isNearbyMode = true;
+                    mAdapter.showNearby(true);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            nearbyButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                            timeTableButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryText));
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
+
+        timeTableButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isNearbyMode){
+                    mAdapter.showNearby(false);
+                    isNearbyMode = false;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            timeTableButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                            nearbyButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryText));
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
+
 
         return view;
     }
@@ -62,14 +115,24 @@ public class NearbyFragment extends AbstractObserverFragment {
         if (helper.currentlyInMainRegion()) enteredStation();
     }
 
+    public void addTrains(){
+        arrivalList.add(new Train("Pågatåg", "2", "12.01"));
+        arrivalList.add(new Train("Oresundståg", "1", "12.22"));
+        arrivalList.add(new Train("Oresundståg", "3", "12.37"));
+        arrivalList.add(new Train("SJ", "6", "13.02"));
+        arrivalList.add(new Train("Pågatåg", "16", "13.24"));
+        arrivalList.add(new Train("Öresundståg", "2", "13.43"));
+
+    }
+
     /* Runs when beacons is in range and updates the views components. */
     public void enteredStation() {
-        updateLocation(getString(R.string.station_entered_text), View.VISIBLE);
+        updateLocation(getString(R.string.beacons_found), View.INVISIBLE);
     }
 
     /* Runs when beacons out of range and updates the views components. */
     public void leftStation() {
-        updateLocation(getString(R.string.station_no_nearby_text), View.INVISIBLE);
+        updateLocation(getString(R.string.beacons_lost), View.INVISIBLE);
     }
 
     /**
@@ -95,44 +158,27 @@ public class NearbyFragment extends AbstractObserverFragment {
      * It updates each beacon's value in the HashMap: foundBeacons and then calls sortList()
      * @param  beacons the beacons found by ranging.
      */
-    public void foundObjectsNear(Collection<Beacon> beacons) {
-        for (Beacon b : beacons) {
-            String beaconName = helper.getBeaconName(b);
-            foundBeacons.put(beaconName, b);
-        }
-        sortList();
-    }
-
-    /* Parses all the found beacons and sorts them in order of distance. */
-    public void sortList() {
-        ArrayList<Beacon> list = new ArrayList<>();
-            for (String key : foundBeacons.keySet()) {
-                list.add(foundBeacons.get(key));
-            }
-            Collections.sort(list, new Comparator<Beacon>() {
-                @Override
-                public int compare(Beacon b2, Beacon b1) {
-                    if (helper.getDistance(b1) < helper.getDistance(b2)) {
-                        return 1;
-                    } else if (helper.getDistance(b1) > helper.getDistance(b2)) {
-                        return -1;
-                    } else {
-                        return 0;
+    public void foundObjectsNear(final ArrayList<PublicTransportBeacon> beacons) {
+        Identifier closestID = beacons.get(0).getID();
+        if(helper.isBeaconAtStation(closestID)){
+            if(isNearbyMode){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.updateList(beacons);
+                        mAdapter.notifyDataSetChanged();
                     }
-                }
-            });
-        updateList(list);
-    }
-
-    /* Updates the list in the adapter and notifies it of changes. */
-    private void updateList(final ArrayList<Beacon> list){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.updateList(list);
-                mAdapter.notifyDataSetChanged();
+                });
             }
-        });
+            if(listView.getVisibility() != View.VISIBLE){
+                updateLocation("Welcome to Lunds Central Station", View.VISIBLE);
+            }
+        }else{
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            Fragment train = new TrainFragment();
+            fragmentTransaction.replace(R.id.fragment_container, train, MainActivity.TRAIN_FRAGMENT);
+            fragmentTransaction.commit();
+        }
     }
 
     /* Observer method from the application. Receives the beacon information. */
@@ -143,7 +189,7 @@ public class NearbyFragment extends AbstractObserverFragment {
         }else if(p.type == BeaconPacket.EXITED_REGION){
             leftStation();
         }else if(p.type == BeaconPacket.RANGED_BEACONS){
-            foundObjectsNear(p.beacons);
+            if(p.beacons.size() > 0){ foundObjectsNear(p.beacons); }
         }
     }
 }
