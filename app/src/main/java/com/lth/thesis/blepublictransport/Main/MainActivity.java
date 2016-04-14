@@ -18,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import android.view.View;
@@ -81,16 +82,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         performFragmentTransactionFromIntent();
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final NavigationView nav = (NavigationView) findViewById(R.id.nav_view);
         //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         final ImageView menuButton = (ImageView) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(menuOpen){
-                    drawer.openDrawer(drawer);
-                }else{
-                    drawer.closeDrawer(drawer);
-                }
+                drawer.openDrawer(nav);
             }
         });
         //drawer.addDrawerListener(toggle);
