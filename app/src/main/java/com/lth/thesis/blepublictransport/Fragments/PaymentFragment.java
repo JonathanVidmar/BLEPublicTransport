@@ -71,6 +71,8 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         createChooseDestinationArea();
         createButton();
 
+        MainActivity a = (MainActivity) getActivity();
+        a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorIcons));
         return view;
     }
 

@@ -96,7 +96,8 @@ public class NearbyFragment extends AbstractObserverFragment {
                 }
             }
         });
-
+        MainActivity a = (MainActivity) getActivity();
+        a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorIcons));
 
         return view;
     }

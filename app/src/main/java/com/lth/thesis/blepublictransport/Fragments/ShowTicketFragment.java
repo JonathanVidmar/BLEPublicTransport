@@ -1,9 +1,11 @@
 package com.lth.thesis.blepublictransport.Fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.Models.Station;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.R;
@@ -77,6 +80,8 @@ public class ShowTicketFragment extends Fragment {
         initTimer();
         //addRemoveButton();
 
+        MainActivity a = (MainActivity) getActivity();
+        a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryText));
         return view;
     }
 

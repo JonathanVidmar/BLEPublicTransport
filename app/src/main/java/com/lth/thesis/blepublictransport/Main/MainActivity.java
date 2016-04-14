@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BLEPublicTransport application;
     //private Toolbar toolbar;
     private Fragment currentFragment;
-    private boolean menuOpen = false;
+    private ImageView menuButton;
 
     // SettingConstants
     public static final String STATION_FRAGMENT = "stationFragment";
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final NavigationView nav = (NavigationView) findViewById(R.id.nav_view);
         //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        final ImageView menuButton = (ImageView) findViewById(R.id.menu_button);
+        menuButton = (ImageView) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void changeMenuColor(int color){
+        menuButton.setColorFilter(color);
     }
 
     private void performFragmentTransactionFromIntent() {
@@ -221,8 +225,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ((AbstractObserverFragment) currentFragment).update(data);
             }
         }
-
-
     }
 
     private void resetBackgroundColor() {
