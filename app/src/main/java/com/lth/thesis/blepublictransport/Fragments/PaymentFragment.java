@@ -5,16 +5,19 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,6 +47,7 @@ import static com.lth.thesis.blepublictransport.Config.BeaconConstants.*;
 public class PaymentFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private View view;
     private int dest = 0;
+    private ImageView headerImage;
     private String destination;
     private boolean isPricesDependent;
     private boolean visaPayment = true;
@@ -61,6 +65,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         view = inflater.inflate(R.layout.fragment_payment, container, false);
         setRetainInstance(true);
         createDestinations();
+        headerImage = (ImageView) view.findViewById(R.id.header_image_dest);
         SharedPreferences settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
         isPricesDependent = settings.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
         createChooseDestinationArea();
@@ -199,13 +204,14 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         dest = pos;
         ticketPrice = prices[pos];
 
-
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 TextView infoText = (TextView) getActivity().findViewById(R.id.paymentInfoText);
                 Resources res = getResources();
                 infoText.setText(String.format(res.getString(R.string.payment_ticket_text), BeaconConstants.HOME_STATION.name, destination));
+                int imgid = getResources().getIdentifier("com.lth.thesis.blepublictransport:drawable/" + destinationsMap.get(destination).image, null, null);
+                headerImage.setImageResource(imgid);
                 TextView priceTag = (TextView) getActivity().findViewById(R.id.priceTag);
                 priceTag.setText(String.format(res.getString(R.string.payment_price_tag), ticketPrice));
             }

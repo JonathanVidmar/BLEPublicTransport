@@ -3,13 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.compscitutorials.basigarcia.navigationdrawervideotutorial.GalleryFragment">
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/img_train"
+        android:scaleType="centerCrop"
+        android:id="@+id/header_image_dest"/>
     <RelativeLayout
         android:id="@+id/destinationView"
+        android:layout_below="@+id/header_image_dest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:paddingBottom="20dp">
+        android:paddingBottom="10dp">
 
         <TextView
             android:id="@+id/chooseDestinationLabel"
@@ -19,7 +24,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
             android:text="@string/payment_choose_your_destination"
-            android:textColor="#FFF"
+            android:textColor="#000"
             android:textSize="22sp" />
 
         <Spinner
@@ -27,7 +32,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/chooseDestinationLabel"
-            android:layout_margin="20dp" />
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"/>
     </RelativeLayout>
 
     <TextView
@@ -37,7 +43,7 @@
         android:layout_below="@+id/destinationView"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:text="@string/payment_ticket_text_default"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryText"
