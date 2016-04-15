@@ -51,7 +51,7 @@ This week we prepared for our usability tests and performed them. We started by 
 
 ### Week ten
 Skiing in the alpes.
-
+[[https://github.com/JonathanVidmar/BLEPublicTransport/blob/master/important_image.jpg|alt=skiing]]
 ### Week eleven
 This week started by going through the new iterration. We realised that one of the things we were going to do during this iterration was unneccesairy and decided together with our supervisor not to do it. Instead we will focus this iterration on improving the system related to the feedback we got from the usability tests.
 
