@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/img_lund"/>
+        android:src="@drawable/img_lund"
+        android:contentDescription="@string/image_description"/>
     <TextView
         android:id="@+id/found_label"
         android:layout_width="match_parent"
@@ -38,7 +39,7 @@
             android:layout_weight="1"
             android:background="@color/colorIcons"
             android:textColor="@color/colorAccent"
-            android:text="Nearby"/>
+            android:text="@string/nearby"/>
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
@@ -50,7 +51,7 @@
             android:textColor="@color/colorPrimaryText"
             android:background="@color/colorIcons"
             android:layout_weight="1"
-            android:text="Timetable"/>
+            android:text="@string/timetable"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"

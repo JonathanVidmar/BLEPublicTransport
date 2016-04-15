@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lth.thesis.blepublictransport.Beacons.PublicTransportBeacon;
-import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
@@ -21,9 +20,7 @@ import com.lth.thesis.blepublictransport.Models.Train;
 import com.lth.thesis.blepublictransport.Utils.NearbyListViewAdapter;
 import com.lth.thesis.blepublictransport.R;
 
-import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
-import org.w3c.dom.Text;
 
 import java.util.*;
 
@@ -37,12 +34,10 @@ import java.util.*;
  */
 public class NearbyFragment extends AbstractObserverFragment {
     private ListView listView;
-    private HashMap<String, Beacon> foundBeacons = new HashMap<>();
     private NearbyListViewAdapter mAdapter;
     private BeaconHelper helper;
     private ArrayList<Train> arrivalList = new ArrayList<>();
     private boolean isNearbyMode = true;
-
 
     public NearbyFragment() {
         // Required empty public constructor
@@ -64,6 +59,7 @@ public class NearbyFragment extends AbstractObserverFragment {
         nearbyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(!isNearbyMode){
                     isNearbyMode = true;
                     mAdapter.showNearby(true);
@@ -172,7 +168,7 @@ public class NearbyFragment extends AbstractObserverFragment {
                 });
             }
             if(listView.getVisibility() != View.VISIBLE){
-                updateLocation("Welcome to Lunds Central Station", View.VISIBLE);
+                updateLocation("Welcome to Lund's Central Station", View.VISIBLE);
             }
         }else{
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();

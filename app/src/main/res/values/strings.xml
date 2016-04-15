@@ -22,8 +22,8 @@
     <string name="settings_automatic_text">Pay automatically when approaching gate</string>
     <string name="settings_manually_text">Pay manually when approaching gate</string>
     <string name="settings_subscription_status">Has subscription?</string>
-    <string name="settings_subscription_text">You have payed for a subscription</string>
-    <string name="settings_no_subscription_text">You have not payed for a subscription</string>
+    <string name="settings_subscription_text">You have paid for a subscription</string>
+    <string name="settings_no_subscription_text">You have not paid for a subscription</string>
     <string name="settings_kalman_status">Kalman Filter System Noise</string>
     <string name="settings_kalman_value">5.0</string>
     <string name="settings_wd_status">Walk detection?</string>
@@ -57,6 +57,9 @@
     <!-- Nearby fragment -->
     <string name="beacons_lost">Searching for nearby stations...</string>
     <string name="beacons_found">You have entered a station</string>
+    <string name="nearby">Nearby</string>
+    <string name="timetable">Timetable</string>
+    <string name="image_description">Header image</string>
 
     <!-- Show ticket fragment -->
     <string name="ticket_not_valid">This ticket is no longer valid.</string>
