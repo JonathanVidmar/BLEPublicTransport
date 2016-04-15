@@ -1,14 +1,544 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.lth.thesis.blepublictransport.Fragments.TrainFragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+            android:id="@+id/header_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_train"/>
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="You are on a fucking train. Good for you." />
+            android:id="@+id/found_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:paddingTop="65dp"
+            android:paddingBottom="65dp"
+            android:gravity="center"
+            android:text="Welcome on board\nPågatåg 1042"
+            android:textColor="#FFF"
+            android:textSize="25sp"/>
 
-</FrameLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_alignParentBottom="true"
+            android:background="#666"
+            android:layout_marginBottom="20dp"/>
+
+    <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/horizontalScrollView"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="10dp"
+            android:scrollbars="none">
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="137dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:textColor="#000"
+                        android:singleLine="true"
+                        android:maxLines="3"
+                        android:text="Ystad"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:singleLine="true"
+                        android:maxLines="3"
+                        android:textColor="#000"
+                        android:text="Malmö Hyllie"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Triangeln"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Malmö C"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Burlöv"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Åkarp"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Hjärup"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:id="@+id/lundc"
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Lund C"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"
+                        android:textStyle="bold"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Gunnesbo"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Kävlinge"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Teckomatorp"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Billeberga"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Tågarp"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Vallåkra"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Gantofta"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:maxLines="3"
+                        android:singleLine="true"
+                        android:textColor="#000"
+                        android:text="Ramlösa"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="122dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="-40dp">
+
+                <com.lth.thesis.blepublictransport.Utils.VerticalTextView
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:singleLine="true"
+                        android:maxLines="3"
+                        android:textColor="#000"
+                        android:text="Helsingborg C"
+                        android:rotation="-45"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="40dp"
+                        android:textSize="17sp"
+                        android:textAlignment="gravity"
+                        android:gravity="bottom"/>
+
+                <View
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/circle_drawable"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="10dp"
+                        />
+            </RelativeLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+</RelativeLayout>

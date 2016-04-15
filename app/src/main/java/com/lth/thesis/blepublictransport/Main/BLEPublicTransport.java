@@ -71,10 +71,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(EDDYSTONE_LAYOUT));
 
         try {
-            beaconManager.setForegroundScanPeriod(120l);
-            beaconManager.setForegroundBetweenScanPeriod(0l);
-            beaconManager.setBackgroundScanPeriod(120l);
-            beaconManager.setBackgroundBetweenScanPeriod(0l);
+            //beaconManager.setForegroundScanPeriod(1100l);
+            //beaconManager.setForegroundBetweenScanPeriod(0l);
+            //beaconManager.setBackgroundScanPeriod(120l);
+            //beaconManager.setBackgroundBetweenScanPeriod(0l);
 
             beaconManager.updateScanPeriods();
         } catch (RemoteException e) {
