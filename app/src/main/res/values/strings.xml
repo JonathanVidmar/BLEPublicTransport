@@ -3,6 +3,7 @@
     <string name="app_name">Public Transport App</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="menu_button_description">Menu button image</string>
 
     <!-- Menu -->
     <string name="menu_title">Public Transport\nPrototype Application</string>
