@@ -21,7 +21,6 @@ public class SettingConstants {
     public static final String WALK_DETECTION = "walk_detection";
     public static final String SIMULATE_GATE = "simulate_gate";
 
-
     public static final double KALMAN_NOISE_MIN = 0.01;
     public static final double KALMAN_NOISE_MAX = 25.0;
 }
