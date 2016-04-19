@@ -9,6 +9,7 @@
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDividerLight">#EEEEEE</color>
     <color name="colorDivider">#B6B6B6</color>
+    <color name="colorDividerDark">#7d7d7d</color>
     <color name="colorSuccess">#74cf85</color>
     <color name="colorFailure">#eb6763</color>
 
