@@ -26,7 +26,7 @@ public class VerticalTextView extends AutofitTextView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        double mAngle = 45;
+        double mAngle = 60;
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         /*int w = getMeasuredWidth();
         int h = getMeasuredHeight();

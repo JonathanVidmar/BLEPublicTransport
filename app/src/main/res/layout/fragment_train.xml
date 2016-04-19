@@ -25,18 +25,17 @@
 
     <View
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_alignParentBottom="true"
-            android:background="#666"
-            android:layout_marginBottom="20dp"/>
+            android:layout_height="6dp"
+            android:layout_below="@+id/header_image"
+            android:background="@color/colorDividerLight"
+            android:layout_marginTop="18dp"/>
 
     <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/horizontalScrollView"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="10dp"
+            android:layout_below="@+id/header_image"
+            android:layout_marginTop="10dp"
             android:scrollbars="none">
 
         <LinearLayout
@@ -58,19 +57,20 @@
                         android:singleLine="true"
                         android:maxLines="3"
                         android:text="Ystad"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -87,19 +87,20 @@
                         android:maxLines="3"
                         android:textColor="#000"
                         android:text="Malmö Hyllie"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -116,19 +117,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Triangeln"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -145,19 +147,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Malmö C"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -174,19 +177,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Burlöv"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -203,23 +207,25 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Åkarp"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
             <RelativeLayout
+                    android:id="@+id/lastStation"
                     android:layout_width="122dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -232,19 +238,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Hjärup"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -262,20 +269,21 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Lund C"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"
+                        android:gravity="top|right"
                         android:textStyle="bold"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_current"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -292,19 +300,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Gunnesbo"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -321,19 +330,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Kävlinge"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -350,19 +360,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Teckomatorp"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -379,19 +390,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Billeberga"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -408,19 +420,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Tågarp"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -437,19 +450,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Vallåkra"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -466,19 +480,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Gantofta"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -495,19 +510,20 @@
                         android:singleLine="true"
                         android:textColor="#000"
                         android:text="Ramlösa"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
 
@@ -524,19 +540,20 @@
                         android:maxLines="3"
                         android:textColor="#000"
                         android:text="Helsingborg C"
-                        android:rotation="-45"
+                        android:rotation="-60"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
+                        android:layout_marginBottom="23dp"
                         android:textSize="17sp"
                         android:textAlignment="gravity"
-                        android:gravity="bottom"/>
+                        android:gravity="top|right"/>
 
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/circle_drawable"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/station_to_be_visited"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="50dp"
                         />
             </RelativeLayout>
         </LinearLayout>
