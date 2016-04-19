@@ -33,9 +33,8 @@ import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Observer {
     private BLEPublicTransport application;
-    //private Toolbar toolbar;
     private Fragment currentFragment;
-    private boolean menuOpen = false;
+    private ImageView menuButton;
 
     // SettingConstants
     public static final String STATION_FRAGMENT = "stationFragment";
@@ -54,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
         application = (BLEPublicTransport) getApplication();
         application.active = true;
@@ -83,19 +80,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         final NavigationView nav = (NavigationView) findViewById(R.id.nav_view);
-        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        final ImageView menuButton = (ImageView) findViewById(R.id.menu_button);
+        menuButton = (ImageView) findViewById(R.id.menu_button);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawer.openDrawer(nav);
             }
         });
-        //drawer.addDrawerListener(toggle);
-        //toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void changeMenuColor(int color){
+        menuButton.setColorFilter(color);
     }
 
     private void performFragmentTransactionFromIntent() {
@@ -130,27 +128,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         currentFragment = getSupportFragmentManager().findFragmentByTag(destination);
         switch (destination) {
             case STATION_FRAGMENT:
-                //toolbar.setTitle("Home");
                 if (currentFragment == null) currentFragment = new NearbyFragment();
                 break;
             case PAYMENT_FRAGMENT:
-                //toolbar.setTitle("Payment");
                 if (currentFragment == null) currentFragment = new PaymentFragment();
                 break;
             case SETTINGS_FRAGMENT:
-                //toolbar.setTitle("Settings");
                 if (currentFragment == null) currentFragment = new SettingsFragment();
                 break;
             case TICKET_FRAGMENT:
-                //toolbar.setTitle("Station");
                 if (currentFragment == null) currentFragment = new ShowTicketFragment();
                 break;
             case BLUETOOTH_PARING_FRAGMENT:
-                //toolbar.setTitle("Bluetooth");
                 if (currentFragment == null) currentFragment = new GateConnectionFragment();
                 break;
             case MEASUREMENT_FRAGMENT:
-            //toolbar.setTitle("Measurement");
             if (currentFragment == null) currentFragment = new MeasurementFragment();
             break;
         }
@@ -221,8 +213,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ((AbstractObserverFragment) currentFragment).update(data);
             }
         }
-
-
     }
 
     private void resetBackgroundColor() {

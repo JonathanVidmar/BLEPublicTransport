@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.lth.thesis.blepublictransport.BluetoothClient.BluetoothClient;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
+import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.R;
 
 /**
@@ -64,6 +65,9 @@ public class GateConnectionFragment extends AbstractObserverFragment {
 
             }
         });
+
+        MainActivity a = (MainActivity) getActivity();
+        a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryText));
         return view;
     }
 

@@ -12,7 +12,10 @@ import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.R;
 
 /**
- * Created by Jonathan on 2/17/2016.
+ * A class to handle notifications sent by the application.
+ *
+ * @author      Jacob Arvidsson & Jonathan Vidmar
+ * @version     1.1
  */
 public class NotificationHandler {
     private NotificationManager notificationManager;
@@ -20,6 +23,7 @@ public class NotificationHandler {
 
     public final static int VALID_TICKET_AVAILABLE = 0;
     public final static int NO_TICKET_AVAILABLE = 1;
+    public final static int OPEN_GATE = 2;
 
     private final static int NOTIFICATION_ID = 1;
 
@@ -37,30 +41,30 @@ public class NotificationHandler {
     }
 
     public void update(int type) {
-        NotificationCompat.Builder builder = getBuilder();
         switch (type)
         {
             case VALID_TICKET_AVAILABLE:
-                Intent ticketFragmentIntent = new Intent(application, MainActivity.class);
-                ticketFragmentIntent.putExtra("fragment", "ticket");
-                PendingIntent ticketPendingIntent = PendingIntent.getActivity(application.getApplicationContext(),1,ticketFragmentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Action ticketAction = new NotificationCompat.Action(R.drawable.ic_ticket, "Show ticket", ticketPendingIntent);
-                builder.addAction(ticketAction)
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText("You have a valid ticket."));
+                sendCustomNotification("ticket", R.drawable.ic_ticket, "Show ticket", "You have a valid ticket");
                 break;
             case NO_TICKET_AVAILABLE:
-                Intent paymentFragmentIntent = new Intent(application, MainActivity.class);
-                paymentFragmentIntent.putExtra("fragment", "payment");
-                PendingIntent paymentPendingIntent = PendingIntent.getActivity(application.getApplicationContext(),1,paymentFragmentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Action paymentAction = new NotificationCompat.Action(R.drawable.ic_add_ticket, "Buy ticket", paymentPendingIntent);
-                builder.addAction(paymentAction)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText("You currently don't have a valid ticket."));
+                sendCustomNotification("payment", R.drawable.ic_add_ticket, "Buy ticket", "You currently don't have a valid ticket.");
+                break;
+            case OPEN_GATE:
+                sendCustomNotification("gate", R.drawable.ic_ticket, "Open gate", "You are near a gate, open it by clicking the button.");
                 break;
         }
+    }
 
+    private void sendCustomNotification(String intentName, int drawableId, String buttonTitle, String message){
+        NotificationCompat.Builder builder = getBuilder();
+        Intent fragmentIntent = new Intent(application, MainActivity.class);
+        fragmentIntent.putExtra("fragment", intentName);
+        PendingIntent pendingIntent = PendingIntent.getActivity(application.getApplicationContext(), 1, fragmentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action action = new NotificationCompat.Action(drawableId, buttonTitle, pendingIntent);
+        builder.addAction(action)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
         //attaches an activity when the user clicks the notification, which we don't want?
         //builder.setContentIntent(nearbyPendingIntent);
-
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
@@ -71,7 +75,7 @@ public class NotificationHandler {
     private NotificationCompat.Builder getBuilder() {
         Intent nearbyFragmentIntent = new Intent(application, MainActivity.class);
         nearbyFragmentIntent.putExtra("fragment", "nearby");
-        PendingIntent nearbyPendingIntent = PendingIntent.getActivity(application.getApplicationContext(),0,nearbyFragmentIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent nearbyPendingIntent = PendingIntent.getActivity(application.getApplicationContext(), 0, nearbyFragmentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action nearbyAction = new NotificationCompat.Action(R.drawable.ic_location_on_black_24dp,"Nearby", nearbyPendingIntent);
         return new NotificationCompat.Builder(application)
                 .setContentTitle("Welcome to Lunds Central Station")

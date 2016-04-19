@@ -50,6 +50,9 @@ Jacob worked on the new application, called the Gate app. Creating the applicati
 This week we prepared for our usability tests and performed them. We started by writing a usability test plan, and on thursday and friday we performed the tests on a few persons. Friday afternoon was spent analysing the results from the tests.
 
 ### Week ten
+Skiing in the alpes.
+![Skiing](important_image.jpg?raw=true "Skiing")
+### Week eleven
 This week started by going through the new iterration. We realised that one of the things we were going to do during this iterration was unneccesairy and decided together with our supervisor not to do it. Instead we will focus this iterration on improving the system related to the feedback we got from the usability tests.
 
 **Jonathan**
@@ -58,3 +61,20 @@ Jonathan has been improving the Kalman filter used in the distance estimation si
 **Jacob**
 Jacob has been working on improving the user interface related to the results of the usability tests.
 
+### Week twelve
+This week has been a lot of focus on the report. We have finished writing most of the background sections, apart from a few sections we will leave until the end. We have also written a lot on the result sections, since we now have results both in the form of a prototype and as usability test results. 
+
+***Jonathan***
+Jonathan has written about Kalman filters, walk detection and self correcting beacons.
+
+***Jacob***
+Jacob has focused more on the usability test, results, starting the discussion about them, and finishing the background.
+
+###Week thirteen
+This week has focused more on the context based part of the application. The nearby page has been remade and made smarter, to show information based on the location of the user.
+
+***Jonathan***
+Jonathan started looking on what information should be displayed when the application notices that the user is on a public transport vehicle, like a train. 
+
+***Jacob*** 
+Jacob has improved the page displaying information about the current station and also started working on a unified design of the entire application.

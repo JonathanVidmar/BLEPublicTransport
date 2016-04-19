@@ -17,13 +17,10 @@ import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
 import com.lth.thesis.blepublictransport.Main.MainActivity;
-import com.lth.thesis.blepublictransport.Models.Train;
 import com.lth.thesis.blepublictransport.Utils.NearbyListViewAdapter;
 import com.lth.thesis.blepublictransport.R;
 
-import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
-import org.w3c.dom.Text;
 
 import java.util.*;
 
@@ -37,12 +34,9 @@ import java.util.*;
  */
 public class NearbyFragment extends AbstractObserverFragment {
     private ListView listView;
-    private HashMap<String, Beacon> foundBeacons = new HashMap<>();
     private NearbyListViewAdapter mAdapter;
     private BeaconHelper helper;
-    private ArrayList<Train> arrivalList = new ArrayList<>();
     private boolean isNearbyMode = true;
-
 
     public NearbyFragment() {
         // Required empty public constructor
@@ -51,9 +45,8 @@ public class NearbyFragment extends AbstractObserverFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.nearby_fragment, container, false);
-        addTrains();
         mAdapter = new NearbyListViewAdapter(getActivity(), new ArrayList<PublicTransportBeacon>());
-        mAdapter.updateArrivalsList(arrivalList);
+        mAdapter.updateArrivalsList(new ArrayList<>(BeaconConstants.ARRIVALS_LIST));
         listView = (ListView) view.findViewById(R.id.locationItems);
         listView.setAdapter(mAdapter);
         listView.setVisibility(View.INVISIBLE);
@@ -64,6 +57,7 @@ public class NearbyFragment extends AbstractObserverFragment {
         nearbyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(!isNearbyMode){
                     isNearbyMode = true;
                     mAdapter.showNearby(true);
@@ -96,7 +90,8 @@ public class NearbyFragment extends AbstractObserverFragment {
                 }
             }
         });
-
+        MainActivity a = (MainActivity) getActivity();
+        a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorIcons));
 
         return view;
     }
@@ -113,16 +108,6 @@ public class NearbyFragment extends AbstractObserverFragment {
     public void onResume(){
         super.onResume();
         if (helper.currentlyInMainRegion()) enteredStation();
-    }
-
-    public void addTrains(){
-        arrivalList.add(new Train("Pågatåg", "2", "12.01"));
-        arrivalList.add(new Train("Oresundståg", "1", "12.22"));
-        arrivalList.add(new Train("Oresundståg", "3", "12.37"));
-        arrivalList.add(new Train("SJ", "6", "13.02"));
-        arrivalList.add(new Train("Pågatåg", "16", "13.24"));
-        arrivalList.add(new Train("Öresundståg", "2", "13.43"));
-
     }
 
     /* Runs when beacons is in range and updates the views components. */
@@ -171,7 +156,7 @@ public class NearbyFragment extends AbstractObserverFragment {
                 });
             }
             if(listView.getVisibility() != View.VISIBLE){
-                updateLocation("Welcome to Lunds Central Station", View.VISIBLE);
+                updateLocation("Welcome to Lund's Central Station", View.VISIBLE);
             }
         }else{
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
