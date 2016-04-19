@@ -28,19 +28,19 @@
             android:layout_height="6dp"
             android:layout_below="@+id/header_image"
             android:background="@color/colorDividerLight"
-            android:layout_marginTop="18dp"/>
+            android:layout_marginTop="35dp"/>
 
     <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/horizontalScrollView"
             android:layout_below="@+id/header_image"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:scrollbars="none">
 
         <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="137dp"
+                android:layout_height="159dp"
                 android:orientation="horizontal"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp">
@@ -49,6 +49,13 @@
                     android:layout_width="122dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15.30"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -69,8 +76,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -79,6 +87,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.21"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -99,8 +114,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -109,6 +125,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.23"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -129,8 +152,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -139,6 +163,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.26"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -159,8 +190,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -169,6 +201,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.30"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -189,8 +228,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -199,6 +239,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.32"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -219,8 +266,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -230,6 +278,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.34"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -250,8 +305,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -282,8 +338,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_current"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -292,6 +349,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.43"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -312,8 +377,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -322,6 +388,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.49"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -342,8 +416,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -352,6 +427,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="16.55"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -372,8 +455,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -382,6 +466,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17.00"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -402,8 +494,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -412,6 +505,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17.04"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -432,8 +533,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -442,6 +544,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17.09"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -462,8 +572,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -472,6 +583,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17.14"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -492,8 +611,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -502,6 +622,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17.18"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -522,8 +650,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
 
@@ -532,6 +661,14 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_marginLeft="-40dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="17.23"
+                        android:textColor="@color/colorDivider"
+                        android:layout_marginLeft="43dp"
+                        android:textStyle="italic"/>
 
                 <com.lth.thesis.blepublictransport.Utils.VerticalTextView
                         android:layout_width="100dp"
@@ -552,8 +689,9 @@
                         android:layout_height="20dp"
                         android:background="@drawable/station_to_be_visited"
                         android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="50dp"
                         />
             </RelativeLayout>
         </LinearLayout>
