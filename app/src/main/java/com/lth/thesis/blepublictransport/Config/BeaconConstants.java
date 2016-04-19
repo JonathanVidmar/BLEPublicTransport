@@ -54,10 +54,10 @@ public class BeaconConstants {
     public static final Map<String, Station> DESTINATION_MAP;
     static {
         Map<String, Station> map = new HashMap<>();
-        map.put("Helsingborg central", HSB_STATION);
-        map.put("Ystad station", YSD_STATION);
-        map.put("Malmö central", MLM_STATION);
-        map.put("Köpenhamn central", CPH_STATION);
+        map.put(HSB_STATION.name, HSB_STATION);
+        map.put(YSD_STATION.name, YSD_STATION);
+        map.put(MLM_STATION.name, MLM_STATION);
+        map.put(CPH_STATION.name, CPH_STATION);
         DESTINATION_MAP = Collections.unmodifiableMap(map);
     }
 

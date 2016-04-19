@@ -26,7 +26,6 @@ import com.lth.thesis.blepublictransport.R;
  * @version 1.1
  */
 public class GateConnectionFragment extends AbstractObserverFragment {
-    private static final String DEBUG_TAG = "BluetoothFragment";
     private TextView statusText;
     private Button button;
     private BLEPublicTransport application;

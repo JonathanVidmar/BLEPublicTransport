@@ -26,7 +26,7 @@ import java.text.DecimalFormat;
  * A simple {@link Fragment} subclass
  * This fragment contains the settings for the application.
  *
- * @author      Jacob Arvidsson
+ * @author      Jacob Arvidsson & Jonathan Vidmar
  * @version     1.1
  */
 public class SettingsFragment extends Fragment {
