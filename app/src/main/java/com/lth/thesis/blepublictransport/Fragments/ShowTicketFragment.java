@@ -34,7 +34,6 @@ import java.util.Locale;
  * @version     1.1
  */
 public class ShowTicketFragment extends Fragment {
-    public Station destination;
     private SharedPreferences ticketPreferences;
     private View view;
     private CountDownTimer timer;
@@ -86,6 +85,9 @@ public class ShowTicketFragment extends Fragment {
     }
 
     private void configureView(){
+        String destinationString = ticketPreferences.getString(SettingConstants.BOUGHT_TICKET_DESTINATION, "");
+         Station destination = BeaconConstants.DESTINATION_MAP.get(destinationString);
+
         int id = getResources().getIdentifier("com.lth.thesis.blepublictransport:drawable/" + destination.image, null, null);
         destinationImage.setImageResource(id);
         destinationStationShortLabel.setText(destination.abbreviation);

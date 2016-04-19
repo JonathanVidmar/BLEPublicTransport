@@ -12,11 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lth.thesis.blepublictransport.Beacons.PublicTransportBeacon;
+import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
 import com.lth.thesis.blepublictransport.Main.MainActivity;
-import com.lth.thesis.blepublictransport.Models.Train;
 import com.lth.thesis.blepublictransport.Utils.NearbyListViewAdapter;
 import com.lth.thesis.blepublictransport.R;
 
@@ -36,7 +36,6 @@ public class NearbyFragment extends AbstractObserverFragment {
     private ListView listView;
     private NearbyListViewAdapter mAdapter;
     private BeaconHelper helper;
-    private ArrayList<Train> arrivalList = new ArrayList<>();
     private boolean isNearbyMode = true;
 
     public NearbyFragment() {
@@ -46,9 +45,8 @@ public class NearbyFragment extends AbstractObserverFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.nearby_fragment, container, false);
-        addTrains();
         mAdapter = new NearbyListViewAdapter(getActivity(), new ArrayList<PublicTransportBeacon>());
-        mAdapter.updateArrivalsList(arrivalList);
+        mAdapter.updateArrivalsList(new ArrayList<>(BeaconConstants.ARRIVALS_LIST));
         listView = (ListView) view.findViewById(R.id.locationItems);
         listView.setAdapter(mAdapter);
         listView.setVisibility(View.INVISIBLE);
@@ -110,16 +108,6 @@ public class NearbyFragment extends AbstractObserverFragment {
     public void onResume(){
         super.onResume();
         if (helper.currentlyInMainRegion()) enteredStation();
-    }
-
-    public void addTrains(){
-        arrivalList.add(new Train("Pågatåg", "2", "12.01"));
-        arrivalList.add(new Train("Oresundståg", "1", "12.22"));
-        arrivalList.add(new Train("Oresundståg", "3", "12.37"));
-        arrivalList.add(new Train("SJ", "6", "13.02"));
-        arrivalList.add(new Train("Pågatåg", "16", "13.24"));
-        arrivalList.add(new Train("Öresundståg", "2", "13.43"));
-
     }
 
     /* Runs when beacons is in range and updates the views components. */

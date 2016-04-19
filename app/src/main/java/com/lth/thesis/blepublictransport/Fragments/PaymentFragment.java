@@ -5,12 +5,10 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +23,12 @@ import android.widget.TextView;
 import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
-import com.lth.thesis.blepublictransport.Models.Station;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 
 import static com.lth.thesis.blepublictransport.Config.BeaconConstants.*;
@@ -45,16 +41,20 @@ import static com.lth.thesis.blepublictransport.Config.BeaconConstants.*;
  * @version     1.1
  */
 public class PaymentFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+    // View components
     private View view;
-    private int dest = 0;
     private ImageView headerImage;
-    private String destination;
+
+    // Global variables
     private boolean isPricesDependent;
+    private String destination;
+    private int ticketPrice;
+    private String[] destinationsArray;
+
+    // Dialog components
     private boolean visaPayment = true;
     private Button visa;
     private Button mastercard;
-    private int ticketPrice;
-    public HashMap<String, Station> destinationsMap = new HashMap<>();
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -62,25 +62,22 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_payment, container, false);
         setRetainInstance(true);
-        createDestinations();
+
+        view = inflater.inflate(R.layout.fragment_payment, container, false);
+        destinationsArray = getResources().getStringArray(R.array.destination_array);
+        destination = destinationsArray[0];
+
         headerImage = (ImageView) view.findViewById(R.id.header_image_dest);
         SharedPreferences settings = getActivity().getSharedPreferences(SettingConstants.SETTINGS_PREFERENCES, 0);
         isPricesDependent = settings.getBoolean(SettingConstants.DESTINATION_DEPENDENT_PRICE, true);
         createChooseDestinationArea();
         createButton();
 
-        MainActivity a = (MainActivity) getActivity();
-        a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorIcons));
+        // Resets the menu button color to white
+        MainActivity main = (MainActivity) getActivity();
+        main.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorIcons));
         return view;
-    }
-
-    public void createDestinations(){
-        destinationsMap.put("Helsingborg central", HSB_STATION);
-        destinationsMap.put("Ystad station", YSD_STATION);
-        destinationsMap.put("Malmö central", MLM_STATION);
-        destinationsMap.put("Köpenhamn central", CPH_STATION);
     }
 
     @Override
@@ -123,9 +120,6 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
 
         String summeryText = "";
         if (isPricesDependent) {
-            Resources res = getResources();
-            String[] destinations = res.getStringArray(R.array.destination_array);
-            destination = destinations[dest];
             summeryText = BeaconConstants.HOME_STATION.name +  "\n" + destination + "\n" + timeFormatter.format(validTo) + "\n" + ticketPrice + " kr";
         }
 
@@ -184,15 +178,13 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
         SharedPreferences.Editor editor = ticketPreferences.edit();
         editor.putString(SettingConstants.BOUGHT_TICKET_DATE, boughtString);
         editor.putString(SettingConstants.VALID_TICKET_DATE, dateString);
+        if (isPricesDependent) { editor.putString(SettingConstants.BOUGHT_TICKET_DESTINATION, destination); }
         editor.apply();
-
-        ShowTicketFragment fragment = new ShowTicketFragment();
-
-        if (isPricesDependent) { fragment.destination = destinationsMap.get(destination);}
 
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
         app.notificationHandler.update(NotificationHandler.VALID_TICKET_AVAILABLE);
 
+        ShowTicketFragment fragment = new ShowTicketFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment, MainActivity.SHOW_TICKET_FRAGMENT);
         fragmentTransaction.commit();
@@ -200,10 +192,8 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Resources res = getResources();
-        String[] destinations = res.getStringArray(R.array.destination_array);
-        final String destination =  destinations[pos];
+        destination =  destinationsArray[pos];
         int[] prices = res.getIntArray(R.array.prices);
-        dest = pos;
         ticketPrice = prices[pos];
 
         getActivity().runOnUiThread(new Runnable() {
@@ -212,7 +202,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                 TextView infoText = (TextView) getActivity().findViewById(R.id.paymentInfoText);
                 Resources res = getResources();
                 infoText.setText(String.format(res.getString(R.string.payment_ticket_text), BeaconConstants.HOME_STATION.name, destination));
-                int imgid = getResources().getIdentifier("com.lth.thesis.blepublictransport:drawable/" + destinationsMap.get(destination).image, null, null);
+                int imgid = getResources().getIdentifier("com.lth.thesis.blepublictransport:drawable/" + BeaconConstants.DESTINATION_MAP.get(destination).image, null, null);
                 headerImage.setImageResource(imgid);
                 TextView priceTag = (TextView) getActivity().findViewById(R.id.priceTag);
                 priceTag.setText(String.format(res.getString(R.string.payment_price_tag), ticketPrice));

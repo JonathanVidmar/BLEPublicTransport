@@ -8,13 +8,15 @@ import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A class containing constants and configurations for the beacon objects.
  *
- * @author Jonathan Vidmar
+ * @author Jonathan Vidmar & Jacob Arvidsson
  * @version 1.0
  */
 
@@ -33,7 +35,6 @@ public class BeaconConstants {
     public static final List<Region> REGIONS = Arrays.asList(REGION_1, REGION_2, REGION_3);
 
     // Beacon types
-
     public static final int BEACON_TYPE_STATION = 0;
     public static final int BEACON_TYPE_VEHICLE = 1;
 
@@ -48,4 +49,27 @@ public class BeaconConstants {
     public static final PublicTransportBeacon BEACON1 = new PublicTransportBeacon(INSTANCE_1, BEACON_TYPE_STATION, HOME_STATION,  "Kundservice", R.drawable.icon_information);
     public static final PublicTransportBeacon BEACON2 = new PublicTransportBeacon(INSTANCE_2, BEACON_TYPE_STATION, HOME_STATION, "Buss 2",  R.drawable.icon_tracks);
     public static final PublicTransportBeacon BEACON3 = new PublicTransportBeacon(INSTANCE_3, BEACON_TYPE_STATION, HOME_STATION,  "Espresso House", R.drawable.icon_coffe);
+
+
+    public static final Map<String, Station> DESTINATION_MAP;
+    static {
+        Map<String, Station> map = new HashMap<>();
+        map.put("Helsingborg central", HSB_STATION);
+        map.put("Ystad station", YSD_STATION);
+        map.put("Malmö central", MLM_STATION);
+        map.put("Köpenhamn central", CPH_STATION);
+        DESTINATION_MAP = Collections.unmodifiableMap(map);
+    }
+
+    public static final List<Train> ARRIVALS_LIST;
+    static {
+        List<Train> list = new ArrayList<>();
+        list.add(new Train("Pågatåg", "2", "12.01"));
+        list.add(new Train("Oresundståg", "1", "12.22"));
+        list.add(new Train("Oresundståg", "3", "12.37"));
+        list.add(new Train("SJ", "6", "13.02"));
+        list.add(new Train("Pågatåg", "16", "13.24"));
+        list.add(new Train("Öresundståg", "2", "13.43"));
+        ARRIVALS_LIST = Collections.unmodifiableList(list);
+    }
 }
