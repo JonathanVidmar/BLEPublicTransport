@@ -46,7 +46,7 @@ public class BeaconConstants {
     public static final Station CPH_STATION = new Station("Köpenhamn central", "CPH", "img_cph", "Öresundståg", "05");
 
     // Beacons
-    public static final PublicTransportBeacon BEACON1 = new PublicTransportBeacon(INSTANCE_1, BEACON_TYPE_STATION, HOME_STATION,  "Kundservice", R.drawable.icon_information);
+    public static final PublicTransportBeacon BEACON1 = new PublicTransportBeacon(INSTANCE_1, BEACON_TYPE_VEHICLE, HOME_STATION,  "Kundservice", R.drawable.icon_information);
     public static final PublicTransportBeacon BEACON2 = new PublicTransportBeacon(INSTANCE_2, BEACON_TYPE_STATION, HOME_STATION, "Buss 2",  R.drawable.icon_tracks);
     public static final PublicTransportBeacon BEACON3 = new PublicTransportBeacon(INSTANCE_3, BEACON_TYPE_STATION, HOME_STATION,  "Espresso House", R.drawable.icon_coffe);
 
