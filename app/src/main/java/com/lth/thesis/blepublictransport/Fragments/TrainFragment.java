@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.R;
 
 import com.lth.thesis.blepublictransport.Utils.VerticalTextView;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 
@@ -41,6 +43,7 @@ public class TrainFragment extends AbstractObserverFragment {
     private View view;
     private HorizontalScrollView sv;
     private RelativeLayout station;
+    private CircularProgressBar circularProgressBar;
 
     public TrainFragment() {
         // Required empty public constructor
@@ -56,6 +59,8 @@ public class TrainFragment extends AbstractObserverFragment {
         view = inflater.inflate(R.layout.fragment_train, container, false);
         station = (RelativeLayout) view.findViewById(R.id.lastStation);
         sv = (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView);
+        circularProgressBar = (CircularProgressBar) view.findViewById(R.id.departureCircularProgressBar);
+
 
         // run when view is visible for the first time
         view.post(new Runnable() {
@@ -65,6 +70,7 @@ public class TrainFragment extends AbstractObserverFragment {
                                handler.postDelayed(new Runnable() {
                                    public void run() {
                                        scrollToView(sv, station);
+                                       circularProgressBar.setProgressWithAnimation(65, 500); // duration in millis
                                    }
                                }, 200); //time in millis
                            }

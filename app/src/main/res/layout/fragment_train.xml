@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -10,18 +11,51 @@
             android:src="@drawable/img_train"/>
 
     <TextView
-            android:id="@+id/found_label"
-            android:layout_width="match_parent"
+            android:id="@+id/welcomelabel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:paddingStart="40dp"
-            android:paddingEnd="40dp"
-            android:paddingTop="65dp"
-            android:paddingBottom="65dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="Welcome on board\nPågatåg 1042"
+            android:text="Welcome on board"
+            android:textColor="#FFF"
+            android:textSize="18sp"/>
+
+    <TextView
+            android:id="@+id/found_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_below="@id/welcomelabel"
+            android:layout_marginTop="10dp"
+            android:text="Pågatåg 1042 | Wagon 2"
             android:textColor="#FFF"
             android:textSize="25sp"/>
+
+    <TextView
+            android:id="@+id/towardslabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/found_label"
+            android:gravity="center"
+            android:text="Towards:"
+            android:textColor="#FFF"
+            android:textSize="18sp"/>
+
+    <TextView
+            android:id="@+id/destinationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_below="@id/towardslabel"
+            android:layout_marginTop="3dp"
+            android:text="Helsingborg C"
+            android:textColor="#FFF"
+            android:textSize="34sp"/>
 
     <View
             android:layout_width="match_parent"
@@ -696,4 +730,114 @@
             </RelativeLayout>
         </LinearLayout>
     </HorizontalScrollView>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/impMess"
+            android:layout_below="@+id/horizontalScrollView"
+            android:text="Important messages"
+            android:textColor="@color/colorAccent"
+            android:layout_marginLeft="25dp"
+            android:textSize="16sp"/>
+
+    <View
+            android:layout_width="200dp"
+            android:layout_height="1dp"
+            android:id="@+id/impMessDiv"
+            android:background="@color/colorDivider"
+            android:layout_below="@id/impMess"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="2dp"/>
+
+
+    <TextView
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/impMess1"
+            android:layout_below="@+id/impMessDiv"
+            android:text="This wagon is reserved for passengers with pets."
+            android:textColor="@color/colorDividerDark"
+            android:layout_marginLeft="38dp"
+            android:layout_marginTop="7dp"
+            android:textSize="14sp"/>
+
+    <View
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:background="@drawable/dot"
+            android:layout_alignTop="@+id/impMess1"
+            android:layout_alignLeft="@+id/impMessDiv"
+            android:layout_marginTop="5dp"/>
+
+    <TextView
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/impMess2"
+            android:layout_below="@+id/impMess1"
+            android:text="Both doors on train wagon five are disabled, please use doors in another wagon."
+            android:textColor="@color/colorDividerDark"
+            android:layout_marginLeft="38dp"
+            android:layout_marginTop="7dp"
+            android:textSize="14sp"/>
+
+    <View
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:background="@drawable/dot"
+            android:layout_alignTop="@+id/impMess2"
+            android:layout_alignLeft="@+id/impMessDiv"
+            android:layout_marginTop="5dp"/>
+
+    <TextView
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/impMess3"
+            android:layout_below="@+id/impMess2"
+            android:text="The toilet on train wagon three is out of order."
+            android:textColor="@color/colorDividerDark"
+            android:layout_marginLeft="38dp"
+            android:layout_marginTop="7dp"
+            android:textSize="14sp"/>
+
+    <View
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:background="@drawable/dot"
+            android:layout_alignTop="@+id/impMess3"
+            android:layout_alignLeft="@+id/impMessDiv"
+            android:layout_marginTop="5dp"/>
+
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/departureCircularProgressBar"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            app:cpb_background_progressbar_color="#F2B7AB"
+            app:cpb_background_progressbar_width="6dp"
+            app:cpb_progressbar_color="#DC6951"
+            app:cpb_progressbar_width="9dp"
+            android:layout_below="@id/horizontalScrollView"
+            android:layout_toRightOf="@id/impMessDiv"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="40dp"
+            />
+    <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Time until departure"
+            android:layout_alignTop="@id/departureCircularProgressBar"
+            android:layout_alignLeft="@id/departureCircularProgressBar"
+            android:gravity="center"
+            android:layout_marginTop="-40dp"/>
+
+    <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="03:21"
+            android:layout_alignTop="@id/departureCircularProgressBar"
+            android:layout_alignLeft="@id/departureCircularProgressBar"
+            android:gravity="center"
+            android:layout_marginTop="28dp"
+            android:textSize="18sp"/>
+
 </RelativeLayout>
