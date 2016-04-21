@@ -45,6 +45,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     // Private states
     private boolean notCurrentlyRanging = true;
+    public boolean shouldNotify = true;
 
     // Public attributes
     public BeaconHelper beaconHelper;
@@ -190,6 +191,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
                     for (Beacon b : beacons) {
                         if (b.getId2().equals(INSTANCE_2)) {
                             bluetoothClient.updateClient(beaconHelper.getDistance(b));
+                            if (shouldNotify && connectionState == BluetoothClient.MANUAL_AND_WAITING_FOR_USER_INPUT) {
+                                notificationHandler.update(NotificationHandler.OPEN_GATE);
+                                shouldNotify = false;
+                            }
                         }
                     }
                 }

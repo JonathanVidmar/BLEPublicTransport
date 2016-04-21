@@ -33,7 +33,7 @@ import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Observer {
     private BLEPublicTransport application;
-    private Fragment currentFragment;
+    public Fragment currentFragment;
     private ImageView menuButton;
 
     // SettingConstants

@@ -74,7 +74,7 @@ public class BeaconHelper {
      * @param beacon, the beacon of which distance to is to be returned
      * @return the text to be displayed.
      */
-    public String getDistanceText(PublicTransportBeacon beacon) {
+    public static String getDistanceText(PublicTransportBeacon beacon) {
         double distance = beacon.getDistance();
         DecimalFormat df = new DecimalFormat("#.#");
         df.setRoundingMode(RoundingMode.CEILING);

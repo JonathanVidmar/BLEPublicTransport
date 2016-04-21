@@ -27,12 +27,10 @@ public class NearbyListViewAdapter extends BaseAdapter {
     private static boolean showsNearby = true;
 
     private LayoutInflater mInflater;
-    private BLEPublicTransport app;
 
     public NearbyListViewAdapter(Context fragment, ArrayList<PublicTransportBeacon> results){
         nearbyList = results;
         mInflater = LayoutInflater.from(fragment);
-        app = (BLEPublicTransport) fragment.getApplicationContext();
     }
 
     public void showNearby(boolean show){
@@ -72,7 +70,6 @@ public class NearbyListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        BeaconHelper helper = app.beaconHelper;
         if(convertView == null){
             convertView = mInflater.inflate(R.layout.list_row_view, null);
             holder = new ViewHolder();
@@ -86,7 +83,7 @@ public class NearbyListViewAdapter extends BaseAdapter {
         }
         if(showsNearby){
             holder.txtname.setText(nearbyList.get(position).getName());
-            holder.destinationName.setText(helper.getDistanceText(nearbyList.get(position)));
+            holder.destinationName.setText(BeaconHelper.getDistanceText(nearbyList.get(position)));
             holder.imageView.setImageResource(nearbyList.get(position).getImage());
         }else{
             Train t = arrivalList.get(position);
@@ -96,8 +93,6 @@ public class NearbyListViewAdapter extends BaseAdapter {
             holder.destinationName.setText(detailLabel);
             holder.imageView.setImageResource(R.drawable.icon_tracks);
         }
-
-
         return convertView;
     }
 
