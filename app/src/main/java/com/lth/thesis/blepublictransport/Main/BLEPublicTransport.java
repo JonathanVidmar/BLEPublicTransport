@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.View;
 
 import com.lth.thesis.blepublictransport.Beacons.BeaconCommunicator;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
@@ -45,6 +44,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     // Private states
     private boolean notCurrentlyRanging = true;
+    public boolean shouldNotify = true;
 
     // Public attributes
     public BeaconHelper beaconHelper;
@@ -53,6 +53,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     // Public states
     public int connectionState = -1;
     public boolean active = true;
+    public boolean isAtStation = true;
 
     private HashMap<String, Beacon> foundBeacons = new HashMap<>();
 
@@ -87,15 +88,18 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconCommunicator = new BeaconCommunicator();
     }
 
+    // Getter
+    public BeaconCommunicator getBeaconCommunicator() {
+        return beaconCommunicator;
+    }
+
     public void manageGate(String state){
         bluetoothClient.sendMessage(state);
     }
 
     public void stop(){
         try {
-
-            for (Region region :
-                    REGIONS) {
+            for (Region region : REGIONS) {
                 beaconManager.stopRangingBeaconsInRegion(region);
                 beaconManager.stopMonitoringBeaconsInRegion(region);
             }
@@ -114,27 +118,23 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     @Override
     public void didEnterRegion(Region arg0) {
-        if (!beaconHelper.currentlyInMainRegion()) notificationHandler.create();
-        beaconHelper.foundRegionInstance(arg0.getId2());
+        if (!BeaconHelper.currentlyInMainRegion()) notificationHandler.create();
+        BeaconHelper.foundRegionInstance(arg0.getId2());
         if (active) {
             // Currently on a fragment
             beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.ENTERED_REGION, null));
             if (notCurrentlyRanging) {
                 startRangingBeaconsInRegion();
             }
-
-        } //else {
-        // If we have already seen beacons before, but a fragment is not in
-        // the foreground, we send a notification to the user on subsequent detections.
-        //}
+        }
     }
 
 
     @Override
     public void didExitRegion(Region arg0) {
-        beaconHelper.lostRegionInstance(arg0.getId2());
+        BeaconHelper.lostRegionInstance(arg0.getId2());
 
-        if (!beaconHelper.currentlyInMainRegion()) {
+        if (!BeaconHelper.currentlyInMainRegion()) {
             // removes notification of entering a region if it exists
             notificationHandler.cancel();
             // update mainActivity that region is no more
@@ -147,8 +147,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     private void stopRangingBeacons() {
         try {
-            for (Region region :
-                    REGIONS) {
+            for (Region region : REGIONS) {
                 beaconManager.stopRangingBeaconsInRegion(region);
             }
             notCurrentlyRanging = true;
@@ -169,8 +168,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
 
     public void startMonitoringBeaconsInRegion() {
         try {
-            for (Region region :
-                    REGIONS) {
+            for (Region region : REGIONS) {
                 beaconManager.startRangingBeaconsInRegion(region);
             }
         } catch (RemoteException e) {
@@ -189,7 +187,11 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
                 if (simulatingGate()) {
                     for (Beacon b : beacons) {
                         if (b.getId2().equals(INSTANCE_2)) {
-                            bluetoothClient.updateClient(beaconHelper.getDistance(b));
+                            bluetoothClient.updateClient(b.getDistance());
+                            if (shouldNotify && connectionState == BluetoothClient.MANUAL_AND_WAITING_FOR_USER_INPUT) {
+                                notificationHandler.update(NotificationHandler.OPEN_GATE);
+                                shouldNotify = false;
+                            }
                         }
                     }
                 }
@@ -213,11 +215,14 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
      */
     public ArrayList<PublicTransportBeacon> sortedListOfBeacons(Collection<Beacon> beacons) {
         for (Beacon b : beacons) {
-
-            String beaconName = beaconHelper.getBeaconName(b);
+            String beaconName = BeaconHelper.getBeaconName(b);
             foundBeacons.put(beaconName, b);
         }
-        return sortList();
+        ArrayList<PublicTransportBeacon> list = sortList();
+        if(list.size() != 0) {
+            isAtStation = BeaconHelper.isBeaconAtStation(list.get(0).getID());
+        }
+        return list;
     }
 
     /* Parses all the found beacons and sorts them in order of distance. */
@@ -231,9 +236,9 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         Collections.sort(temp, new Comparator<Beacon>() {
             @Override
             public int compare(Beacon b2, Beacon b1) {
-                if (beaconHelper.getDistance(b1) < beaconHelper.getDistance(b2)) {
+                if (b1.getDistance() < b2.getDistance()) {
                     return 1;
-                } else if (beaconHelper.getDistance(b1) > beaconHelper.getDistance(b2)) {
+                } else if (b1.getDistance() > b2.getDistance()) {
                     return -1;
                 } else {
                     return 0;
@@ -242,13 +247,9 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         });
 
         for(Beacon b: temp){
-            list.add(beaconHelper.beaconList.get(b.getId2()));
+            list.add(BeaconHelper.BEACON_LIST.get(b.getId2()));
         }
         return list;
-    }
-
-    public BeaconCommunicator getBeaconCommunicator() {
-        return beaconCommunicator;
     }
 
     public boolean hasValidTicket() {

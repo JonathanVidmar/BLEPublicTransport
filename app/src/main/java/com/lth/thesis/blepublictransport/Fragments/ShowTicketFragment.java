@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
+import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
+import com.lth.thesis.blepublictransport.Beacons.PublicTransportBeacon;
 import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
@@ -19,8 +22,11 @@ import com.lth.thesis.blepublictransport.Models.Station;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
 import com.lth.thesis.blepublictransport.R;
 
+import org.altbeacon.beacon.Beacon;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -32,7 +38,7 @@ import java.util.Locale;
  * @author      Jacob Arvidsson
  * @version     1.1
  */
-public class ShowTicketFragment extends Fragment {
+public class ShowTicketFragment extends AbstractObserverFragment {
     private SharedPreferences ticketPreferences;
     private View view;
     private CountDownTimer timer;
@@ -73,6 +79,8 @@ public class ShowTicketFragment extends Fragment {
         timeOfNextDepartureLabel = (TextView) view.findViewById(R.id.timeOfNextDepartureLabel);
         trackNumberLabel = (TextView) view.findViewById(R.id.track);
         distanceLabel = (TextView) view.findViewById(R.id.trackDistanceLabel);
+        trackNumberLabel.setText("N/A");
+        distanceLabel.setText("N/A");
 
         configureView();
         initTimer();
@@ -80,12 +88,13 @@ public class ShowTicketFragment extends Fragment {
 
         MainActivity a = (MainActivity) getActivity();
         a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryText));
+        a.currentFragment = this;
         return view;
     }
 
     private void configureView(){
         String destinationString = ticketPreferences.getString(SettingConstants.BOUGHT_TICKET_DESTINATION, "");
-         Station destination = BeaconConstants.DESTINATION_MAP.get(destinationString);
+        Station destination = BeaconConstants.DESTINATION_MAP.get(destinationString);
 
         int id = getResources().getIdentifier("com.lth.thesis.blepublictransport:drawable/" + destination.image, null, null);
         destinationImage.setImageResource(id);
@@ -111,7 +120,6 @@ public class ShowTicketFragment extends Fragment {
 
         }
         nextDepartureLabel.setText(destination.transportType);
-        trackNumberLabel.setText(destination.track);
 
         currentStationLabel.setText(BeaconConstants.HOME_STATION.name);
         currentStationShortLabel.setText(BeaconConstants.HOME_STATION.abbreviation);
@@ -177,5 +185,37 @@ public class ShowTicketFragment extends Fragment {
         mTextField.setText(message);
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
         app.notificationHandler.update(NotificationHandler.NO_TICKET_AVAILABLE);
+    }
+
+    @Override
+    public void update(Object data) {
+        BeaconPacket p = (BeaconPacket) data;
+        if(p.type == BeaconPacket.RANGED_BEACONS){
+            if(p.beacons.size() > 0){
+                updateDistanceText(getBeaconForDistance(p.beacons));
+            }
+        }
+    }
+
+    private PublicTransportBeacon getBeaconForDistance(ArrayList<PublicTransportBeacon> beacons){
+        for(PublicTransportBeacon beacon : beacons){
+            if(beacon.getID().equals(BeaconConstants.BEACON2.getID())){
+                return beacon;
+            }
+        }
+        return null;
+    }
+
+    private void updateDistanceText(PublicTransportBeacon beacon){
+        final String trackName = beacon.getName();
+        final String distance = BeaconHelper.getDistanceText(beacon);
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                trackNumberLabel.setText(trackName);
+                distanceLabel.setText(distance);
+            }
+        });
     }
 }

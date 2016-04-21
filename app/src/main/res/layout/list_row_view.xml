@@ -15,7 +15,9 @@
         android:layout_toEndOf="@+id/list_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dip"
+        android:paddingStart="10dip"
+        android:paddingEnd="10dip"
+        android:paddingTop="10dip"
         android:textSize="16sp"
         android:textStyle="bold"/>
 

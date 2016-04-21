@@ -33,7 +33,7 @@ import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Observer {
     private BLEPublicTransport application;
-    private Fragment currentFragment;
+    public Fragment currentFragment;
     private ImageView menuButton;
 
     // SettingConstants
@@ -128,7 +128,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         currentFragment = getSupportFragmentManager().findFragmentByTag(destination);
         switch (destination) {
             case STATION_FRAGMENT:
-                if (currentFragment == null) currentFragment = new NearbyFragment();
+                if (application.isAtStation) {
+                    if (currentFragment == null) currentFragment = new NearbyFragment();
+                }else{
+                currentFragment = new TrainFragment();
+            }
                 break;
             case PAYMENT_FRAGMENT:
                 if (currentFragment == null) currentFragment = new PaymentFragment();
