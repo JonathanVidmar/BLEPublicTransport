@@ -22,7 +22,7 @@ public class MeasurementUtil {
 
     public void update(Beacon b, BeaconHelper bh) {
         if (b.getId2().equals(BeaconConstants.TEST_BEACON_INSTANCE)) {
-            lastDistance = bh.getDistance(b);
+            lastDistance = b.getDistance();
             processNoise = bh.getProcessNoise();
         }
     }

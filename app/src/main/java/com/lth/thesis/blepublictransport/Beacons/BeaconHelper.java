@@ -1,5 +1,8 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
+import android.content.SharedPreferences;
+
+import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
 import com.lth.thesis.blepublictransport.Utils.MeasurementUtil;
 import org.altbeacon.beacon.Beacon;
@@ -19,42 +22,25 @@ import static com.lth.thesis.blepublictransport.Config.BeaconConstants.*;
  * @version 1.3
  */
 public class BeaconHelper {
-
     public double txPower = -59;
     private double processNoise;
-    public Map<Identifier, PublicTransportBeacon> beaconList = new HashMap<>();
     private boolean selfCorrection;
     private long lastSelfCorrectingBeaconUpdate = 0;
     public MeasurementUtil measurementUtil;
 
-
+    // Beacons
+    public static final Map<Identifier, PublicTransportBeacon> BEACON_LIST;
+    static {
+        Map<Identifier, PublicTransportBeacon> map = new HashMap<>();
+        map.put(INSTANCE_1, BEACON1);
+        map.put(INSTANCE_2, BEACON2);
+        map.put(INSTANCE_3, BEACON3);
+        BEACON_LIST = Collections.unmodifiableMap(map);
+    }
 
     public BeaconHelper(boolean selfCorrection) {
         this.selfCorrection = selfCorrection;
-        beaconList.put(INSTANCE_1, BEACON1);
-        beaconList.put(INSTANCE_2, BEACON2);
-        beaconList.put(INSTANCE_3, BEACON3);
         measurementUtil = new MeasurementUtil();
-    }
-
-    public boolean isBeaconAtStation(Identifier instance){
-        return beaconList.get(instance).getType() == BEACON_TYPE_STATION;
-    }
-
-    public void lostRegionInstance(Identifier instance) {
-        beaconList.get(instance).updateProximity(false);
-    }
-
-    public void foundRegionInstance(Identifier instance) {
-        beaconList.get(instance).updateProximity(true);
-    }
-
-    public boolean currentlyInMainRegion() {
-        boolean inMainRegion = false;
-        for (Region region : REGIONS) {
-            inMainRegion = inMainRegion || beaconList.get(region.getId2()).inProximity();
-        }
-        return inMainRegion;
     }
 
     /**
@@ -63,8 +49,8 @@ public class BeaconHelper {
      * @param b, region.getId2()
      * @return the name of the beacon.
      */
-    public String getBeaconName(Beacon b) {
-        return beaconList.get(b.getId2()).getName();
+    public static String getBeaconName(Beacon b) {
+        return BEACON_LIST.get(b.getId2()).getName();
     }
 
     /**
@@ -80,21 +66,42 @@ public class BeaconHelper {
         return df.format(distance) + " meters";
     }
 
-    public double getDistance(Beacon beacon) {
-        return beacon.getDistance();
+    /**
+     * For given beacon, returns if the type is a station
+     * @param instance, id of the beacon
+     * @return boolean, if it is of type station
+     */
+    public static boolean isBeaconAtStation(Identifier instance){
+        return BEACON_LIST.get(instance).getType() == BEACON_TYPE_STATION;
+    }
+
+    public static void lostRegionInstance(Identifier instance) {
+        BEACON_LIST.get(instance).updateProximity(false);
+    }
+
+    public static void foundRegionInstance(Identifier instance) {
+        BEACON_LIST.get(instance).updateProximity(true);
+    }
+
+    public static boolean currentlyInMainRegion() {
+        boolean inMainRegion = false;
+        for (Region region : REGIONS) {
+            inMainRegion = inMainRegion || BEACON_LIST.get(region.getId2()).inProximity();
+        }
+        return inMainRegion;
     }
 
     public void updateBeaconDistances(Collection<Beacon> beacons, double movementState) {
         for (Beacon b : beacons) {
             checkSelfCorrection(b);
-            beaconList.get(b.getId2()).updateDistance(b, movementState, txPower, processNoise);
+            BEACON_LIST.get(b.getId2()).updateDistance(b, movementState, txPower, processNoise);
             measurementUtil.update(b, this);
         }
 
     }
 
-    public int getImage(Beacon b) {
-        return beaconList.get(b.getId2()).getImage();
+    public static int getImage(Beacon b) {
+        return BEACON_LIST.get(b.getId2()).getImage();
     }
 
     private void checkSelfCorrection(Beacon b) {
