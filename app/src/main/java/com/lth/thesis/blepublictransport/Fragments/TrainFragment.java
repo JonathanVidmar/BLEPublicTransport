@@ -1,22 +1,29 @@
 package com.lth.thesis.blepublictransport.Fragments;
 
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.ViewParent;
-import android.view.animation.BounceInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
@@ -26,14 +33,10 @@ import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
 import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.R;
 
-import com.lth.thesis.blepublictransport.Utils.VerticalTextView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
-import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.Identifier;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,8 +45,18 @@ public class TrainFragment extends AbstractObserverFragment {
     private BeaconHelper helper;
     private View view;
     private HorizontalScrollView sv;
-    private RelativeLayout station;
+    private RelativeLayout prevStation;
+    private RelativeLayout currStation;
+    private View currStationIcon;
+    private View nextStationIcon;
     private CircularProgressBar circularProgressBar;
+    private TextView timeLeft;
+    private TextView timeUntilStatus;
+    private TextView lundcText;
+    private TextView lundcTime;
+    private final static float START_TIME = 300;
+    private float timeElapsed = 250;
+    private CountDownTimer timer;
 
     public TrainFragment() {
         // Required empty public constructor
@@ -57,10 +70,16 @@ public class TrainFragment extends AbstractObserverFragment {
         BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
         helper = app.beaconHelper;
         view = inflater.inflate(R.layout.fragment_train, container, false);
-        station = (RelativeLayout) view.findViewById(R.id.lastStation);
+        prevStation = (RelativeLayout) view.findViewById(R.id.hjarup);
+        currStation = (RelativeLayout) view.findViewById(R.id.lundc);
+        currStationIcon = view.findViewById(R.id.lundcIcon);
+        nextStationIcon = view.findViewById(R.id.gunnesboIcon);
         sv = (HorizontalScrollView) view.findViewById(R.id.horizontalScrollView);
+        timeLeft = (TextView) view.findViewById(R.id.timeLeft);
+        timeUntilStatus = (TextView) view.findViewById(R.id.timeUntilText);
+        lundcText = (TextView) view.findViewById(R.id.lundcText);
+        lundcTime = (TextView) view.findViewById(R.id.lundcTime);
         circularProgressBar = (CircularProgressBar) view.findViewById(R.id.departureCircularProgressBar);
-
 
         // run when view is visible for the first time
         view.post(new Runnable() {
@@ -69,14 +88,40 @@ public class TrainFragment extends AbstractObserverFragment {
                                Handler handler = new Handler();
                                handler.postDelayed(new Runnable() {
                                    public void run() {
-                                       scrollToView(sv, station);
-                                       circularProgressBar.setProgressWithAnimation(65, 500); // duration in millis
+                                       scrollToView(sv, prevStation);
+                                       circularProgressBar.setProgressWithAnimation(100.0f*timeElapsed/START_TIME, 500); // duration in millis
+                                       initTimer();
                                    }
                                }, 200); //time in millis
                            }
                        }
         );
+
         return view;
+    }
+
+    private void initTimer() {
+        timer = new CountDownTimer((int)(START_TIME-timeElapsed) * 1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                timeElapsed++;
+                circularProgressBar.setProgress(100.0f*timeElapsed/START_TIME);
+                timeLeft.setText(timeLeftToString());
+            }
+
+            public void onFinish() {
+                timeElapsed = 0;
+                currStationIcon.setBackground(getContext().getResources().getDrawable(R.drawable.station_visited));
+                animateNextStation();
+                lundcTime.setVisibility(View.VISIBLE);
+                lundcText.setTypeface(null, Typeface.NORMAL);
+                lundcText.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDivider));
+                scrollToView(sv, currStation);
+                timeUntilStatus.setText("Arrival in");
+
+                initTimer();
+            }
+
+        }.start();
     }
 
     /**
@@ -97,6 +142,51 @@ public class TrainFragment extends AbstractObserverFragment {
         anim.setInterpolator(new OvershootInterpolator());
         anim.setDuration(600L);
         anim.start();
+    }
+
+    private void animateNextStation() {
+        int colorFrom = 0xFFFFFFFF;
+        int colorTo = getResources().getColor(R.color.colorAccent);
+        final ValueAnimator valueAnimator = ValueAnimator.ofObject(new ArgbEvaluator(),
+                colorFrom,
+                colorTo);
+
+        final GradientDrawable background = (GradientDrawable) nextStationIcon.getBackground();
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(final ValueAnimator animator) {
+                background.setColor((Integer) animator.getAnimatedValue());
+            }
+
+
+        });
+        valueAnimator.setDuration(1300);
+        valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        valueAnimator.start();
+    }
+
+    private String timeLeftToString() {
+
+            int minutes = (int) (Math.floor((START_TIME - timeElapsed) / 60));
+            int seconds = (int) ((START_TIME - timeElapsed) % 60);
+
+            return twoDigitString(minutes) + " : " + twoDigitString(seconds);
+        }
+
+    private String twoDigitString(int number) {
+
+        if (number == 0) {
+            return "00";
+        }
+
+        if (number / 10 == 0) {
+            return "0" + number;
+        }
+
+        return String.valueOf(number);
     }
 
     /**
