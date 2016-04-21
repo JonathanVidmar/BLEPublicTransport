@@ -41,15 +41,14 @@ public class BeaconConstants {
     // Station
     public static final Station HOME_STATION = new Station("Lund central", "LU", "", "Pågatåg", "01");
     public static final Station MLM_STATION = new Station("Malmö central", "MLM", "img_mlm", "Pågatåg", "12 B");
-    public static final Station HSB_STATION = new Station("Helsingborg central", "HSB", "img_hsb", "Öresundståg", "06");
+    public static final Station HSB_STATION = new Station("Helsingborg central", "HSB", "img_hsb", "Øresundståg", "06");
     public static final Station YSD_STATION = new Station("Ystad station", "YSD", "img_ysd", "Pågatåg", "03");
-    public static final Station CPH_STATION = new Station("Köpenhamn central", "CPH", "img_cph", "Öresundståg", "05");
+    public static final Station CPH_STATION = new Station("Köpenhamn central", "CPH", "img_cph", "Øresundståg", "05");
 
     // Beacons
     public static final PublicTransportBeacon BEACON1 = new PublicTransportBeacon(INSTANCE_1, BEACON_TYPE_VEHICLE, HOME_STATION,  "Kundservice", R.drawable.icon_information);
-    public static final PublicTransportBeacon BEACON2 = new PublicTransportBeacon(INSTANCE_2, BEACON_TYPE_STATION, HOME_STATION, "Buss 2",  R.drawable.icon_tracks);
+    public static final PublicTransportBeacon BEACON2 = new PublicTransportBeacon(INSTANCE_2, BEACON_TYPE_STATION, HOME_STATION, "Buss 166 - S. Sandby",  R.drawable.icon_tracks);
     public static final PublicTransportBeacon BEACON3 = new PublicTransportBeacon(INSTANCE_3, BEACON_TYPE_STATION, HOME_STATION,  "Espresso House", R.drawable.icon_coffe);
-
 
     public static final Map<String, Station> DESTINATION_MAP;
     static {
@@ -64,12 +63,12 @@ public class BeaconConstants {
     public static final List<Train> ARRIVALS_LIST;
     static {
         List<Train> list = new ArrayList<>();
-        list.add(new Train("Pågatåg", "2", "12.01"));
-        list.add(new Train("Oresundståg", "1", "12.22"));
-        list.add(new Train("Oresundståg", "3", "12.37"));
-        list.add(new Train("SJ", "6", "13.02"));
-        list.add(new Train("Pågatåg", "16", "13.24"));
-        list.add(new Train("Öresundståg", "2", "13.43"));
+        list.add(new Train("Pågatåg - Ystad", "2", "12.01"));
+        list.add(new Train("Øresundståg - Köpenhamn", "1", "12.22"));
+        list.add(new Train("Øresundståg - Helsingborg", "3", "12.37"));
+        list.add(new Train("SJ - Stockholm", "6", "13.02"));
+        list.add(new Train("Pågatåg - Trelleborg", "16", "13.24"));
+        list.add(new Train("Øresundståg - Göteborg", "2", "13.43"));
         ARRIVALS_LIST = Collections.unmodifiableList(list);
     }
 }

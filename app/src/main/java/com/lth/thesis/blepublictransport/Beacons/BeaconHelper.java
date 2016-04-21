@@ -51,8 +51,7 @@ public class BeaconHelper {
 
     public boolean currentlyInMainRegion() {
         boolean inMainRegion = false;
-        for (Region region :
-                REGIONS) {
+        for (Region region : REGIONS) {
             inMainRegion = inMainRegion || beaconList.get(region.getId2()).inProximity();
         }
         return inMainRegion;

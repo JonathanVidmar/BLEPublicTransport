@@ -35,8 +35,8 @@ import java.util.*;
 public class NearbyFragment extends AbstractObserverFragment {
     private ListView listView;
     private NearbyListViewAdapter mAdapter;
-    private BeaconHelper helper;
     private boolean isNearbyMode = true;
+    private BLEPublicTransport application;
 
     public NearbyFragment() {
         // Required empty public constructor
@@ -100,14 +100,13 @@ public class NearbyFragment extends AbstractObserverFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
-        helper = app.beaconHelper;
+        application = (BLEPublicTransport) getActivity().getApplication();
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        if (helper.currentlyInMainRegion()) enteredStation();
+        if (application.beaconHelper.currentlyInMainRegion()) enteredStation();
     }
 
     /* Runs when beacons is in range and updates the views components. */
@@ -144,8 +143,7 @@ public class NearbyFragment extends AbstractObserverFragment {
      * @param  beacons the beacons found by ranging.
      */
     public void foundObjectsNear(final ArrayList<PublicTransportBeacon> beacons) {
-        Identifier closestID = beacons.get(0).getID();
-        if(helper.isBeaconAtStation(closestID)){
+        if(application.isAtStation){
             if(isNearbyMode){
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

@@ -54,6 +54,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
     // Public states
     public int connectionState = -1;
     public boolean active = true;
+    public boolean isAtStation = true;
 
     private HashMap<String, Beacon> foundBeacons = new HashMap<>();
 
@@ -123,11 +124,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             if (notCurrentlyRanging) {
                 startRangingBeaconsInRegion();
             }
-
-        } //else {
-        // If we have already seen beacons before, but a fragment is not in
-        // the foreground, we send a notification to the user on subsequent detections.
-        //}
+        }
     }
 
 
@@ -185,7 +182,8 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 beaconHelper.updateBeaconDistances(beacons, walkDetectionEnabled() ? walkDetection.getState() : 1);
-                beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, sortedListOfBeacons(beacons)));
+                ArrayList<PublicTransportBeacon> sortedBeacons = sortedListOfBeacons(beacons);
+                beaconCommunicator.notifyObservers(new BeaconPacket(BeaconPacket.RANGED_BEACONS, sortedBeacons));
 
                 if (simulatingGate()) {
                     for (Beacon b : beacons) {
@@ -218,11 +216,13 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
      */
     public ArrayList<PublicTransportBeacon> sortedListOfBeacons(Collection<Beacon> beacons) {
         for (Beacon b : beacons) {
-
             String beaconName = beaconHelper.getBeaconName(b);
             foundBeacons.put(beaconName, b);
         }
-        return sortList();
+        ArrayList<PublicTransportBeacon> list = sortList();
+        Identifier closestID = list.get(0).getID();
+        isAtStation = beaconHelper.isBeaconAtStation(closestID);
+        return list;
     }
 
     /* Parses all the found beacons and sorts them in order of distance. */
