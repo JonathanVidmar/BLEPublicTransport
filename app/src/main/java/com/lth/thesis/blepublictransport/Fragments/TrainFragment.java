@@ -100,6 +100,12 @@ public class TrainFragment extends AbstractObserverFragment {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        timer.cancel();
+        super.onPause();
+    }
+
     private void initTimer() {
         timer = new CountDownTimer((int)(START_TIME-timeElapsed) * 1000, 1000) {
             public void onTick(long millisUntilFinished) {

@@ -15,11 +15,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:gravity="center"
             android:text="Welcome on board"
             android:textColor="#FFF"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:visibility="invisible"/>
 
     <TextView
             android:id="@+id/found_label"
@@ -38,12 +39,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="0dp"
             android:layout_below="@id/found_label"
             android:gravity="center"
             android:text="Towards:"
             android:textColor="#FFF"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:visibility="invisible"/>
 
     <TextView
             android:id="@+id/destinationLabel"
@@ -52,23 +54,9 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:layout_below="@id/towardslabel"
-            android:layout_marginTop="3dp"
             android:text="Helsingborg C"
             android:textColor="#FFF"
             android:textSize="34sp"/>
-
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/header_image"
-            android:layout_marginBottom="7dp"
-            android:background="#BB000000"
-            android:text="You do not have a valid ticket for this trip."
-            android:textColor="#ff0000"
-            android:gravity="center"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:id="@+id/validTicketText"/>
 
     <View
             android:layout_width="match_parent"
@@ -841,11 +829,24 @@
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/statusMessDiv"
+            android:id="@+id/statusMessText"
             android:text="Currently on schedule."
             android:textColor="@color/colorDividerDark"
             android:layout_alignLeft="@id/impMessDiv"
             android:layout_marginTop="7dp"
             android:textSize="14sp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statusMessText"
+            android:text="You do not have a valid ticket for this trip."
+            android:textColor="#000"
+            android:layout_alignLeft="@id/impMessDiv"
+            android:layout_marginTop="7dp"
+            android:textSize="14sp"
+            android:id="@+id/validTicketText"/>
 
 
 
