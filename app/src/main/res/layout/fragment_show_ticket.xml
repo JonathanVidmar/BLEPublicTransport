@@ -6,6 +6,7 @@
     tools:context=".Fragments.ShowTicketFragment">
 
     <RelativeLayout
+        android:id="@+id/ticket_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
@@ -249,13 +250,16 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <!--<android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <ImageView
+        android:id="@+id/delete_ticket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_action_delete" />-->
+        android:src="@drawable/ic_delete_24dp"
+        android:layout_alignParentBottom="true"
+        android:padding="20dp"
+        android:layout_alignEnd="@id/ticket_container"/>
+
+
 
 </RelativeLayout>
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
@@ -160,24 +161,22 @@ public class ShowTicketFragment extends AbstractObserverFragment {
         }
     }
 
-    /* Adds a floating button with the remove action and its handler*/
-    /*private void addRemoveButton(){
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    private void addRemoveButton(){
+        ImageView removeButton = (ImageView) view.findViewById(R.id.delete_ticket);
+        removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Toast.makeText(getActivity(), getString(R.string.ticket_removed), Toast.LENGTH_LONG).show();
 
                 SharedPreferences.Editor editor = ticketPreferences.edit();
                 editor.putString(SettingConstants.VALID_TICKET_DATE, "1999-06-10'T'10:10:10'Z");
                 editor.apply();
 
-                setValidTicketCounterText(getString(R.string.ticket_not_valid));
                 timer.cancel();
                 clearTicket("");
             }
         });
-    }*/
+    }
 
     /* Clears the ticket from the system. */
     private void clearTicket(String message) {

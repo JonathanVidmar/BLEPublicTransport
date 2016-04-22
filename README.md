@@ -78,3 +78,12 @@ Jonathan started looking on what information should be displayed when the applic
 
 ***Jacob*** 
 Jacob has improved the page displaying information about the current station and also started working on a unified design of the entire application.
+
+###Week fourteen
+This week we have been doing some general improvments to the interface, while remaking the nearby screen into showing more informatio based on the user's position. We also started planning a DEMO session we will have for Skånetrafiken and a few people at Softhouse next week.
+
+***Jonathan***
+Jonathan has been working on the page displayed when the user is on a train/bus. 
+
+***Jacob***
+Jacob has been working on updating the page displayed when the user is on a station.
