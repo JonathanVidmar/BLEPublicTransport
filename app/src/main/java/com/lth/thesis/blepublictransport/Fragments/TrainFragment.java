@@ -54,8 +54,8 @@ public class TrainFragment extends AbstractObserverFragment {
     private TextView timeUntilStatus;
     private TextView lundcText;
     private TextView lundcTime;
-    private final static float START_TIME = 300;
-    private float timeElapsed = 250;
+    private final static float START_TIME = 2760;
+    private float timeElapsed = 60;
     private CountDownTimer timer;
 
     public TrainFragment() {
@@ -84,6 +84,7 @@ public class TrainFragment extends AbstractObserverFragment {
         View statusLine = view.findViewById(R.id.train_ticket_line);
         if(application.hasValidTicket()) {
             status.setText("Show ticket");
+            status.setTextColor(getResources().getColor(R.color.colorPrimaryText));
         } else {
             status.setText("Buy ticket");
             statusLine.setVisibility(View.VISIBLE);
@@ -108,8 +109,11 @@ public class TrainFragment extends AbstractObserverFragment {
                                handler.postDelayed(new Runnable() {
                                    public void run() {
                                        scrollToView(sv, prevStation);
-                                       circularProgressBar.setProgressWithAnimation(100.0f*timeElapsed/START_TIME, 500); // duration in millis
-                                       initTimer();
+                                       if(application.hasValidTicket()) {
+                                           circularProgressBar.setProgressWithAnimation(100.0f * timeElapsed / START_TIME, 500); // duration in millis
+                                           initTimer();
+                                           timeUntilStatus.setText("Arriving at Helsingborg C");
+                                       }
                                    }
                                }, 200); //time in millis
                            }
@@ -121,7 +125,7 @@ public class TrainFragment extends AbstractObserverFragment {
 
     @Override
     public void onPause() {
-        timer.cancel();
+        if (timer != null) timer.cancel();
         super.onPause();
     }
 
@@ -131,22 +135,26 @@ public class TrainFragment extends AbstractObserverFragment {
                 timeElapsed++;
                 circularProgressBar.setProgress(100.0f*timeElapsed/START_TIME);
                 timeLeft.setText(timeLeftToString());
+                if (timeElapsed == 100) {
+                    leftStation();
+                }
             }
 
             public void onFinish() {
                 timeElapsed = 0;
-                currStationIcon.setBackground(getContext().getResources().getDrawable(R.drawable.station_visited));
-                animateNextStation();
-                lundcTime.setVisibility(View.VISIBLE);
-                lundcText.setTypeface(null, Typeface.NORMAL);
-                lundcText.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDivider));
-                scrollToView(sv, currStation);
-                timeUntilStatus.setText("Arrival in");
-
                 initTimer();
             }
 
         }.start();
+    }
+
+    private void leftStation() {
+        currStationIcon.setBackground(getContext().getResources().getDrawable(R.drawable.station_visited));
+        animateNextStation();
+        lundcTime.setVisibility(View.VISIBLE);
+        lundcText.setTypeface(null, Typeface.NORMAL);
+        lundcText.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDivider));
+        scrollToView(sv, currStation);
     }
 
     /**
