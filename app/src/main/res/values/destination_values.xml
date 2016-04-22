@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="destination_array">
-        <item>Malmö central</item>
-        <item>Helsingborg central</item>
-        <item>Ystad station</item>
-        <item>Köpenhamn central</item>
+        <item>Malmö C</item>
+        <item>Helsingborg C</item>
+        <item>Ystad</item>
+        <item>Köpenhamn C</item>
     </string-array>
 </resources>

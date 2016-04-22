@@ -52,11 +52,11 @@ public class BeaconConstants {
     public static final int BEACON_TYPE_VEHICLE = 1;
 
     // Station
-    public static final Station HOME_STATION = new Station("Lund central", "LU", "", "Pågatåg", "01");
-    public static final Station MLM_STATION = new Station("Malmö central", "MLM", "img_mlm", "Pågatåg", "12 B");
-    public static final Station HSB_STATION = new Station("Helsingborg central", "HSB", "img_hsb", "Øresundståg", "06");
-    public static final Station YSD_STATION = new Station("Ystad station", "YSD", "img_ysd", "Pågatåg", "03");
-    public static final Station CPH_STATION = new Station("Köpenhamn central", "CPH", "img_cph", "Øresundståg", "05");
+    public static final Station HOME_STATION = new Station("Lund C", "LU", "", "Pågatåg", "01");
+    public static final Station MLM_STATION = new Station("Malmö C", "MLM", "img_mlm", "Pågatåg", "12 B");
+    public static final Station HSB_STATION = new Station("Helsingborg C", "HSB", "img_hsb", "Øresundståg", "06");
+    public static final Station YSD_STATION = new Station("Ystad", "YSD", "img_ysd", "Pågatåg", "03");
+    public static final Station CPH_STATION = new Station("Köpenhamn C", "CPH", "img_cph", "Øresundståg", "05");
 
     // Beacons
     public static final Map<Identifier, PublicTransportBeacon> BEACON_LIST;
