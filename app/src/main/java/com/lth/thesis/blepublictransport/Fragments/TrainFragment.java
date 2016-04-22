@@ -24,6 +24,7 @@ import android.view.ViewParent;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
@@ -80,8 +81,14 @@ public class TrainFragment extends AbstractObserverFragment {
 
 
         TextView status = (TextView) view.findViewById(R.id.train_ticket_status);
-        status.setText((application.hasValidTicket() ? "Show ticket" : "Buy ticket"));
-        RelativeLayout ticketButton = (RelativeLayout) view.findViewById(R.id.ticket_button);
+        View statusLine = view.findViewById(R.id.train_ticket_line);
+        if(application.hasValidTicket()) {
+            status.setText("Show ticket");
+        } else {
+            status.setText("Buy ticket");
+            statusLine.setVisibility(View.VISIBLE);
+        }
+        LinearLayout ticketButton = (LinearLayout) view.findViewById(R.id.ticket_button);
         ticketButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
