@@ -129,7 +129,6 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         }
     }
 
-
     @Override
     public void didExitRegion(Region arg0) {
         BeaconHelper.lostRegionInstance(arg0.getId2());
