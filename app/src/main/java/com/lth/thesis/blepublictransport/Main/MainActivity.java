@@ -134,6 +134,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 currentFragment = new TrainFragment();
             }
                 break;
+            case TRAIN_FRAGMENT:
+                if (currentFragment == null) currentFragment = new TrainFragment();
+                break;
             case PAYMENT_FRAGMENT:
                 if (currentFragment == null) currentFragment = new PaymentFragment();
                 break;

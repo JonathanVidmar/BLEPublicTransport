@@ -89,7 +89,7 @@ public class NearbyListViewAdapter extends BaseAdapter {
             Train t = arrivalList.get(position);
             String header = t.nextArrival + " - " + t.name;
             holder.txtname.setText(header);
-            String detailLabel = "Train leaves from track " + t.track;
+            String detailLabel = "Train leaves from " + t.track.getName();
             holder.destinationName.setText(detailLabel);
             holder.imageView.setImageResource(R.drawable.icon_tracks);
         }
