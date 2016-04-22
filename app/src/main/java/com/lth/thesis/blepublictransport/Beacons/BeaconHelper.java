@@ -35,6 +35,12 @@ public class BeaconHelper {
         map.put(INSTANCE_1, BEACON1);
         map.put(INSTANCE_2, BEACON2);
         map.put(INSTANCE_3, BEACON3);
+        map.put(INSTANCE_4, BEACON4);
+        map.put(INSTANCE_5, BEACON5);
+        map.put(INSTANCE_6, BEACON6);
+        map.put(INSTANCE_7, BEACON7);
+        map.put(INSTANCE_8, BEACON8);
+        map.put(INSTANCE_9, BEACON9);
         BEACON_LIST = Collections.unmodifiableMap(map);
     }
 

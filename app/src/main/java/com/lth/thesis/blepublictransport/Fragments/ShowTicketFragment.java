@@ -207,6 +207,7 @@ public class ShowTicketFragment extends AbstractObserverFragment {
     }
 
     private void updateDistanceText(PublicTransportBeacon beacon){
+        if(beacon == null) { return; }
         final String trackName = beacon.getName();
         final String distance = BeaconHelper.getDistanceText(beacon);
 

@@ -805,50 +805,58 @@
             android:layout_alignLeft="@+id/impMessDiv"
             android:layout_marginTop="7dp"/>
 
-    <TextView
+
+    <RelativeLayout
+        android:id="@+id/trainMessageBox"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:paddingStart="35dp"
+        android:paddingEnd="35dp"
+        android:paddingTop="32dp"
+
+        android:background="@color/color_message_box_light">
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/statusMess"
-            android:layout_below="@+id/impMess3"
+            android:id="@+id/statusTitle"
             android:text="Status"
-            android:textColor="@color/colorAccent"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="20dp"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="16sp"/>
-
-    <View
-            android:layout_width="185dp"
-            android:layout_height="1dp"
-            android:id="@+id/statusMessDiv"
-            android:background="@color/colorDivider"
-            android:layout_below="@id/statusMess"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="4dp"/>
-
-    <TextView
+        <TextView
             android:layout_width="170dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/statusMessDiv"
+            android:layout_below="@+id/statusTitle"
             android:id="@+id/statusMessText"
             android:text="Currently on schedule."
-            android:textColor="@color/colorDividerDark"
-            android:layout_alignLeft="@id/impMessDiv"
-            android:layout_marginTop="7dp"
+            android:textColor="@color/color_message_box_text"
             android:textSize="14sp"/>
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:singleLine="true"
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="90dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignEnd="@+id/trainMessageBox"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_message_box_dark"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/statusMessText"
-            android:text="You do not have a valid ticket for this trip."
-            android:textColor="#000"
-            android:layout_alignLeft="@id/impMessDiv"
-            android:layout_marginTop="7dp"
-            android:textSize="14sp"
-            android:id="@+id/validTicketText"/>
-
-
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/train_ticket"
+            android:id="@+id/train_ticket_image" />
+        <TextView
+            android:id="@+id/train_ticket_status"
+            android:layout_below="@+id/train_ticket_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:textAlignment="center"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/color_message_box_text"
+            android:text="No ticket"/>
+    </RelativeLayout>
 
     <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/departureCircularProgressBar"

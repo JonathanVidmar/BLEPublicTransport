@@ -15,4 +15,7 @@
 
     <color name="color_dialog_selected">#EEF4FC</color>
     <color name="color_dialog_text">#838588</color>
+    <color name="color_message_box_light">#EEF0F2</color>
+    <color name="color_message_box_dark">#DEE2E7</color>
+    <color name="color_message_box_text">#95989A</color>
 </resources>
