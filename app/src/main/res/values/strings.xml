@@ -61,6 +61,7 @@
     <string name="nearby">Nearby</string>
     <string name="timetable">Timetable</string>
     <string name="image_description">Header image</string>
+    <string name="welcome_message">Welcome to Lund\'s Central Station</string>
 
     <!-- Show ticket fragment -->
     <string name="ticket_not_valid">This ticket is no longer valid.</string>

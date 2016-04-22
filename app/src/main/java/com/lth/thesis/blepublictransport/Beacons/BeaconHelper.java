@@ -1,8 +1,5 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
-import android.content.SharedPreferences;
-
-import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
 import com.lth.thesis.blepublictransport.Utils.MeasurementUtil;
 import org.altbeacon.beacon.Beacon;
@@ -28,22 +25,6 @@ public class BeaconHelper {
     private long lastSelfCorrectingBeaconUpdate = 0;
     public MeasurementUtil measurementUtil;
 
-    // Beacons
-    public static final Map<Identifier, PublicTransportBeacon> BEACON_LIST;
-    static {
-        Map<Identifier, PublicTransportBeacon> map = new HashMap<>();
-        map.put(INSTANCE_1, BEACON1);
-        map.put(INSTANCE_2, BEACON2);
-        map.put(INSTANCE_3, BEACON3);
-        map.put(INSTANCE_4, BEACON4);
-        map.put(INSTANCE_5, BEACON5);
-        map.put(INSTANCE_6, BEACON6);
-        map.put(INSTANCE_7, BEACON7);
-        map.put(INSTANCE_8, BEACON8);
-        map.put(INSTANCE_9, BEACON9);
-        BEACON_LIST = Collections.unmodifiableMap(map);
-    }
-
     public BeaconHelper(boolean selfCorrection) {
         this.selfCorrection = selfCorrection;
         measurementUtil = new MeasurementUtil();
@@ -51,25 +32,11 @@ public class BeaconHelper {
 
     /**
      * This method is a getter for the name attribute of a beacon
-     *
      * @param b, region.getId2()
      * @return the name of the beacon.
      */
     public static String getBeaconName(Beacon b) {
         return BEACON_LIST.get(b.getId2()).getName();
-    }
-
-    /**
-     * This method returns the distance in a formatted string.
-     *
-     * @param beacon, the beacon of which distance to is to be returned
-     * @return the text to be displayed.
-     */
-    public static String getDistanceText(PublicTransportBeacon beacon) {
-        double distance = beacon.getDistance();
-        DecimalFormat df = new DecimalFormat("#.#");
-        df.setRoundingMode(RoundingMode.CEILING);
-        return df.format(distance) + " meters";
     }
 
     /**
@@ -79,6 +46,18 @@ public class BeaconHelper {
      */
     public static boolean isBeaconAtStation(Identifier instance){
         return BEACON_LIST.get(instance).getType() == BEACON_TYPE_STATION;
+    }
+
+    /**
+     * This method returns the distance in a formatted string.
+     * @param beacon, the beacon of which distance to is to be returned
+     * @return the text to be displayed.
+     */
+    public static String getDistanceText(PublicTransportBeacon beacon) {
+        double distance = beacon.getDistance();
+        DecimalFormat df = new DecimalFormat("#.#");
+        df.setRoundingMode(RoundingMode.CEILING);
+        return df.format(distance) + " meters";
     }
 
     public static void lostRegionInstance(Identifier instance) {
@@ -103,11 +82,6 @@ public class BeaconHelper {
             BEACON_LIST.get(b.getId2()).updateDistance(b, movementState, txPower, processNoise);
             measurementUtil.update(b, this);
         }
-
-    }
-
-    public static int getImage(Beacon b) {
-        return BEACON_LIST.get(b.getId2()).getImage();
     }
 
     private void checkSelfCorrection(Beacon b) {

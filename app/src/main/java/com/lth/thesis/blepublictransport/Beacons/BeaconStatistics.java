@@ -1,6 +1,5 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
-import android.util.Log;
 import com.lth.thesis.blepublictransport.Utils.KFBuilder;
 import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
 import org.altbeacon.beacon.Beacon;

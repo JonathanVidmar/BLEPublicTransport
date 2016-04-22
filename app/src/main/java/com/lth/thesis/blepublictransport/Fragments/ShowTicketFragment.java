@@ -199,7 +199,7 @@ public class ShowTicketFragment extends AbstractObserverFragment {
 
     private PublicTransportBeacon getBeaconForDistance(ArrayList<PublicTransportBeacon> beacons){
         for(PublicTransportBeacon beacon : beacons){
-            if(beacon.getID().equals(BeaconConstants.BEACON2.getID())){
+            if(beacon.getID().equals(BeaconConstants.BEACON_LIST.get(BeaconConstants.INSTANCE_2).getID())){
                 return beacon;
             }
         }

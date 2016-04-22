@@ -30,29 +30,22 @@ public class PublicTransportBeacon {
         this.beacon = beacon;
     }
 
-    public int getType(){
-        return type;
-    }
+    public int getType() { return type; }
 
-    public String getName() {
-        return simpleName;
-    }
-
-    public double getDistance() {
-        return stats.getDistance();
-    }
-
-    public void updateDistance(Beacon b, double movementState, double txPower, double processNoise){
-        stats.updateDistance(b, movementState, txPower, processNoise);
-    }
+    public String getName() { return simpleName; }
 
     public Identifier getID() {
         return id;
     }
 
-
     public Integer getImage() {
         return image;
+    }
+
+    public double getDistance() { return stats.getDistance(); }
+
+    public void updateDistance(Beacon b, double movementState, double txPower, double processNoise){
+        stats.updateDistance(b, movementState, txPower, processNoise);
     }
 
     public boolean inProximity(){

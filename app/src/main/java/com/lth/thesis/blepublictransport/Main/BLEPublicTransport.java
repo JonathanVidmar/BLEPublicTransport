@@ -11,6 +11,7 @@ import com.lth.thesis.blepublictransport.Beacons.BeaconCommunicator;
 import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
 import com.lth.thesis.blepublictransport.Beacons.PublicTransportBeacon;
+import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
 import com.lth.thesis.blepublictransport.BluetoothClient.BluetoothClient;
 import com.lth.thesis.blepublictransport.Utils.NotificationHandler;
@@ -246,7 +247,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         });
 
         for(Beacon b: temp){
-            list.add(BeaconHelper.BEACON_LIST.get(b.getId2()));
+            list.add(BeaconConstants.BEACON_LIST.get(b.getId2()));
         }
         return list;
     }

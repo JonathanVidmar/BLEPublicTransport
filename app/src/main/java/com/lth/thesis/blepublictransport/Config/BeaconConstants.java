@@ -59,17 +59,20 @@ public class BeaconConstants {
     public static final Station CPH_STATION = new Station("Köpenhamn central", "CPH", "img_cph", "Øresundståg", "05");
 
     // Beacons
-    public static final PublicTransportBeacon BEACON1 = new PublicTransportBeacon(INSTANCE_1, BEACON_TYPE_STATION, HOME_STATION,  "Kundservice", R.drawable.icon_information);
-    public static final PublicTransportBeacon BEACON2 = new PublicTransportBeacon(INSTANCE_2, BEACON_TYPE_STATION, HOME_STATION, "Gate 2",  R.drawable.icon_tracks);
-    public static final PublicTransportBeacon BEACON3 = new PublicTransportBeacon(INSTANCE_3, BEACON_TYPE_STATION, HOME_STATION,  "Espresso House", R.drawable.icon_coffe);
-    public static final PublicTransportBeacon BEACON4 = new PublicTransportBeacon(INSTANCE_4, BEACON_TYPE_STATION, HOME_STATION,  "Track 2", R.drawable.icon_tracks);
-    public static final PublicTransportBeacon BEACON5 = new PublicTransportBeacon(INSTANCE_5, BEACON_TYPE_STATION, HOME_STATION,  "Track 1", R.drawable.icon_tracks);
-    public static final PublicTransportBeacon BEACON6 = new PublicTransportBeacon(INSTANCE_6, BEACON_TYPE_VEHICLE, HOME_STATION,  "Pågatåg - Ystad", R.drawable.icon_coffe);
-    public static final PublicTransportBeacon BEACON7 = new PublicTransportBeacon(INSTANCE_7, BEACON_TYPE_VEHICLE, HOME_STATION,  "Espresso House", R.drawable.icon_coffe);
-    public static final PublicTransportBeacon BEACON8 = new PublicTransportBeacon(INSTANCE_8, BEACON_TYPE_VEHICLE, HOME_STATION,  "Espresso House", R.drawable.icon_coffe);
-    public static final PublicTransportBeacon BEACON9 = new PublicTransportBeacon(INSTANCE_9, BEACON_TYPE_VEHICLE, HOME_STATION,  "Espresso House", R.drawable.icon_coffe);
-
-
+    public static final Map<Identifier, PublicTransportBeacon> BEACON_LIST;
+    static {
+        Map<Identifier, PublicTransportBeacon> map = new HashMap<>();
+        map.put(INSTANCE_1, new PublicTransportBeacon(INSTANCE_1, BEACON_TYPE_STATION, HOME_STATION,  "Kundservice", R.drawable.icon_information));
+        map.put(INSTANCE_2, new PublicTransportBeacon(INSTANCE_2, BEACON_TYPE_STATION, HOME_STATION, "Gate 2",  R.drawable.icon_tracks));
+        map.put(INSTANCE_3, new PublicTransportBeacon(INSTANCE_3, BEACON_TYPE_STATION, HOME_STATION,  "Espresso House", R.drawable.icon_coffe));
+        map.put(INSTANCE_4, new PublicTransportBeacon(INSTANCE_4, BEACON_TYPE_STATION, HOME_STATION,  "Track 2", R.drawable.icon_tracks));
+        map.put(INSTANCE_5, new PublicTransportBeacon(INSTANCE_5, BEACON_TYPE_STATION, HOME_STATION,  "Track 1", R.drawable.icon_tracks));
+        map.put(INSTANCE_6, new PublicTransportBeacon(INSTANCE_6, BEACON_TYPE_VEHICLE, HOME_STATION,  "Pågatåg - Ystad", R.drawable.icon_tracks));
+        map.put(INSTANCE_7, new PublicTransportBeacon(INSTANCE_7, BEACON_TYPE_VEHICLE, HOME_STATION,  "Øresundståg - Köpenhamn", R.drawable.icon_tracks));
+        map.put(INSTANCE_8, new PublicTransportBeacon(INSTANCE_8, BEACON_TYPE_VEHICLE, HOME_STATION,  "Pågatåg - Trellborg", R.drawable.icon_tracks));
+        map.put(INSTANCE_9, new PublicTransportBeacon(INSTANCE_9, BEACON_TYPE_VEHICLE, HOME_STATION,  "Øresundståg - Helsingborg", R.drawable.icon_tracks));
+        BEACON_LIST = Collections.unmodifiableMap(map);
+    }
 
     public static final Map<String, Station> DESTINATION_MAP;
     static {
@@ -84,12 +87,12 @@ public class BeaconConstants {
     public static final List<Train> ARRIVALS_LIST;
     static {
         List<Train> list = new ArrayList<>();
-        list.add(new Train("Pågatåg - Ystad", "2", "12.01"));
-        list.add(new Train("Øresundståg - Köpenhamn", "1", "12.22"));
-        list.add(new Train("Øresundståg - Helsingborg", "3", "12.37"));
-        list.add(new Train("SJ - Stockholm", "6", "13.02"));
-        list.add(new Train("Pågatåg - Trelleborg", "16", "13.24"));
-        list.add(new Train("Øresundståg - Göteborg", "2", "13.43"));
+        list.add(new Train("Pågatåg", "Ystad", BEACON_LIST.get(INSTANCE_4), "12.01"));
+        list.add(new Train("Øresundståg", "Köpenhamn", BEACON_LIST.get(INSTANCE_5), "12.22"));
+        list.add(new Train("Øresundståg", "Helsingborg", BEACON_LIST.get(INSTANCE_4), "12.37"));
+        list.add(new Train("SJ", "Stockholm", BEACON_LIST.get(INSTANCE_5), "13.02"));
+        list.add(new Train("Pågatåg", "Trelleborg", BEACON_LIST.get(INSTANCE_4), "13.24"));
+        list.add(new Train("Øresundståg", "Göteborg", BEACON_LIST.get(INSTANCE_5), "13.43"));
         ARRIVALS_LIST = Collections.unmodifiableList(list);
     }
 }

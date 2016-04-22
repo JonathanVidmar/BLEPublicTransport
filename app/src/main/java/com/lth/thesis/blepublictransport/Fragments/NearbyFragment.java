@@ -1,8 +1,6 @@
 package com.lth.thesis.blepublictransport.Fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +9,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.PublicTransportBeacon;
 import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Main.BLEPublicTransport;
-import com.lth.thesis.blepublictransport.Beacons.BeaconHelper;
 import com.lth.thesis.blepublictransport.Beacons.BeaconPacket;
 import com.lth.thesis.blepublictransport.Main.MainActivity;
 import com.lth.thesis.blepublictransport.Utils.NearbyListViewAdapter;
 import com.lth.thesis.blepublictransport.R;
-
-import org.altbeacon.beacon.Identifier;
 
 import java.util.*;
 
@@ -29,14 +25,16 @@ import java.util.*;
  * Shows a list of nearby objects if a station has been
  * entered. Is empty otherwise.
  *
- * @author      Jacob Arvidsson & Jonathan Vidmar
- * @version     1.1
+ * @author Jacob Arvidsson & Jonathan Vidmar
+ * @version 1.1
  */
 public class NearbyFragment extends AbstractObserverFragment {
-    private ListView listView;
-    private NearbyListViewAdapter mAdapter;
-    private boolean isNearbyMode = true;
     private BLEPublicTransport application;
+    private NearbyListViewAdapter mAdapter;
+    private ListView listView;
+    private MainActivity activity;
+
+    private boolean isNearbyMode = true;
 
     public NearbyFragment() {
         // Required empty public constructor
@@ -53,45 +51,20 @@ public class NearbyFragment extends AbstractObserverFragment {
 
         final Button nearbyButton = (Button) view.findViewById(R.id.nearbyTabButton);
         final Button timeTableButton = (Button) view.findViewById(R.id.timetableTabButton);
-
         nearbyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(!isNearbyMode){
-                    isNearbyMode = true;
-                    mAdapter.showNearby(true);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            nearbyButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                            timeTableButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryText));
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
+                setMode(true, nearbyButton, timeTableButton);
             }
         });
-
         timeTableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isNearbyMode){
-                    mAdapter.showNearby(false);
-                    isNearbyMode = false;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            timeTableButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                            nearbyButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryText));
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
+                setMode(false, nearbyButton, timeTableButton);
             }
         });
-        MainActivity a = (MainActivity) getActivity();
-        a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorIcons));
+        activity = (MainActivity) getActivity();
+        activity.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorIcons));
 
         return view;
     }
@@ -104,9 +77,32 @@ public class NearbyFragment extends AbstractObserverFragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        if (application.beaconHelper.currentlyInMainRegion()) enteredStation();
+        if (BeaconHelper.currentlyInMainRegion()) enteredStation();
+    }
+
+    /**
+     * Sets the mode of the list view to either nearby objects or timetable.
+     * @param button, if nearbyButton was pressed, true, otherwise false
+     * @param nearbyButton, the button for nearby list
+     * @param timeTableButton, the button for timetable list
+     */
+    private void setMode(final boolean button, final Button nearbyButton, final Button timeTableButton) {
+        if ((button && !isNearbyMode) || !button && isNearbyMode) {
+            isNearbyMode = button;
+            mAdapter.showNearby(button);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int selected_color = ContextCompat.getColor(getActivity(), R.color.colorAccent);
+                    int unselected_color = ContextCompat.getColor(getActivity(), R.color.colorPrimaryText);
+                    nearbyButton.setTextColor((button) ? selected_color : unselected_color);
+                    timeTableButton.setTextColor((!button) ? selected_color : unselected_color);
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     /* Runs when beacons is in range and updates the views components. */
@@ -123,10 +119,10 @@ public class NearbyFragment extends AbstractObserverFragment {
      * Update view's components.
      * Sets the text on top of the screen and hides or shows the list of objects.
      *
-     * @param  visibility if the list of objects should be displayed.
-     * @param  text text to be displayed on top of the screen.
+     * @param visibility if the list of objects should be displayed.
+     * @param text       text to be displayed on top of the screen.
      */
-    private void updateLocation(final String text, final int visibility){
+    private void updateLocation(final String text, final int visibility) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -140,11 +136,12 @@ public class NearbyFragment extends AbstractObserverFragment {
     /**
      * Called when ranging has found nearby beacons.
      * It updates each beacon's value in the HashMap: foundBeacons and then calls sortList()
-     * @param  beacons the beacons found by ranging.
+     *
+     * @param beacons the beacons found by ranging.
      */
     public void foundObjectsNear(final ArrayList<PublicTransportBeacon> beacons) {
-        if(application.isAtStation){
-            if(isNearbyMode){
+        if (application.isAtStation) {
+            if (isNearbyMode) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -153,26 +150,25 @@ public class NearbyFragment extends AbstractObserverFragment {
                     }
                 });
             }
-            if(listView.getVisibility() != View.VISIBLE){
-                updateLocation("Welcome to Lund's Central Station", View.VISIBLE);
+            if (listView.getVisibility() != View.VISIBLE) {
+                updateLocation(getString(R.string.welcome_message), View.VISIBLE);
             }
-        }else{
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            Fragment train = new TrainFragment();
-            fragmentTransaction.replace(R.id.fragment_container, train, MainActivity.TRAIN_FRAGMENT);
-            fragmentTransaction.commit();
+        } else {
+            activity.executeNavigationTo(MainActivity.TRAIN_FRAGMENT);
         }
     }
 
     /* Observer method from the application. Receives the beacon information. */
     public void update(Object data) {
         BeaconPacket p = (BeaconPacket) data;
-        if(p.type == BeaconPacket.ENTERED_REGION){
+        if (p.type == BeaconPacket.ENTERED_REGION) {
             enteredStation();
-        }else if(p.type == BeaconPacket.EXITED_REGION){
+        } else if (p.type == BeaconPacket.EXITED_REGION) {
             leftStation();
-        }else if(p.type == BeaconPacket.RANGED_BEACONS){
-            if(p.beacons.size() > 0){ foundObjectsNear(p.beacons); }
+        } else if (p.type == BeaconPacket.RANGED_BEACONS) {
+            if (p.beacons.size() > 0) {
+                foundObjectsNear(p.beacons);
+            }
         }
     }
 }
