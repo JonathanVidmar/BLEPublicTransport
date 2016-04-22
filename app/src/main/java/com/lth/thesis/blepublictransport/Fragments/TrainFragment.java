@@ -42,8 +42,7 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class TrainFragment extends AbstractObserverFragment {
-    private BeaconHelper helper;
-    private View view;
+    private BLEPublicTransport application;
     private HorizontalScrollView sv;
     private RelativeLayout prevStation;
     private RelativeLayout currStation;
@@ -64,12 +63,10 @@ public class TrainFragment extends AbstractObserverFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        BLEPublicTransport app = (BLEPublicTransport) getActivity().getApplication();
-        helper = app.beaconHelper;
-        view = inflater.inflate(R.layout.fragment_train, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_train, container, false);
+
+        application = (BLEPublicTransport) getActivity().getApplication();
         prevStation = (RelativeLayout) view.findViewById(R.id.hjarup);
         currStation = (RelativeLayout) view.findViewById(R.id.lundc);
         currStationIcon = view.findViewById(R.id.lundcIcon);
@@ -81,6 +78,21 @@ public class TrainFragment extends AbstractObserverFragment {
         lundcTime = (TextView) view.findViewById(R.id.lundcTime);
         circularProgressBar = (CircularProgressBar) view.findViewById(R.id.departureCircularProgressBar);
 
+
+        TextView status = (TextView) view.findViewById(R.id.train_ticket_status);
+        status.setText((application.hasValidTicket() ? "Show ticket" : "Buy ticket"));
+        RelativeLayout ticketButton = (RelativeLayout) view.findViewById(R.id.ticket_button);
+        ticketButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity main = (MainActivity) getActivity();
+                if(application.hasValidTicket()){
+                    main.executeNavigationTo(MainActivity.SHOW_TICKET_FRAGMENT);
+                }else{
+                    main.executeNavigationTo(MainActivity.PAYMENT_FRAGMENT);
+                }
+            }
+        });
         // run when view is visible for the first time
         view.post(new Runnable() {
                            @Override
@@ -235,7 +247,7 @@ public class TrainFragment extends AbstractObserverFragment {
      */
     public void foundObjectsNear(final ArrayList<PublicTransportBeacon> beacons) {
         Identifier closestID = beacons.get(0).getID();
-        if(helper.isBeaconAtStation(closestID)){
+        if(BeaconHelper.isBeaconAtStation(closestID)){
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             Fragment train = new NearbyFragment();
             fragmentTransaction.replace(R.id.fragment_container, train, MainActivity.STATION_FRAGMENT);

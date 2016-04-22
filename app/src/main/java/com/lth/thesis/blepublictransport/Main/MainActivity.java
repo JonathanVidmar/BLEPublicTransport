@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void executeNavigationTo(String destination) {
+    public void executeNavigationTo(String destination) {
         resetBackgroundColor();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         currentFragment = getSupportFragmentManager().findFragmentByTag(destination);
@@ -136,6 +136,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case PAYMENT_FRAGMENT:
                 if (currentFragment == null) currentFragment = new PaymentFragment();
+                break;
+            case SHOW_TICKET_FRAGMENT:
+                if (currentFragment == null) currentFragment = new ShowTicketFragment();
                 break;
             case SETTINGS_FRAGMENT:
                 if (currentFragment == null) currentFragment = new SettingsFragment();

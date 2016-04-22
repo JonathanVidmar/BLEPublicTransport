@@ -833,6 +833,7 @@
             android:textSize="14sp"/>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/ticket_button"
         android:layout_width="90dp"
         android:layout_height="100dp"
         android:layout_marginTop="30dp"
@@ -857,6 +858,7 @@
             android:textColor="@color/color_message_box_text"
             android:text="No ticket"/>
     </RelativeLayout>
+
 
     <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/departureCircularProgressBar"
