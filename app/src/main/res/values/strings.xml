@@ -86,7 +86,7 @@
     <string name="ticket_transportation_type">Train/Bus</string>
     <string name="ticket_valid_until">Valid until</string>
     <string name="ticket_next_departure">NEXT DEPARTURE</string>
-    <string name="ticket_time_to_next_departure">TIME TO NEXT DEPARTURE</string>
+    <string name="ticket_time_to_next_departure">NEXT DEPARTURE TIME</string>
     <string name="ticket_track_number">TRACK NUMBER</string>
 
 

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,9 @@ public class ShowTicketFragment extends AbstractObserverFragment {
     private TextView trackNumberLabel;
     private TextView distanceLabel;
 
+    private RelativeLayout ticketContainer;
+    private RelativeLayout ticketFailureMessage;
+
     public ShowTicketFragment() {
         // Required empty public constructor
     }
@@ -80,12 +84,14 @@ public class ShowTicketFragment extends AbstractObserverFragment {
         timeOfNextDepartureLabel = (TextView) view.findViewById(R.id.timeOfNextDepartureLabel);
         trackNumberLabel = (TextView) view.findViewById(R.id.track);
         distanceLabel = (TextView) view.findViewById(R.id.trackDistanceLabel);
+        ticketContainer = (RelativeLayout) view.findViewById(R.id.ticket_container);
+        ticketFailureMessage = (RelativeLayout) view.findViewById(R.id.ticket_failure_message);
         trackNumberLabel.setText("N/A");
         distanceLabel.setText("N/A");
 
         configureView();
         initTimer();
-        //addRemoveButton();
+        addRemoveButton();
 
         MainActivity a = (MainActivity) getActivity();
         a.changeMenuColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryText));
@@ -174,6 +180,13 @@ public class ShowTicketFragment extends AbstractObserverFragment {
 
                 timer.cancel();
                 clearTicket("");
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ticketFailureMessage.setVisibility(View.VISIBLE);
+                        ticketContainer.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
         });
     }

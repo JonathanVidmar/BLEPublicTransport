@@ -6,6 +6,47 @@
     tools:context=".Fragments.ShowTicketFragment">
 
     <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:id="@+id/ticket_failure_message"
+            android:visibility="invisible">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ticket_oops"
+            android:gravity="center"
+            android:textColor="@color/colorDivider"
+            android:text="Oops..."
+            android:textStyle="bold"
+            android:textSize="30sp"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorDivider"
+            android:text=":("
+            android:textStyle="bold"
+            android:textSize="100sp"
+            android:layout_below="@+id/ticket_oops"
+            android:id="@+id/ticket_smiley"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorDivider"
+            android:text="No ticket available"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:layout_below="@+id/ticket_smiley"
+                android:layout_marginTop="20dp"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:id="@+id/ticket_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -257,7 +298,7 @@
         android:src="@drawable/ic_delete_24dp"
         android:layout_alignParentBottom="true"
         android:padding="20dp"
-        android:layout_alignEnd="@id/ticket_container"/>
+        android:layout_alignParentEnd="true"/>
 
 
 
