@@ -55,7 +55,7 @@ public class BeaconStatistics {
     }
 
     private void calculateDistance(double txPower) {
-        double n = 3.0;   // Signal propogation exponent
+        double n = 2.5;   // Signal propogation exponent
         double d0 = 1;  // Reference distance in meters
         double C = 0;   // Gaussian variable for mitigating flat fading
 

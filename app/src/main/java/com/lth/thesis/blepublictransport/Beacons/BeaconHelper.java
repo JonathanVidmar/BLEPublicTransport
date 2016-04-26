@@ -65,9 +65,9 @@ public class BeaconHelper {
         }else{
             distanceText = "More than 40 meters away";
         }
-        //DecimalFormat df = new DecimalFormat("#.#");
-        //df.setRoundingMode(RoundingMode.CEILING);
-        return distanceText; //+ " | " +  df.format(distance);
+        DecimalFormat df = new DecimalFormat("#.#");
+        df.setRoundingMode(RoundingMode.CEILING);
+        return distanceText + " | " +  df.format(distance);
     }
 
     public static void lostRegionInstance(Identifier instance) {
