@@ -145,7 +145,7 @@ public class NearbyFragment extends AbstractObserverFragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.updateList(beacons);
+                        mAdapter.updateList(filterList(beacons));
                         mAdapter.notifyDataSetChanged();
                     }
                 });
@@ -156,6 +156,16 @@ public class NearbyFragment extends AbstractObserverFragment {
         } else {
             activity.executeNavigationTo(MainActivity.TRAIN_FRAGMENT);
         }
+    }
+
+    public ArrayList<PublicTransportBeacon> filterList(ArrayList<PublicTransportBeacon> beacons){
+        ArrayList<PublicTransportBeacon> filteredList = new ArrayList<>();
+        for(PublicTransportBeacon beacon : beacons){
+            if(beacon.getType() != BeaconConstants.BEACON_TYPE_VEHICLE && !beacon.getID().equals(BeaconConstants.INSTANCE_2)){
+                filteredList.add(beacon);
+            }
+        }
+        return filteredList;
     }
 
     /* Observer method from the application. Receives the beacon information. */

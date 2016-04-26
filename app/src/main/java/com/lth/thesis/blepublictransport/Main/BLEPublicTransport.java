@@ -73,10 +73,10 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout(EDDYSTONE_LAYOUT));
 
         try {
-            //beaconManager.setForegroundScanPeriod(1100l);
-            //beaconManager.setForegroundBetweenScanPeriod(0l);
-            //beaconManager.setBackgroundScanPeriod(120l);
-            //beaconManager.setBackgroundBetweenScanPeriod(0l);
+            beaconManager.setForegroundScanPeriod(120l);
+            beaconManager.setForegroundBetweenScanPeriod(0l);
+            beaconManager.setBackgroundScanPeriod(120l);
+            beaconManager.setBackgroundBetweenScanPeriod(0l);
 
             beaconManager.updateScanPeriods();
         } catch (RemoteException e) {
@@ -220,7 +220,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         }
         ArrayList<PublicTransportBeacon> list = sortList();
         if(list.size() != 0) {
-            isAtStation = BeaconHelper.isBeaconAtStation(list.get(0).getID());
+            isAtStation = BeaconHelper.isBeaconAStation(list.get(0).getID());
         }
         return list;
     }
@@ -233,9 +233,12 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
         for (String key : foundBeacons.keySet()) {
             temp.add(foundBeacons.get(key));
         }
-        Collections.sort(temp, new Comparator<Beacon>() {
+        for(Beacon b: temp){
+            list.add(BeaconConstants.BEACON_LIST.get(b.getId2()));
+        }
+        Collections.sort(list, new Comparator<PublicTransportBeacon>() {
             @Override
-            public int compare(Beacon b2, Beacon b1) {
+            public int compare(PublicTransportBeacon b2, PublicTransportBeacon b1) {
                 if (b1.getDistance() < b2.getDistance()) {
                     return 1;
                 } else if (b1.getDistance() > b2.getDistance()) {
@@ -246,9 +249,7 @@ public class BLEPublicTransport extends Application implements BootstrapNotifier
             }
         });
 
-        for(Beacon b: temp){
-            list.add(BeaconConstants.BEACON_LIST.get(b.getId2()));
-        }
+
         return list;
     }
 

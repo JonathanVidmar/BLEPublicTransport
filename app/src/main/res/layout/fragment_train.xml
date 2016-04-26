@@ -421,7 +421,7 @@
                 <View
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/station_to_be_visited"
+                        android:background="@drawable/station_animated"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="22dp"
                         android:layout_alignParentLeft="true"

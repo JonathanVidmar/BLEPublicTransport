@@ -44,7 +44,7 @@ public class BeaconHelper {
      * @param instance, id of the beacon
      * @return boolean, if it is of type station
      */
-    public static boolean isBeaconAtStation(Identifier instance){
+    public static boolean isBeaconAStation(Identifier instance){
         return BEACON_LIST.get(instance).getType() == BEACON_TYPE_STATION;
     }
 
@@ -55,9 +55,19 @@ public class BeaconHelper {
      */
     public static String getDistanceText(PublicTransportBeacon beacon) {
         double distance = beacon.getDistance();
-        DecimalFormat df = new DecimalFormat("#.#");
-        df.setRoundingMode(RoundingMode.CEILING);
-        return df.format(distance) + " meters";
+        String distanceText = "";
+        if(distance < 5){
+            distanceText = "Less than 5 meters";
+        }else if(distance < 20){
+            distanceText = "5 - 20 meters away";
+        }else if(distance < 40){
+            distanceText = "20 - 40 meters away";
+        }else{
+            distanceText = "More than 40 meters away";
+        }
+        //DecimalFormat df = new DecimalFormat("#.#");
+        //df.setRoundingMode(RoundingMode.CEILING);
+        return distanceText; //+ " | " +  df.format(distance);
     }
 
     public static void lostRegionInstance(Identifier instance) {

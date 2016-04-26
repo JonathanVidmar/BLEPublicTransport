@@ -78,6 +78,8 @@ public class TrainFragment extends AbstractObserverFragment {
         lundcText = (TextView) view.findViewById(R.id.lundcText);
         lundcTime = (TextView) view.findViewById(R.id.lundcTime);
         circularProgressBar = (CircularProgressBar) view.findViewById(R.id.departureCircularProgressBar);
+        final GradientDrawable background = (GradientDrawable) nextStationIcon.getBackground();
+        background.setColor(Color.WHITE);
 
 
         TextView status = (TextView) view.findViewById(R.id.train_ticket_status);
@@ -149,12 +151,15 @@ public class TrainFragment extends AbstractObserverFragment {
     }
 
     private void leftStation() {
-        currStationIcon.setBackground(getContext().getResources().getDrawable(R.drawable.station_visited));
-        animateNextStation();
-        lundcTime.setVisibility(View.VISIBLE);
-        lundcText.setTypeface(null, Typeface.NORMAL);
-        lundcText.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDivider));
-        scrollToView(sv, currStation);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity != null) {
+            currStationIcon.setBackground(getContext().getResources().getDrawable(R.drawable.station_visited));
+            animateNextStation();
+            lundcTime.setVisibility(View.VISIBLE);
+            lundcText.setTypeface(null, Typeface.NORMAL);
+            lundcText.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDivider));
+            scrollToView(sv, currStation);
+        }
     }
 
     /**
@@ -246,11 +251,7 @@ public class TrainFragment extends AbstractObserverFragment {
     /* Observer method from the application. Receives the beacon information. */
     public void update(Object data) {
         BeaconPacket p = (BeaconPacket) data;
-        if(p.type == BeaconPacket.ENTERED_REGION){
-            // Probably shoudn't be handled here
-        }else if(p.type == BeaconPacket.EXITED_REGION){
-            // Left train
-        }else if(p.type == BeaconPacket.RANGED_BEACONS){
+        if(p.type == BeaconPacket.RANGED_BEACONS){
             if(p.beacons.size() > 0){ foundObjectsNear(p.beacons); }
         }
     }
@@ -261,12 +262,9 @@ public class TrainFragment extends AbstractObserverFragment {
      * @param  beacons the beacons found by ranging.
      */
     public void foundObjectsNear(final ArrayList<PublicTransportBeacon> beacons) {
-        Identifier closestID = beacons.get(0).getID();
-        if(BeaconHelper.isBeaconAtStation(closestID)){
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            Fragment train = new NearbyFragment();
-            fragmentTransaction.replace(R.id.fragment_container, train, MainActivity.STATION_FRAGMENT);
-            fragmentTransaction.commit();
+        if(application.isAtStation){
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.executeNavigationTo(MainActivity.STATION_FRAGMENT);
         }else{
             // Still on the train
         }
