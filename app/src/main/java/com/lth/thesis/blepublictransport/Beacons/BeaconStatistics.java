@@ -55,12 +55,21 @@ public class BeaconStatistics {
     }
 
     private void calculateDistance(double txPower) {
-        double n = 2;   // Signal propogation exponent
-        double d0 = 0.89976;  // Reference distance in meters, taken from altbeacon
+        double n = 3.0;   // Signal propogation exponent
+        double d0 = 1;  // Reference distance in meters
         double C = 0;   // Gaussian variable for mitigating flat fading
 
+        // model specific adjustments for Samsung S3
+        double mReceiverRssiSlope = 0;
+        double mReceiverRssiOffset = -4;
+
+        // calculation of adjustment
+        double adjustment = mReceiverRssiSlope * lastFilteredReading + mReceiverRssiOffset;
+        double adjustedRssi = lastFilteredReading - adjustment;
+
+
         // Log-distance path loss model
-        lastCalculatedDistance = d0 * Math.pow(10, (lastFilteredReading - txPower - C) / (-10 * n));
+        lastCalculatedDistance = d0 * Math.pow(10.0, (adjustedRssi - txPower - C) / (-10 * n));
 
     }
 
