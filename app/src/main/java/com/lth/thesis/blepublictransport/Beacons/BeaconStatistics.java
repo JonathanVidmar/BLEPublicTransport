@@ -59,7 +59,7 @@ public class BeaconStatistics {
         double d0 = 1;  // Reference distance in meters
         double C = 0;   // Gaussian variable for mitigating flat fading
 
-        // model specific adjustments for Samsung S3
+        // model specific adjustments for Samsung S3 as per Android Beacon Library
         double mReceiverRssiSlope = 0;
         double mReceiverRssiOffset = -4;
 

@@ -56,12 +56,11 @@ public class NotificationHandler {
                 //application.shouldNotify = true;
                 break;
             case NO_TICKET_AVAILABLE:
-                sendCustomNotification("payment", R.drawable.ic_add_ticket, "Buy ticket", "You currently don't have a valid ticket.");
+                sendCustomNotification("payment", R.drawable.ic_add_ticket, "Buy ticket", "You currently don't have a valid ticket");
                 //application.shouldNotify = true;
                 break;
             case OPEN_GATE:
                 //sendBackgroundNotification("Open gate", "You are near a gate, open it by clicking the button.", R.drawable.ic_ticket);
-                Log.d("Note", "Wnyyy??");
                 displayBackgroundNotification(application);
                 break;
         }
@@ -89,7 +88,7 @@ public class NotificationHandler {
         PendingIntent nearbyPendingIntent = PendingIntent.getActivity(application.getApplicationContext(), 0, nearbyFragmentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action nearbyAction = new NotificationCompat.Action(R.drawable.ic_location_on_black_24dp,"Nearby", nearbyPendingIntent);
         return new NotificationCompat.Builder(application)
-                .setContentTitle("Welcome to Lunds Central Station")
+                .setContentTitle("Welcome to Lund Central Station")
                 .setContentText("Swipe down to view options")
                 .setSmallIcon(R.drawable.ic_notification_bus)
                 .setColor(ContextCompat.getColor(application.getApplicationContext(), R.color.colorAccent))
@@ -108,8 +107,8 @@ public class NotificationHandler {
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(application);
-        builder.setContentTitle("Welcome to Lunds Central Station")
-                .setContentText("You are approaching a gate, pleace click to open the gate.")
+        builder.setContentTitle("Approaching gate at Track 2")
+                .setContentText("Touch to open the gate")
                 .setSmallIcon(R.drawable.ic_notification_bus)
                 .setColor(ContextCompat.getColor(application.getApplicationContext(), R.color.colorAccent))
                 .setOngoing(true)

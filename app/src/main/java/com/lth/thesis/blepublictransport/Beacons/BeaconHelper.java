@@ -58,16 +58,16 @@ public class BeaconHelper {
         String distanceText = "";
         if(distance < 5){
             distanceText = "Less than 5 meters";
-        }else if(distance < 20){
-            distanceText = "5 - 20 meters away";
+        }else if(distance < 15){
+            distanceText = "5 - 15 meters away";
         }else if(distance < 40){
-            distanceText = "20 - 40 meters away";
+            distanceText = "15 - 40 meters away";
         }else{
             distanceText = "More than 40 meters away";
         }
         DecimalFormat df = new DecimalFormat("#.#");
         df.setRoundingMode(RoundingMode.CEILING);
-        return distanceText + " | " +  df.format(distance);
+        return distanceText; // + " | " +  df.format(distance);
     }
 
     public static void lostRegionInstance(Identifier instance) {
