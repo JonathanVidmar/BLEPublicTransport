@@ -39,7 +39,7 @@ public class GateConnectionFragment extends AbstractObserverFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_bluetooth_connection, container, false);
+        final View view = inflater.inflate(R.layout.fragment_gate_connection, container, false);
         reenteredFragment = true;
         statusText = (TextView) view.findViewById(R.id.statusText);
         button = (Button) view.findViewById(R.id.connectButton);

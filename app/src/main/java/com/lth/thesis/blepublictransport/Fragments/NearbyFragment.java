@@ -42,7 +42,7 @@ public class NearbyFragment extends AbstractObserverFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.nearby_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_nearby, container, false);
         mAdapter = new NearbyListViewAdapter(getActivity(), new ArrayList<PublicTransportBeacon>());
         mAdapter.updateArrivalsList(new ArrayList<>(BeaconConstants.ARRIVALS_LIST));
         listView = (ListView) view.findViewById(R.id.locationItems);

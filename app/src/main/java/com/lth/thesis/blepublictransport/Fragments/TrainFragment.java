@@ -56,6 +56,7 @@ public class TrainFragment extends AbstractObserverFragment {
     private TextView lundcTime;
     private final static float START_TIME = 2760;
     private float timeElapsed = 60;
+    private final static float DEPARTURE_TIME = 70;
     private CountDownTimer timer;
 
     public TrainFragment() {
@@ -137,7 +138,7 @@ public class TrainFragment extends AbstractObserverFragment {
                 timeElapsed++;
                 circularProgressBar.setProgress(100.0f*timeElapsed/START_TIME);
                 timeLeft.setText(timeLeftToString());
-                if (timeElapsed == 100) {
+                if (timeElapsed == DEPARTURE_TIME) {
                     leftStation();
                 }
             }
@@ -178,7 +179,7 @@ public class TrainFragment extends AbstractObserverFragment {
         anim.setPropertyName("scrollX");
         anim.setIntValues(childOffset.x);
         anim.setInterpolator(new OvershootInterpolator());
-        anim.setDuration(600L);
+        anim.setDuration(1000L);
         anim.start();
     }
 
@@ -199,7 +200,7 @@ public class TrainFragment extends AbstractObserverFragment {
 
 
         });
-        valueAnimator.setDuration(1300);
+        valueAnimator.setDuration(1600);
         valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
         valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());

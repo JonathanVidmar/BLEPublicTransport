@@ -12,13 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.lth.thesis.blepublictransport.Config.BeaconConstants;
 import com.lth.thesis.blepublictransport.Config.SettingConstants;
@@ -53,8 +47,8 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
 
     // Dialog components
     private boolean visaPayment = true;
-    private Button visa;
-    private Button mastercard;
+    private LinearLayout visa;
+    private LinearLayout mastercard;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -138,8 +132,8 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                 }).create();
         alert.show();
 
-        visa = (Button) alert.findViewById(R.id.visaButton);
-        mastercard = (Button) alert.findViewById(R.id.mastercardButton);
+        visa = (LinearLayout) alert.findViewById(R.id.visaButton);
+        mastercard = (LinearLayout) alert.findViewById(R.id.mastercardButton);
 
         TextView dialog_description_box = (TextView) alert.findViewById(R.id.dialog_description_box);
         dialog_description_box.setText(summeryText);
@@ -150,7 +144,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
                 if (!visaPayment) {
                     visaPayment = true;
                     visa.setBackgroundColor(selectedColor);
-                    mastercard.setBackgroundColor(Color.WHITE);
+                    mastercard.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
         });
@@ -160,7 +154,7 @@ public class PaymentFragment extends Fragment implements AdapterView.OnItemSelec
             public void onClick(View v) {
                 if (visaPayment) {
                     visaPayment = false;
-                    visa.setBackgroundColor(Color.WHITE);
+                    visa.setBackgroundColor(Color.TRANSPARENT);
                     mastercard.setBackgroundColor(selectedColor);
                 }
             }
