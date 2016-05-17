@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
  * A simple {@link Fragment} subclass
  * This fragment contains a simple measurement tool for logging different settings on the Kalman Filter
  *
- * @author Janathan Vidmar
+ * @author Janathan Vidmar and ONLY HIM
  * @version 1.0
  */
 public class MeasurementFragment extends Fragment {
@@ -178,6 +178,8 @@ public class MeasurementFragment extends Fragment {
         long elapsedTime = (System.currentTimeMillis() - startTime) / 100;
         sb.append(elapsedTime + " " + currentDistance + " " +
                 formatDistance(bh.measurementUtil.getMeasurement()).replace(',', '.') +
-                bh.measurementUtil.getAltBeaconMeasurement() + "\n");
+                formatDistance(bh.measurementUtil.getAltBeaconMeasurement()).replace(',', '.') +
+                formatDistance(bh.measurementUtil.getRawMeasurement()).replace(',', '.') +
+                formatDistance(bh.measurementUtil.getWOSCMeasurement()).replace(',', '.') + "\n");
     }
 }

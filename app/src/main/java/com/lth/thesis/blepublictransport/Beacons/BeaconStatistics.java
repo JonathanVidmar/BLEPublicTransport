@@ -19,7 +19,8 @@ public class BeaconStatistics {
     private DescriptiveStatistics mostRecentTxPower;
     private KalmanFilter kf;
     private double lastCalculatedDistance;
-    private double lastFilteredReading = -1;
+    private double lastRawDistance;
+    private double lastWOSC;
     private static final int WINDOW = 20;
 
     public BeaconStatistics() {
@@ -30,6 +31,8 @@ public class BeaconStatistics {
         mostRecentTxPower.setWindowSize(WINDOW);
 
         lastCalculatedDistance = 0;
+        lastRawDistance = 0;
+        lastWOSC = 0;
 
         // Baserat på konstant avstånd från beacon, dvs låga störningar från systemet (R), höga störningar från mätning (Q)
         // Värden borde baseras på faktiska statistiska mätvärden dock
@@ -42,19 +45,22 @@ public class BeaconStatistics {
     }
 
     public void updateDistance(Beacon b, double movementState, double txPower, double processNoise) {
+        double lastFilteredReading = -1;
 
         mostRecentRSSI.addValue(b.getRssi());
         mostRecentTxPower.addValue(txPower);
 
         // Update measurement noise continually
-        double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(mostRecentRSSI.getMean()/ mostRecentRSSI.getStandardDeviation(), 2)));
+        double mNoise = Math.sqrt((100 * 9 / Math.log(10))*Math.log(1 + Math.pow(mostRecentRSSI.getMean() / mostRecentRSSI.getStandardDeviation(), 2)));
         if (!Double.isInfinite(mNoise) && !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
         kf.setProcessNoise(processNoise);
         lastFilteredReading = kf.filter(mostRecentRSSI.getPercentile(50), movementState);
-        calculateDistance(mostRecentTxPower.getPercentile(50));
+        lastCalculatedDistance = calculateDistance(mostRecentTxPower.getPercentile(50), lastFilteredReading);
+        lastRawDistance = calculateDistance(b.getTxPower(), b.getRssi());
+        lastWOSC = calculateDistance(b.getTxPower(), lastFilteredReading);
     }
 
-    private void calculateDistance(double txPower) {
+    private double calculateDistance(double txPower, double rssi) {
         double n = 2.5;   // Signal propogation exponent
         double d0 = 1;  // Reference distance in meters
         double C = 0;   // Gaussian variable for mitigating flat fading
@@ -64,17 +70,23 @@ public class BeaconStatistics {
         double mReceiverRssiOffset = -4;
 
         // calculation of adjustment
-        double adjustment = mReceiverRssiSlope * lastFilteredReading + mReceiverRssiOffset;
-        double adjustedRssi = lastFilteredReading - adjustment;
+        double adjustment = mReceiverRssiSlope * rssi + mReceiverRssiOffset;
+        double adjustedRssi = rssi - adjustment;
 
 
         // Log-distance path loss model
-        lastCalculatedDistance = d0 * Math.pow(10.0, (adjustedRssi - txPower - C) / (-10 * n));
-
+        return d0 * Math.pow(10.0, (adjustedRssi - txPower - C) / (-10 * n));
     }
 
     public double getDistance() {
         return lastCalculatedDistance;
+    }
+    public double getRawDistance() {
+        return lastRawDistance;
+    }
+
+    public double getDistanceWOSC() {
+        return lastWOSC;
     }
 
 }
