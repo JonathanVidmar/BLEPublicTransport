@@ -49,7 +49,7 @@ public class BeaconStatistics {
         // Update measurement noise continually
         double mNoise = Math.sqrt((100*9/Math.log(10))*Math.log(1+Math.pow(mostRecentRSSI.getMean()/ mostRecentRSSI.getStandardDeviation(), 2)));
         if (!Double.isInfinite(mNoise) && !Double.isNaN(mNoise)) kf.setMeasurementNoise(mNoise);
-        kf.setProcessNoise(processNoise);;
+        kf.setProcessNoise(processNoise);
         lastFilteredReading = kf.filter(mostRecentRSSI.getPercentile(50), movementState);
         calculateDistance(mostRecentTxPower.getPercentile(50));
     }

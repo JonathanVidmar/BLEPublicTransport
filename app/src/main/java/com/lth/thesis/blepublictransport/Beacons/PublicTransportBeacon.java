@@ -42,6 +42,7 @@ public class PublicTransportBeacon {
         return image;
     }
 
+    /* Kalman filter*/
     public double getDistance() { return stats.getDistance(); }
 
     public void updateDistance(Beacon b, double movementState, double txPower, double processNoise){

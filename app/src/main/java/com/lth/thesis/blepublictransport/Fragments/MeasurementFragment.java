@@ -176,6 +176,8 @@ public class MeasurementFragment extends Fragment {
 
     private void logValues() {
         long elapsedTime = (System.currentTimeMillis() - startTime) / 100;
-        sb.append(elapsedTime + " " + currentDistance + " " + formatDistance(bh.measurementUtil.getMeasurement()).replace(',', '.') + "\n");
+        sb.append(elapsedTime + " " + currentDistance + " " +
+                formatDistance(bh.measurementUtil.getMeasurement()).replace(',', '.') +
+                bh.measurementUtil.getAltBeaconMeasurement() + "\n");
     }
 }

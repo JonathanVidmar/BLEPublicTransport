@@ -16,6 +16,7 @@ import java.io.*;
  */
 public class MeasurementUtil {
     private double lastDistance;
+    private double lastAltBeaconDistance;
     private double processNoise;
 
     public MeasurementUtil() {}
@@ -23,12 +24,17 @@ public class MeasurementUtil {
     public void update(Beacon b, BeaconHelper bh) {
         if (b.getId2().equals(BeaconConstants.TEST_BEACON_INSTANCE)) {
             lastDistance = b.getDistance();
+            lastAltBeaconDistance = b.getDistance();
             processNoise = bh.getProcessNoise();
         }
     }
 
     public double getMeasurement() {
         return lastDistance;
+    }
+
+    public double getAltBeaconMeasurement(){
+        return lastAltBeaconDistance;
     }
 
     /* Checks if external storage is available for read and write */
@@ -42,6 +48,8 @@ public class MeasurementUtil {
     }
 
     public void export(String data){
+        Log.d("test", data);
+        /*
         if (isExternalStorageWritable()) {
             String filename = "/Documents/" + processNoise + "_" + System.currentTimeMillis() + ".txt";
             File root= Environment.getExternalStorageDirectory();
@@ -59,7 +67,7 @@ public class MeasurementUtil {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
 }
