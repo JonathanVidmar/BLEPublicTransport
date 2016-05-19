@@ -112,7 +112,7 @@ public class BluetoothClient {
     private void killPairing() {
         currentState = NOT_PAIRED;
         connectionThread.cancel();
-        application.beaconHelper.txPower = -59;
+        application.beaconHelper.updateTxPower(-59);
         Log.d(DEBUG_TAG, "NOT PAIRED ANYMORE");
     }
 
@@ -288,7 +288,7 @@ public class BluetoothClient {
                     bytes = mmInStream.read(buffer);
                     String message = new String(Arrays.copyOfRange(buffer, 0, bytes));
                     try {
-                        application.beaconHelper.txPower = Integer.valueOf(message);
+                        application.beaconHelper.updateTxPower(Integer.valueOf(message));
                     }catch (NumberFormatException e){
                         Log.d(DEBUG_TAG, "INTEGER FAILURE");
                     }

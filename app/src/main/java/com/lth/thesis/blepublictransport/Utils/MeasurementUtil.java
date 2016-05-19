@@ -16,13 +16,19 @@ import java.io.*;
  */
 public class MeasurementUtil {
     private double lastDistance;
+    private double lastRawDistance;
+    private double lastDistanceWOSC;
+    private double lastAltBeaconDistance;
     private double processNoise;
 
     public MeasurementUtil() {}
 
     public void update(Beacon b, BeaconHelper bh) {
         if (b.getId2().equals(BeaconConstants.TEST_BEACON_INSTANCE)) {
-            lastDistance = b.getDistance();
+            lastDistance = BeaconConstants.BEACON_LIST.get(b.getId2()).getDistance();
+            lastRawDistance = BeaconConstants.BEACON_LIST.get(b.getId2()).getRawDistance();
+            lastDistanceWOSC = BeaconConstants.BEACON_LIST.get(b.getId2()).getDistanceWOSC();
+            lastAltBeaconDistance = b.getDistance();
             processNoise = bh.getProcessNoise();
         }
     }
@@ -30,6 +36,19 @@ public class MeasurementUtil {
     public double getMeasurement() {
         return lastDistance;
     }
+
+    public double getAltBeaconMeasurement(){
+        return lastAltBeaconDistance;
+    }
+
+    public double getRawMeasurement(){
+        return lastRawDistance;
+    }
+
+    public double getWOSCMeasurement(){
+        return lastDistanceWOSC;
+    }
+
 
     /* Checks if external storage is available for read and write */
     private boolean isExternalStorageWritable() {

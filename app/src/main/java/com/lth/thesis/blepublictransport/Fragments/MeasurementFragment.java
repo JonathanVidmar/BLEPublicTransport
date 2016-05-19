@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
  * A simple {@link Fragment} subclass
  * This fragment contains a simple measurement tool for logging different settings on the Kalman Filter
  *
- * @author Janathan Vidmar
+ * @author Janathan Vidmar and ONLY HIM
  * @version 1.0
  */
 public class MeasurementFragment extends Fragment {
@@ -58,6 +58,7 @@ public class MeasurementFragment extends Fragment {
         markDistanceButton.setOnLongClickListener(resetTestListener());
         updateDisplayedValuesForStepDistance();
         sb = new StringBuilder();
+        //sb.append("ElapsedTime | Reference distance | Our measurement | AltBeacon distance | Raw measurement | WOSC \n");
         bh = ((BLEPublicTransport) getActivity().getApplication()).beaconHelper;
         currentMetersMarked.setOnEditorActionListener(
                 new EditText.OnEditorActionListener() {
@@ -175,7 +176,18 @@ public class MeasurementFragment extends Fragment {
     }
 
     private void logValues() {
-        long elapsedTime = (System.currentTimeMillis() - startTime) / 100;
-        sb.append(elapsedTime + " " + currentDistance + " " + formatDistance(bh.measurementUtil.getMeasurement()).replace(',', '.') + "\n");
+        long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
+        sb.append(elapsedTime);
+        sb.append(" ");
+        sb.append(currentDistance);
+        sb.append(" ");
+        sb.append(formatDistance(bh.measurementUtil.getMeasurement()).replace(',', '.'));
+        sb.append(" ");
+        sb.append(formatDistance(bh.measurementUtil.getAltBeaconMeasurement()).replace(',', '.'));
+        sb.append(" ");
+        sb.append(formatDistance(bh.measurementUtil.getRawMeasurement()).replace(',', '.'));
+        sb.append(" ");
+        sb.append(formatDistance(bh.measurementUtil.getWOSCMeasurement()).replace(',', '.'));
+        sb.append("\n");
     }
 }
