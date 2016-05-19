@@ -61,8 +61,6 @@ public class MeasurementUtil {
     }
 
     public void export(String data){
-        Log.d("test", data);
-        /*
         if (isExternalStorageWritable()) {
             String filename = "/Documents/" + processNoise + "_" + System.currentTimeMillis() + ".txt";
             File root= Environment.getExternalStorageDirectory();
@@ -80,7 +78,7 @@ public class MeasurementUtil {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 
 }

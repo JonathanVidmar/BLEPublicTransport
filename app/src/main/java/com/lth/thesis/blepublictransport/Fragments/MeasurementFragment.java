@@ -58,6 +58,7 @@ public class MeasurementFragment extends Fragment {
         markDistanceButton.setOnLongClickListener(resetTestListener());
         updateDisplayedValuesForStepDistance();
         sb = new StringBuilder();
+        sb.append("ElapsedTime | Reference distance | Our measurement | AltBeacon distance | Raw measurement | WOSC \n");
         bh = ((BLEPublicTransport) getActivity().getApplication()).beaconHelper;
         currentMetersMarked.setOnEditorActionListener(
                 new EditText.OnEditorActionListener() {
@@ -177,9 +178,9 @@ public class MeasurementFragment extends Fragment {
     private void logValues() {
         long elapsedTime = (System.currentTimeMillis() - startTime) / 100;
         sb.append(elapsedTime + " " + currentDistance + " " +
-                formatDistance(bh.measurementUtil.getMeasurement()).replace(',', '.') +
-                formatDistance(bh.measurementUtil.getAltBeaconMeasurement()).replace(',', '.') +
-                formatDistance(bh.measurementUtil.getRawMeasurement()).replace(',', '.') +
+                formatDistance(bh.measurementUtil.getMeasurement()).replace(',', '.') + " " +
+                formatDistance(bh.measurementUtil.getAltBeaconMeasurement()).replace(',', '.') + " " +
+                formatDistance(bh.measurementUtil.getRawMeasurement()).replace(',', '.') + " " +
                 formatDistance(bh.measurementUtil.getWOSCMeasurement()).replace(',', '.') + "\n");
     }
 }
