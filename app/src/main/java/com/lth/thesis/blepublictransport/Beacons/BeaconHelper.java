@@ -1,5 +1,7 @@
 package com.lth.thesis.blepublictransport.Beacons;
 
+import android.util.Log;
+
 import com.lth.thesis.blepublictransport.Utils.KalmanFilter;
 import com.lth.thesis.blepublictransport.Utils.MeasurementUtil;
 import org.altbeacon.beacon.Beacon;
@@ -19,7 +21,7 @@ import static com.lth.thesis.blepublictransport.Config.BeaconConstants.*;
  * @version 1.3
  */
 public class BeaconHelper {
-    public double txPower = -59;
+    private double txPower = -59;
     private double processNoise;
     private boolean selfCorrection;
     private long lastSelfCorrectingBeaconUpdate = 0;
@@ -96,14 +98,17 @@ public class BeaconHelper {
 
     private void checkSelfCorrection(Beacon b) {
         // Reset to preset after 10 seconds without update
-        boolean selfCorrectingBeaconTimedOut = System.currentTimeMillis() - lastSelfCorrectingBeaconUpdate < 10000;
-        lastSelfCorrectingBeaconUpdate = System.currentTimeMillis();
-
+        boolean selfCorrectingBeaconTimedOut = System.currentTimeMillis() - lastSelfCorrectingBeaconUpdate > 10000;
         if (!selfCorrection || selfCorrectingBeaconTimedOut) txPower = b.getTxPower();
     }
 
     public void updateSelfCorrection(boolean update) {
         selfCorrection = update;
+    }
+
+    public void updateTxPower(double value){
+        txPower = value;
+        lastSelfCorrectingBeaconUpdate = System.currentTimeMillis();
     }
 
     public void updateProcessNoise(int progress) {
