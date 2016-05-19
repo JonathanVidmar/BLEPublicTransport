@@ -34,7 +34,7 @@ public class BeaconConstants {
     public static final Identifier INSTANCE_8 = Identifier.parse("0x456c32394745");
     public static final Identifier INSTANCE_9 = Identifier.parse("0x725671434f6c");
 
-    public static final Identifier TEST_BEACON_INSTANCE = INSTANCE_1;
+    public static final Identifier TEST_BEACON_INSTANCE = INSTANCE_2;
 
     public static final Region REGION_1 = new Region("BLEPublicTransport A", NAMESPACE, INSTANCE_1, null);
     public static final Region REGION_2 = new Region("BLEPublicTransport B", NAMESPACE, INSTANCE_2, null);

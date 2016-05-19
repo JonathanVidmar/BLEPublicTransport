@@ -1,5 +1,10 @@
 clear
-test = load('test_3.txt');
+test = load('test3.txt');
+%% for fixed distance x.x
+x = 1;
+k = size(test);
+test(:,2) = x * ones(k(1),1);
+%%
 plot1 = plot(test(:,1),test(:,2));
 hold on
 plot2 = plot(test(:,1),test(:,3));
